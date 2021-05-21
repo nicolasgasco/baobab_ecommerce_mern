@@ -1,20 +1,86 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const Joi = require("joi");
+require("dotenv").config();
+const path = require("path");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const encryptPassword = require("./middleware/encryptPassword");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const mongoose = require("mongoose");
 
-var app = express();
+const express = require("express");
+const app = express();
+// External routes from routes folder
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const { create } = require("domain");
 
-app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "build")));
+// Using bcrypt
+app.use(encryptPassword);
+app.use(helmet());
+if (app.get("env") === "development") {
+  app.use(morgan("tiny"));
+}
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// Used to redirect to react page when a route other than index is refreshed by user
+app.use("/", indexRouter);
+app.use("/api/users", usersRouter);
+
+mongoose
+  .connect(
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@sandbox.1ybr6.mongodb.net/bootcamp_final_project?retryWrites=true&w=majority`,
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+  .then(() => {
+    // if (err) {
+    //   res.send(err);
+    // }
+    // console.log(client)
+
+    // app.locals.db = client.db("bootcamp_final_project");
+    console.log(`Connected to database...`);
+  })
+  .catch((err) => console.error("Could not connect to MongoDB...", err));
+
+const userSchema = require("./models/userSchema");
+const User = mongoose.model("user", userSchema);
+
+const user = new User({
+  name: "Juan",
+  surname: "Pérez",
+  gender: "m",
+  birthday: Date(1983 - 12 - 07),
+  address: {
+    country: "Spain",
+    region: "Basque Country",
+    province: "Biscay",
+    city: "Bilbao",
+    zip: "48008",
+    street: "Telesforo Aranzadi Kalea",
+    streetNumber: "3",
+    doorNumber: "4D",
+  },
+  telephone: {
+    prefix: "+34",
+    number: "605383854",
+  },
+  tier: 0,
+});
+
+user
+  .save()
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((err) => console.log(err));
+
+// Use Joi for input validation
+// First step is describing schema inside app.get or whatever https://codewithmosh.com/courses/293204/lectures/4516859
+// const schema = { name: Joi.string().min(3).required()}
+// const result = Joi.validate(req.body, schema)
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 module.exports = app;
