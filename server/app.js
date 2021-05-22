@@ -6,7 +6,6 @@ const morgan = require("morgan");
 const encryptPassword = require("./middleware/encryptPassword");
 
 const mongoose = require("mongoose");
-const createUser = require("./mongoose/crud_users");
 
 const express = require("express");
 const app = express();
@@ -18,7 +17,7 @@ const { create } = require("domain");
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
 
-app.use(encryptPassword);
+// app.use(encryptPassword);
 app.use(helmet());
 
 if (app.get("env") === "development") {
@@ -26,13 +25,14 @@ if (app.get("env") === "development") {
 }
 
 // Used to redirect to react page when a route other than index is refreshed by user
-app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
+app.use("/", indexRouter);
+
 
 // Database connection
 mongoose.connect(
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@sandbox.1ybr6.mongodb.net/bootcamp_final_project?retryWrites=true&w=majority`,
-    { useNewUrlParser: true, useUnifiedTopology: true }
+    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
   )
   .then(() => {
     // if (err) {
