@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const encryptPassword = require("./middleware/encryptPassword");
 
 const mongoose = require("mongoose");
+const createUser = require("./mongoose/crud_users");
 
 const express = require("express");
 const app = express();
@@ -16,9 +17,10 @@ const { create } = require("domain");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
-// Using bcrypt
+
 app.use(encryptPassword);
 app.use(helmet());
+
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
 }
@@ -27,8 +29,8 @@ if (app.get("env") === "development") {
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 
-mongoose
-  .connect(
+// Database connection
+mongoose.connect(
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@sandbox.1ybr6.mongodb.net/bootcamp_final_project?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
@@ -43,37 +45,6 @@ mongoose
   })
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
-const userSchema = require("./models/userSchema");
-const User = mongoose.model("user", userSchema);
-
-const user = new User({
-  name: "Juan",
-  surname: "Pérez",
-  gender: "m",
-  birthday: Date(1983 - 12 - 07),
-  address: {
-    country: "Spain",
-    region: "Basque Country",
-    province: "Biscay",
-    city: "Bilbao",
-    zip: "48008",
-    street: "Telesforo Aranzadi Kalea",
-    streetNumber: "3",
-    doorNumber: "4D",
-  },
-  telephone: {
-    prefix: "+34",
-    number: "605383854",
-  },
-  tier: 0,
-});
-
-user
-  .save()
-  .then((result) => {
-    console.log(result);
-  })
-  .catch((err) => console.log(err));
 
 // Use Joi for input validation
 // First step is describing schema inside app.get or whatever https://codewithmosh.com/courses/293204/lectures/4516859
