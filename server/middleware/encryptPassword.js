@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 // MIddleware for password encryption
 const encryptPassword = (req, res, next) => {
@@ -8,8 +8,14 @@ const encryptPassword = (req, res, next) => {
     user.password = bcrypt.hashSync(user.password, 10);
     req.body = user;
   }
-  console.log('Password encrypted');
+  console.log("Password encrypted");
   next();
 };
 
+const encryptPasswordFunc = (password) => {
+  const saltRounds = process.env.SALT;
+  return bcrypt.hashSync(password, +saltRounds);
+};
+
 module.exports = encryptPassword;
+module.exports = encryptPasswordFunc;
