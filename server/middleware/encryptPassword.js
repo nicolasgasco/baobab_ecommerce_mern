@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 
-// MIddleware for password encryption
-const encryptPassword = (req, res, next) => {
+// Middle for password encryption
+const encryptPasswordMiddle = (req, res, next) => {
   if (req.body.password) {
     let user = req.body;
     const saltRounds = process.env.SALT;
@@ -12,10 +12,11 @@ const encryptPassword = (req, res, next) => {
   next();
 };
 
-const encryptPasswordFunc = (password) => {
+// Using actual function over middleware because I want to validate password before sending it database
+const encryptPassword = (password) => {
   const saltRounds = process.env.SALT;
   return bcrypt.hashSync(password, +saltRounds);
 };
 
-module.exports = encryptPassword;
-module.exports = encryptPasswordFunc;
+module.exports.encryptPasswordMiddle = encryptPasswordMiddle;
+module.exports.encryptPassword = encryptPassword;
