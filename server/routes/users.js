@@ -1,55 +1,70 @@
 const express = require("express");
 const router = express.Router();
-const encryptPasswordFunc = require("../middleware/encryptPassword");
+const { encryptPassword } = require("../middleware/encryptPassword");
 
+// Data validation with joi
 const Joi = require("joi");
-const userSchemaJoi = require("../joi/users_validation");
+const userSchemaJoi = require("../joi/users");
 
 const mongoose = require("mongoose");
-const userSchema = require("../mongoose/crud_users");
+
+// Initializing users
+const userSchema = require("../mongoose/users");
 const User = mongoose.model("User", userSchema);
 
-/* GET users listing. */
+// GET all users
 router.get("/", async (req, res) => {
   try {
-    // Query param for sorting
+    // Query param for sorting, by which and in which order
     let sortBy = req.query.sortBy;
     const order = req.query.order;
-    // Sorting in descending order
-    if (order < 0) {
-      sortBy = "-" + sortBy;
-    }
+
+    // You can add a - in front of key for descending order
+    sortBy = order === "-1" ? "-" + sortBy : sortBy;
+
+    // Dictionary request
     const users = await User.find().sort(sortBy);
     res.send({
       resultsFound: users.length,
-      sortBy: sortBy.replace("-", ""),
+      sortBy: () => {
+        return sortBy ? sortBy.replace("-", "") : null;
+      },
       order,
       results: users,
     });
   } catch (err) {
-    console.log("Error: " + err);
-    res.status(400);
+    console.log("Error: " + err.message);
+    res.status(400).send({ error: err.message });
   }
 });
 
+// POST a new user
 router.post("/", async (req, res) => {
+  // First round of validation with Joi
   const joiValidation = userSchemaJoi.validate(req.body);
   if (joiValidation.error) {
     res.status(400).send({
-      error: `${joiValidation.error.name}: ${joiValidation.error.details.map(
-        (err) => {
-          return err.message;
-        }
-      )}`,
+      error: `${
+        joiValidation.error.name
+      } (Joi): ${joiValidation.error.details.map((err) => {
+        return err.message;
+      })}`,
     });
     return;
   }
   console.log("Joi validation successful");
-  req.body.password = encryptPasswordFunc(req.body.password);
+
+  // Encrypt password now and not before, otherwise it cannot be validated
+  req.body.password = encryptPassword(req.body.password);
+
+  // Creating new mongoose user with body
   const user = new User(req.body);
   try {
+    // Second round of validation with Mongoose
     await user.validate();
     console.log("Mongoose validation successful");
+
+    // Saving in DB and sending result
     const result = await user.save();
     res.send(result);
   } catch (err) {
@@ -65,12 +80,32 @@ router.post("/", async (req, res) => {
   }
 });
 
+// PUT a specific user (with ID)
 router.put("/:id", async (req, res) => {
+  // Add a modification date
+  req.body.modificationDate = new Date();
+
+  // First round of validation with Joi
+  const joiValidation = userSchemaJoi.validate(req.body);
+  if (joiValidation.error) {
+    res.status(400).send({
+      error: `${
+        joiValidation.error.name
+      } (Joi): ${joiValidation.error.details.map((err) => {
+        return err.message;
+      })}`,
+    });
+    return;
+  }
+  console.log("Joi validation successful");
+
+  const updatedUser = new User(req.body);
   try {
-    const updatedUser = new User(req.body);
+    // Validation with Mongoose
     await updatedUser.validate();
 
-    req.body.modificationDate = new Date();
+    updatedUser.password = encryptPassword(req.body.password);
+    // Finding and updating at the same time
     const result = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
@@ -79,8 +114,32 @@ router.put("/:id", async (req, res) => {
     }
     res.send({ updatedCount: 1, updatedObj: result });
   } catch (err) {
-    console.log(err);
-    res.status(400).send(err.message);
+    const errMessages = [];
+    for (field in err.errors) {
+      console.log(`Error: ${err.errors[field].message}`);
+      errMessages.push(err.errors[field].message);
+    }
+
+    res.status(400).send({
+      error: errMessages,
+    });
+  }
+});
+
+// DELETE a specific user (with ID)
+router.delete("/:id", async (req, res) => {
+  try {
+    const result = await User.remove({ _id: req.params.id });
+    if (result.deletedCount === 0) {
+      throw new Error("User not found");
+    }
+    res.send({ deletedCount: 1, result: result });
+  } catch (err) {
+    console.log("Error: ", err.message);
+    res.status(400).send({
+      deletedCount: 0,
+      error: err.message,
+    });
   }
 });
 
