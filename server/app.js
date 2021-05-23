@@ -12,7 +12,6 @@ const app = express();
 // External routes from routes folder
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
-const { create } = require("domain");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
