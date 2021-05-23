@@ -175,44 +175,4 @@ const userSchema = new mongoose.Schema(
   { collection: "users" }
 );
 
-const User = mongoose.model("User", userSchema);
-
-// const createUser = async (userObject) => {
-//   try {
-//     // This is if you want to validate only
-//     await userObject.validate();
-//     console.log("Validation successful");
-//     const result = await userObject.save();
-//     return result;
-//   } catch (err) {
-//     for (field in err.errors) {
-//       console.log(`Error: ${err.errors[field].message}`);
-//     }
-//   }
-// };
-
-const user = new User({
-  name: "Angel",
-  surname: "Pérez",
-  email: "ciao@gmail.com",
-  gender: "m",
-  password: "Ciaociaociao",
-  birthday: "1983-12-09",
-  address: {
-    countryCode: "ESP",
-    region: "Basque Country",
-    province: "Biscay",
-    city: "Bilbao",
-    zip: "48008",
-    street: "Telesforo Aranzadi Kalea",
-    streetNumber: "3",
-    doorNumber: "4D",
-  },
-  telephone: {
-    prefix: "+34",
-    number: "605383854",
-  },
-  tier: 0,
-});
-
 module.exports = userSchema;
