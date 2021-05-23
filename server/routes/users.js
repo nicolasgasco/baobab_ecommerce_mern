@@ -66,7 +66,7 @@ router.post("/", async (req, res) => {
 
     // Saving in DB and sending result
     const result = await user.save();
-    res.send(result);
+    res.send({insertedCount: 1, result: result});
   } catch (err) {
     const errMessages = [];
     for (field in err.errors) {

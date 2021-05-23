@@ -115,15 +115,15 @@ const userSchema = new mongoose.Schema(
       city: {
         type: String,
         trim: true,
-        minLength: [2, "Region name too short"],
-        maxLength: [25, "Region name too long"],
+        minLength: [2, "City name too short"],
+        maxLength: [25, "City name too long"],
       },
       zip: {
         type: String,
         trim: true,
         match: [/^[0-9]*$/, "Zip code is not valid"],
-        minLength: [5, "Zip code too short"],
-        maxLength: [5, "Zip code too long"],
+        length: [5, "Zip code must 5 digits long"],
+        maxLength: [5, "Zip code must 5 digits long"],
       },
       street: {
         type: String,
@@ -140,7 +140,7 @@ const userSchema = new mongoose.Schema(
       doorNumber: {
         type: String,
         trim: true,
-        minLength: [2, "Street number too short"],
+        minLength: [1, "Street number too short"],
         maxLength: [10, "Street number too long"],
       },
       other: {
@@ -154,13 +154,14 @@ const userSchema = new mongoose.Schema(
       countryPrefix: {
         type: String,
         trim: true,
-        minLength: [3, "Prefix number too short"],
-        maxLength: [6, "Prefix number too long"],
+        minLength: [2, "Prefix number too short"],
+        maxLength: [4, "Prefix number too long"],
         match: [/^\+[0-9]{1,6}$/, "Country prefix is not valid"],
       },
       number: {
         type: String,
         trim: true,
+        minLength: [4, "Phone number too short"],
         maxLength: [15, "Phone number too long"],
         match: [/^[0-9]*$/, "Phone number must contain only digits"],
       },
@@ -168,7 +169,7 @@ const userSchema = new mongoose.Schema(
     tier: {
       type: Number,
       default: 0,
-      enum: [0, 1, 2],
+      enum: [0, 1],
     },
   },
   { collection: "users" }

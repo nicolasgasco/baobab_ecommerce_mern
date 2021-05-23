@@ -8,7 +8,7 @@ const userSchemaJoi = Joi.object({
   email: Joi.when("modificationDate", {
     is: null,
     then: Joi.optional(),
-    otherwise: Joi.string().email(),
+    otherwise: Joi.string().lowercase().email(),
   }),
   gender: Joi.string().valid("f", "m", "o").required().trim(),
   birthday: Joi.date()
@@ -23,8 +23,8 @@ const userSchemaJoi = Joi.object({
       }`
     )
     .required(),
-  creationDate: Joi.date(),
-  modificationDate: Joi.date(),
+  creationDate: Joi.date().iso().default("now"),
+  modificationDate: Joi.date().iso().less("now"),
   address: {
     countryCode: Joi.string()
       .pattern(new RegExp("^[A-Z]{3}$"))
@@ -33,21 +33,21 @@ const userSchemaJoi = Joi.object({
     region: Joi.string().trim().min(2).max(25),
     province: Joi.string().trim().min(2).max(25),
     city: Joi.string().trim().min(2).max(25),
-    zip: Joi.string().trim().length(5),
+    zip: Joi.string().trim().length(5).regex(/^\d+$/),
     street: Joi.string().trim().min(1).max(25),
-    streetNumber: Joi.string().trim().min(2).max(25),
-    doorNumber: Joi.string().trim().min(2).max(10),
+    streetNumber: Joi.string().trim().min(1).max(10),
+    doorNumber: Joi.string().trim().min(1).max(10),
     other: Joi.string().trim().min(2).max(50),
   },
   telephone: {
     countryPrefix: Joi.string()
       .trim()
-      .min(3)
-      .max(3)
+      .min(2)
+      .max(4)
       .pattern(new RegExp("^\\+[0-9]{1,6}$")),
-    number: Joi.string().trim().max(15).pattern(new RegExp("^[0-9]*$")),
+    number: Joi.string().trim().min(4).max(15).pattern(new RegExp("^[0-9]*$")),
   },
-  tier: Joi.number().valid(0, 1, 2),
+  tier: Joi.number().valid(0, 1),
 });
 
 module.exports = userSchemaJoi;
