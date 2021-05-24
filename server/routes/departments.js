@@ -8,14 +8,20 @@ const Department = mongoose.model("Department", departmentSchema);
 
 // GET all departments of a specific language
 router.get("/", async (req, res) => {
-  try {
-    let language = req.query.lang;
-    let filter;
-    if (language) {
-      filter = { _id: 1 };
-      filter[`translations.${language}`] = 1;
-    }
+  let language = req.query.lang;
 
+  if (!res) {
+    res.status(500).send("Error");
+  }
+
+  // Showing only the desired language
+  let filter;
+  if (language) {
+    filter = { _id: 1 };
+    filter[`translations.${language}`] = 1;
+  }
+
+  try {
     // Database request
     const departments = await Department.find()
       .sort(`translations.${language}`)
@@ -29,17 +35,17 @@ router.get("/", async (req, res) => {
     console.log("Error: " + err.message);
     res.status(400).send({ error: err.message });
   }
-
-  if (!res) {
-    res.send("Error");
-  }
 });
 
-// GET all departments of a specific language
+// GET a specific department (used for validation too)
 router.get("/:id", async (req, res) => {
-  try {
-    let id = req.params.id;
+  let id = req.params.id;
 
+  if (!res) {
+    res.status(500).send("Error");
+  }
+
+  try {
     // Database request
     const department = await Department.find({ _id: id });
     res.send({
@@ -49,10 +55,6 @@ router.get("/:id", async (req, res) => {
   } catch (err) {
     console.log("Error: " + err.message);
     res.status(400).send({ error: err.message });
-  }
-
-  if (!res) {
-    res.send("Error");
   }
 });
 
