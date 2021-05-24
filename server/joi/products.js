@@ -4,7 +4,7 @@ Joi.objectId = require("joi-objectid")(Joi);
 const productSchemaJoi = Joi.object({
   completeName: {
     brand: Joi.string().uppercase().min(2).max(30).trim(),
-    shortDesc: Joi.string().lowercase().min(2).min(25).trim(),
+    shortDesc: Joi.string().lowercase().min(2).max(25).trim(),
     productName: Joi.string().min(2).max(25).trim(),
     productDesc1: Joi.string().lowercase().min(2).max(50).trim(),
     productDesc2: Joi.string().lowercase().min(2).max(50).trim(),
@@ -14,13 +14,11 @@ const productSchemaJoi = Joi.object({
       .valid("unisex", "male", "female")
       .trim(),
   },
+  creationDate: Joi.date().iso().default("now"),
+  modificationDate: Joi.date().iso().less("now"),
   stock: Joi.number().min(0).max(9999),
   seller: Joi.string().min(2).max(30).trim(),
-  department: Joi.object({
-    id: Joi.objectId(),
-    name: Joi.string().max(100),
-    date: Joi.date(),
-  }),
+  department: Joi.objectId(),
   pricingInfo: {
     price: Joi.number().min(0.01).max(2000).precision(2),
     priceHistory: Joi.array().items(

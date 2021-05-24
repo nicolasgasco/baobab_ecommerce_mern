@@ -80,6 +80,8 @@ const productSchema = new mongoose.Schema(
       minLength: [2, "Description too short"],
       maxLength: [30, "Description too long"],
     },
+    creationDate: { type: Date, default: Date.now },
+    modificationDate: Date,
     department: {
       type: mongoose.Schema.Types.ObjectId,
       trim: true,
