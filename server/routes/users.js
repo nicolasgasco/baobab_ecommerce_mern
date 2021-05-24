@@ -66,7 +66,7 @@ router.post("/", async (req, res) => {
 
     // Saving in DB and sending result
     const result = await user.save();
-    res.send({insertedCount: 1, result: result});
+    res.send({ insertedCount: 1, result: result });
   } catch (err) {
     const errMessages = [];
     for (field in err.errors) {
@@ -104,7 +104,9 @@ router.put("/:id", async (req, res) => {
     // Validation with Mongoose
     await updatedUser.validate();
 
-    updatedUser.password = encryptPassword(req.body.password);
+    req.body.password = updatedUser.password
+      ? encryptPassword(req.body.password)
+      : null;
     // Finding and updating at the same time
     const result = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
