@@ -118,8 +118,12 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     const errMessages = [];
     for (field in err.errors) {
-      console.log(`Error: ${err.errors[field].message}`);
-      errMessages.push(err.errors[field].message);
+      console.log(
+        `Error: ${err.errors[field].path}: ${err.errors[field].message}`
+      );
+      errMessages.push(
+        `Error: ${err.errors[field].path}: ${err.errors[field].message}`
+      );
     }
 
     res.status(400).send({
