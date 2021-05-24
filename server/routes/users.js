@@ -9,7 +9,7 @@ const userSchemaJoi = require("../joi/users");
 const mongoose = require("mongoose");
 
 // Initializing users
-const userSchema = require("../mongoose/users");
+const userSchema = require("../models/users");
 const User = mongoose.model("User", userSchema);
 
 // GET all users
