@@ -2,15 +2,15 @@ const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
 const userSchemaJoi = Joi.object({
-  name: Joi.string().min(2).max(25).required().trim(),
-  surname: Joi.string().min(2).max(25).required().trim(),
-  password: passwordComplexity().required().trim(),
+  name: Joi.string().min(2).max(25).trim(),
+  surname: Joi.string().min(2).max(25).trim(),
+  password: passwordComplexity().trim(),
   email: Joi.when("modificationDate", {
     is: null,
     then: Joi.optional(),
     otherwise: Joi.string().lowercase().email(),
   }),
-  gender: Joi.string().valid("f", "m", "o").required().trim(),
+  gender: Joi.string().valid("f", "m", "o").trim(),
   birthday: Joi.date()
     .max(
       `${new Date().getMonth() + 1}-${new Date().getDate()}-${
@@ -22,7 +22,7 @@ const userSchemaJoi = Joi.object({
         new Date().getFullYear() - 125
       }`
     )
-    .required(),
+    ,
   creationDate: Joi.date().iso().default("now"),
   modificationDate: Joi.date().iso().less("now"),
   address: {

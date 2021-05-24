@@ -8,19 +8,19 @@ const userSchema = new mongoose.Schema(
       minLength: [2, "Name too short"],
       maxLength: [25, "Name too long"],
       trim: true,
-      required: [true, "Name is required"],
+      // required: [true, "Name is required"],
     },
     surname: {
       type: String,
       minLength: [2, "Surname too short"],
       maxLength: [25, "Surname too long"],
       trim: true,
-      required: [true, "Surname is required"],
+      // required: [true, "Surname is required"],
     },
     password: {
       type: String,
       trim: true,
-      required: [true, "Password is required"],
+      // required: [true, "Password is required"],
     },
     email: {
       type: String,
@@ -28,13 +28,13 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minLength: [3, "Email too short"],
       maxLength: [320, "Email too long"],
-      // Email is required only when inserting new user, not when updating
-      required: [
-        function () {
-          return this.modificationDate === null ? true : false;
-        },
-        "Email is required",
-      ],
+      // // Email is required only when inserting new user, not when updating
+      // required: [
+      //   function () {
+      //     return this.modificationDate === null ? true : false;
+      //   },
+      //   "Email is required",
+      // ],
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Email format is not valid",
@@ -60,11 +60,11 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       enum: ["m", "f", "o"],
-      required: [true, "Gender is required (m, f, o)"],
+      // required: [true, "Gender is required (m, f, o)"],
     },
     birthday: {
       type: Date,
-      required: [true, "Birthday is required"],
+      // required: [true, "Birthday is required"],
       validate: {
         // Custom validation, no over 125 and not below 18 years old
         validator: function (value) {
@@ -92,8 +92,7 @@ const userSchema = new mongoose.Schema(
               );
               const result = await res.json();
               return result.status === undefined;
-            } catch {
-              const err = new Error("The service is currently not available");
+            } catch (err) {
               console.log(err.message);
             }
           },
