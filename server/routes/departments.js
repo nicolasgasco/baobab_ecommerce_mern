@@ -16,14 +16,35 @@ router.get("/", async (req, res) => {
       filter[`translations.${language}`] = 1;
     }
 
-    // Dictionary request
-    const users = await Department.find()
+    // Database request
+    const departments = await Department.find()
       .sort(`translations.${language}`)
       .select(filter);
     res.send({
-      resultsFound: users.length,
+      resultsFound: departments.length,
       sortBy: language,
-      results: users,
+      results: departments,
+    });
+  } catch (err) {
+    console.log("Error: " + err.message);
+    res.status(400).send({ error: err.message });
+  }
+
+  if (!res) {
+    res.send("Error");
+  }
+});
+
+// GET all departments of a specific language
+router.get("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+
+    // Database request
+    const department = await Department.find({ _id: id });
+    res.send({
+      resultsFound: 1,
+      result: department[0],
     });
   } catch (err) {
     console.log("Error: " + err.message);
