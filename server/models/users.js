@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
+      unique: true,
       minLength: [3, "Email too short"],
       maxLength: [320, "Email too long"],
       // // Email is required only when inserting new user, not when updating
