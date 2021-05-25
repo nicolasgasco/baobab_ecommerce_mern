@@ -17,11 +17,19 @@ router.get("/", async (req, res) => {
     res.status(500).send("Error");
   }
 
+  const pageNumber = req.query.pageNum;
+  const pageSize = req.query.pageSize;
+
   try {
     // Populating department name from another table, with name and without id
-    const products = await Product.find().populate("department", "name -_id");
+    const products = await Product.find()
+      .populate("department", "name -_id")
+      .skip((pageNumber - 1) * pageSize)
+      .limit(+pageSize);
     res.send({
       resultsFound: products.length,
+      pageNumber,
+      pageSize,
       results: products,
     });
   } catch (err) {
@@ -125,21 +133,25 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// // DELETE a specific user (with ID)
-// router.delete("/:id", async (req, res) => {
-//   try {
-//     const result = await User.remove({ _id: req.params.id });
-//     if (result.deletedCount === 0) {
-//       throw new Error("User not found");
-//     }
-//     res.send({ deletedCount: 1, result: result });
-//   } catch (err) {
-//     console.log("Error: ", err.message);
-//     res.status(400).send({
-//       deletedCount: 0,
-//       error: err.message,
-//     });
-//   }
-// });
+// DELETE a specific order (with ID)
+router.delete("/:id", async (req, res) => {
+  if (!res) {
+    res.status(500).send("Error");
+  }
+
+  try {
+    const result = await Product.remove({ _id: req.params.id });
+    if (result.deletedCount === 0) {
+      res.status(404).send("Product not found");
+    }
+    res.send({ deletedCount: 1, result: result });
+  } catch (err) {
+    console.log("Error: ", err.message);
+    res.status(400).send({
+      deletedCount: 0,
+      error: err.message,
+    });
+  }
+});
 
 module.exports = router;
