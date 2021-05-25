@@ -1,29 +1,35 @@
 const Joi = require("joi");
-require("dotenv").config();
 const path = require("path");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const encryptPassword = require("./middleware/encryptPassword");
 
 const mongoose = require("mongoose");
-
 const express = require("express");
-const app = express();
+
+const passport = require("passport");
+const session = require("express-session");
+const initializePassport = require("./passport-config");
+
 // External routes from routes folder
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const departmentsRouter = require("./routes/departments");
 const productsRouter = require("./routes/products");
+const { ObjectId } = require("bson");
+
+const app = express();
+
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+  app.use(morgan("tiny"));
+}
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "build")));
 
-// app.use(encryptPassword);
+// Helmet for security
 app.use(helmet());
-
-if (app.get("env") === "development") {
-  app.use(morgan("tiny"));
-}
 
 // Used to redirect to react page when a route other than index is refreshed by user
 app.use("/api/users", usersRouter);
@@ -42,38 +48,89 @@ mongoose
   })
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
-// const productSchema = require("./models/products");
-// const { ObjectId } = require("bson");
-// const Product = mongoose.model("Product", productSchema);
+initializePassport(
+  passport,
+  async (email) => {
+    const userSchema = require("./models/users");
+    const User = mongoose.model("User", userSchema);
+    try {
+      const user = await User.findOne({ email });
+      if (user) {
+        return user;
+      } else {
+        return null;
+      }
+    } catch (err) {
+      console.log("Error: " + err.message);
+      return null;
+    }
+  },
+  async (id) => {
+    try {
+      const user = await User.find({ _id: ObjectId(id) });
+      if (user) {
+        return user;
+      } else {
+        return null;
+      }
+    } catch (err) {
+      console.log("Error: " + err.message);
+      return null;
+    }
+  }
+);
 
-// try {
-//   const product = new Product({
-//     completeName: {
-//       brand: "Parafina   ",
-//       shortDesc: "Gafas de sol",
-//       productName: "aviator bench social Club",
-//       productDesc1: "En material 100% riciclado",
-//       productDesc2: "Lentes polarizadas",
-//       productGender: "Unisex",
-//       seller: "Parafina Co",
-//     },
-//     department: new ObjectId("60aa4fabd82af1469cdbda95"),
-//     pricingInfo: {
-//       price: 0.0234,
-//       priceHistory: [10.01, 9, 3],
-//     },
-//     ecoInfo: {
-//       originCountryCode: "ITA",
-//       productionCountryCode: "ESP",
-//       socialMission: "Bla bla social",
-//       environmentMission: "Bla bla environment",
-//     }
-//   });
-//   console.log(product.productName)
-//   product.save();
-//   console.log("Save on database")
-// } catch (err) {
-//   console.log(err.message);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/success",
+    failureRedirect: "/fail",
+  })
+);
+
+app.delete("/logout", (req, res) => {
+  req.logOut();
+  res.send({ loggedOut: true, msg: "Logout successful" });
+  // req.session.destroy(function (err) {
+  //   res.send({ loggedOut: true, msg: "Logout successful" });
+  // });
+});
+
+app.get("/success", (req, res) => {
+  res.send({
+    success: true,
+    msg: "Login successful",
+    user: req.user,
+    session: true,
+  });
+});
+
+app.get("/fail", (req, res) => {
+  res.send({
+    success: false,
+    msg: "Wrong user or password",
+    session: false,
+  });
+});
+
+// Middleware to check if authenticated, not sure if I'll use, same can be done for checkNotAuthenticated
+// function checkAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     return next();
+//   } else {
+//     res.redirect("/fail");
+//   }
 // }
 
 const port = process.env.PORT || 3000;
