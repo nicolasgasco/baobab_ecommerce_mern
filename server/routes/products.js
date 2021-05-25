@@ -26,6 +26,11 @@ router.get("/", async (req, res) => {
       .populate("department", "name -_id")
       .skip((pageNumber - 1) * pageSize)
       .limit(+pageSize);
+
+    if (products.length === 0) {
+      res.status(400).send({ error: "No results found" });
+    }
+
     res.send({
       resultsFound: products.length,
       pageNumber,
@@ -43,6 +48,7 @@ router.post("/", async (req, res) => {
   if (!res) {
     res.status(500).send("Error");
   }
+  
   // First round of validation with Joi
   const joiValidation = productSchemaJoi.validate(req.body);
   if (joiValidation.error) {

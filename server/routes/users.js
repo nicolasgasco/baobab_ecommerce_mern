@@ -137,7 +137,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const result = await User.remove({ _id: req.params.id });
     if (result.deletedCount === 0) {
-      throw new Error("User not found");
+      res.status(404).send("Product not found");
     }
     res.send({ deletedCount: 1, result: result });
   } catch (err) {
