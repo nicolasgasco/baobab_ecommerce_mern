@@ -14,15 +14,15 @@ const User = mongoose.model("User", userSchema);
 
 // GET all users
 router.get("/", async (req, res) => {
+  // Query param for sorting, by which and in which order
+  let sortBy = req.query.sortBy;
+  const order = req.query.order;
+
+  // You can add a - in front of key for descending order
+  sortBy = order === "-1" ? "-" + sortBy : sortBy;
+
   try {
-    // Query param for sorting, by which and in which order
-    let sortBy = req.query.sortBy;
-    const order = req.query.order;
-
-    // You can add a - in front of key for descending order
-    sortBy = order === "-1" ? "-" + sortBy : sortBy;
-
-    // Dictionary request
+    // Database request
     const users = await User.find().sort(sortBy);
     res.send({
       resultsFound: users.length,
