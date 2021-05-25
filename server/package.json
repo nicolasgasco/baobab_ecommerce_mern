@@ -9,13 +9,16 @@
     "bcrypt": "^5.0.1",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-session": "^1.17.2",
     "helmet": "^4.6.0",
     "joi": "^17.4.0",
     "joi-objectid": "^3.0.1",
     "joi-password-complexity": "^5.1.0",
     "mongodb": "^3.6.6",
     "mongoose": "^5.12.10",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "dotenv": "^9.0.2",
