@@ -26,6 +26,5 @@ module.exports = function (app) {
 
 //   app.use(error);
 
-  // At the end, otherwise calling a route redirects you to home
-  app.use("/", indexRouter);
+
 };
