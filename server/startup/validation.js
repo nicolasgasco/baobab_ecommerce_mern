@@ -1,3 +1,3 @@
-module.exports = function (Joi) {
+module.exports = (Joi) => {
   Joi.objectId = require("joi-objectid")(Joi);
 };

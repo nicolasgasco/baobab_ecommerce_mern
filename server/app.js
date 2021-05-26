@@ -1,3 +1,5 @@
+const indexRouter = require("./routes/index");
+
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
@@ -20,7 +22,10 @@ require("./startup/validation")(Joi);
 // Complete passport auth logic
 require("./startup/auth")(app, passport, session, mongoose);
 
-const port = process.env.PORT || 3001;
+// At the end, otherwise calling a route redirects you to home
+app.use("/", indexRouter);
+
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 module.exports = app;

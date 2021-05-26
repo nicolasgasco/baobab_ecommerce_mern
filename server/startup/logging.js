@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = () => {
   // Catching all remaining exceptions
   process.on("uncaughtException", (err) => {
     console.log("Uncaught exception: " + err.message, err);

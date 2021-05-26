@@ -4,7 +4,6 @@ const helmet = require("helmet");
 // const error = require("../middleware/error");
 
 // External routes from routes folder
-const indexRouter = require("../routes/index");
 const usersRouter = require("../routes/users");
 const departmentsRouter = require("../routes/departments");
 const productsRouter = require("../routes/products");
@@ -23,8 +22,4 @@ module.exports = function (app) {
   app.use("/api/users", usersRouter);
   app.use("/api/departments", departmentsRouter);
   app.use("/api/products", productsRouter);
-
-//   app.use(error);
-
-
 };

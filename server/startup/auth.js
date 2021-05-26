@@ -1,6 +1,6 @@
 const initializePassport = require("./passport-config");
 
-function passportLogic(app, passport, session, mongoose) {
+const passportLogic = (app, passport, session, mongoose) => {
   const userSchema = require("../models/users");
   const User = mongoose.model("User", userSchema);
   const { ObjectId } = require("bson");

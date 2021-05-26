@@ -1,4 +1,4 @@
-module.exports = function (mongoose) {
+module.exports = (mongoose) => {
   // Database connection
   mongoose
     .connect(
