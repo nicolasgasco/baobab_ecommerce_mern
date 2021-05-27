@@ -1,13 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const mongoose = require("mongoose");
+const { departmentSchema, Department } = require("../models/departments");
 
-// const asyncMiddleware = require("../middleware/async");
-
-
-const departmentSchema = require("../models/departments");
-const Department = mongoose.model("Department", departmentSchema);
+const validateObjectId = require("../middleware/validateObjectId");
 
 // GET all departments of a specific language
 router.get("/", async (req, res) => {
@@ -28,23 +24,29 @@ router.get("/", async (req, res) => {
   const departments = await Department.find()
     .sort(`translations.${language}`)
     .select(filter);
-  res.send({
-    resultsFound: departments.length,
-    sortBy: language,
-    results: departments,
-  });
+  console.log();
+  if (departments.length === 0) {
+    return res.status(404).send({ error: "Nothing found" });
+  } else {
+    res.send({
+      resultsFound: departments.length,
+      sortBy: language,
+      results: departments,
+    });
+  }
 });
 
 // GET a specific department (used for validation too)
-router.get("/:id", async (req, res) => {
-  let id = req.params.id;
+router.get("/:id", validateObjectId, async (req, res) => {
+  if (!res) res.status(500).send("Error");
 
-  if (!res) {
-    res.status(500).send("Error");
-  }
+  let id = req.params.id;
 
   // Database request
   const department = await Department.find({ _id: id });
+  if (!department[0]) {
+    return res.status(404).send({ error: "Department not found" });
+  }
   res.send({
     resultsFound: 1,
     result: department[0],

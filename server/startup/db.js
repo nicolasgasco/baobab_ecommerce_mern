@@ -1,5 +1,12 @@
+const runTestDb = require("../tests/db_test");
+
 module.exports = (mongoose) => {
-  // Database connection
+
+  if (process.env.NODE_ENV === "test") {
+    return runTestDb(mongoose);
+  }
+
+  // Real database connection
   mongoose
     .connect(
       `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@sandbox.1ybr6.mongodb.net/bootcamp_final_project?retryWrites=true&w=majority`,
