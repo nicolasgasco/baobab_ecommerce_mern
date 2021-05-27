@@ -8,9 +8,6 @@ const usersRouter = require("../routes/users");
 const departmentsRouter = require("../routes/departments");
 const productsRouter = require("../routes/products");
 
-// Handle all err messages instead of using try/catch blocks
-require("express-async-errors");
-
 module.exports = function (app) {
   app.use(express.json());
   app.use(express.static(path.join(__dirname, "build")));
