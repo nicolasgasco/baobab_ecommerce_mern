@@ -28,7 +28,10 @@ require("./startup/auth")(app, passport, session, mongoose);
 // At the end, otherwise calling a route redirects you to home
 app.use("/", indexRouter);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+const port = process.env.PORT || 3001;
+const server = app.listen(port, () =>
+  console.log(`Listening on port ${port}...`)
+);
 
-module.exports = app;
+exports.app = app;
+exports.server = server;
