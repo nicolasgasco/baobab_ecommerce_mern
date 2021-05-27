@@ -6,11 +6,10 @@ const Joi = require("joi");
 const productSchemaJoi = require("../joi/products");
 const asyncMiddleware = require("../middleware/async");
 
-const mongoose = require("mongoose");
+const validateObjectId = require("../middleware/validateObjectId");
 
 // Initializing products
-const productSchema = require("../models/products");
-const Product = mongoose.model("Product", productSchema);
+const { productSchema, Product } = require("../models/products");
 
 // GET all products
 router.get("/", async (req, res) => {
@@ -71,7 +70,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT a specific product (with ID)
-router.put("/:id", async (req, res) => {
+router.put("/:id", validateObjectId, async (req, res) => {
   if (!res) {
     res.status(500).send("Error");
   }

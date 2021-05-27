@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const fetch = require("node-fetch");
 
 // Needed for custom validation later
-const departmentSchema = require("./departments");
-const Department = mongoose.model("Department", departmentSchema);
+const { departmentSchema, Department } = require("./departments");
 
 const productSchema = new mongoose.Schema(
   {
@@ -186,4 +185,8 @@ const productSchema = new mongoose.Schema(
   { collection: "products" }
 );
 
-module.exports = productSchema;
+const Product = mongoose.model("Product", productSchema);
+
+
+exports.productSchema = productSchema;
+exports.Product = Product;

@@ -7,12 +7,10 @@ const Joi = require("joi");
 const userSchemaJoi = require("../joi/users");
 
 // const asyncMiddleware = require("../middleware/async");
-
-const mongoose = require("mongoose");
+const validateObjectId = require("../middleware/validateObjectId");
 
 // Initializing users
-const userSchema = require("../models/users");
-const User = mongoose.model("User", userSchema);
+const { userSchema, User } = require("../models/users");
 
 // GET all users
 router.get("/", async (req, res) => {
@@ -67,7 +65,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT a specific user (with ID)
-router.put("/:id", async (req, res) => {
+router.put("/:id", validateObjectId, async (req, res) => {
   // Add a modification date
   req.body.modificationDate = new Date();
 
@@ -104,7 +102,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE a specific user (with ID)
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", validateObjectId, async (req, res) => {
   const result = await User.remove({ _id: req.params.id });
   if (result.deletedCount === 0) {
     res.status(404).send("Product not found");
