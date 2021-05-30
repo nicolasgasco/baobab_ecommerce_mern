@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./app.js",
-    "test": "set $NODE_ENV=test && jest --watchAll --verbose --detectOpenHandles"
+    "test": "set $NODE_ENV=test && set $PORT=3001 && jest --watchAll --verbose --detectOpenHandles"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -19,7 +19,8 @@
     "mongoose": "^5.12.10",
     "node-fetch": "^2.6.1",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "debug": "~2.6.9",
