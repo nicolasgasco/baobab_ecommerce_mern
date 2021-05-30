@@ -28,7 +28,12 @@ require("./startup/auth")(app, passport, session, mongoose);
 // At the end, otherwise calling a route redirects you to home
 app.use("/", indexRouter);
 
-const port = process.env.PORT || 3001;
+// Add here "page not found logic"
+// app.use((req, res, next) => {
+//   res.status(404);
+// });
+
+const port = process.env.PORT || 3000;
 const server = app.listen(port, () =>
   console.log(`Listening on port ${port}...`)
 );
