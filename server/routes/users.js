@@ -6,7 +6,6 @@ const { encryptPassword } = require("../middleware/encryptPassword");
 const Joi = require("joi");
 const userSchemaJoi = require("../joi/users");
 
-// const asyncMiddleware = require("../middleware/async");
 const validateObjectId = require("../middleware/validateObjectId");
 
 // Initializing users
