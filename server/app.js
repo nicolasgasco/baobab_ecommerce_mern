@@ -33,10 +33,11 @@ app.use("/", indexRouter);
 //   res.status(404);
 // });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const server = app.listen(port, () =>
   console.log(`Listening on port ${port}...`)
 );
+
 
 exports.app = app;
 exports.server = server;

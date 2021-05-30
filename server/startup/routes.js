@@ -16,7 +16,7 @@ module.exports = function (app) {
   app.use(helmet());
 
   // Used to redirect to react page when a route other than index is refreshed by user
-  app.use("/api/users", usersRouter);
   app.use("/api/departments", departmentsRouter);
+  app.use("/api/users", usersRouter);
   app.use("/api/products", productsRouter);
 };
