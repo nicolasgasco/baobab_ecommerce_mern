@@ -1,0 +1,112 @@
+const productSchemaJoi = require("../joi/products");
+
+const { Product } = require("../models/products");
+
+exports.getAllProducts = async (req, res) => {
+  const pageNumber = req.query.pageNum;
+  const pageSize = req.query.pageSize;
+
+  // Populating department name from another table, with name and without id
+  const products = await Product.find()
+    .populate("department", "name -_id")
+    .skip((pageNumber - 1) * pageSize)
+    .limit(+pageSize);
+
+  if (products.length === 0) {
+    res.status(404).send({ error: "No results found" });
+  }
+
+  res.send({
+    resultsFound: products.length,
+    pageNumber,
+    pageSize,
+    results: products,
+  });
+};
+
+exports.getProductById = async (req, res) => {
+  const id = req.params.id;
+
+  // Populating department name from another table, with name and without id
+  const product = await Product.find({ productId: id }).populate(
+    "department",
+    "name -_id"
+  );
+
+  if (product.length === 0) {
+    res.status(404).send({ error: "No results found" });
+  }
+
+  res.send({
+    resultsFound: 1,
+    result: product[0],
+  });
+};
+
+exports.postNewProduct = async (req, res) => {
+  // First round of validation with Joi
+  const joiValidation = productSchemaJoi.validate(req.body);
+  if (joiValidation.error) {
+    res.status(400).send({
+      error: `${
+        joiValidation.error.name
+      } (Joi): ${joiValidation.error.details.map((err) => {
+        return err.message;
+      })}`,
+    });
+    return;
+  }
+  console.log("Joi validation successful");
+
+  // Creating new mongoose product with body
+  const product = new Product(req.body);
+  // Second round of validation with Mongoose
+  await product.validate();
+  console.log("Mongoose validation successful");
+
+  // Saving in DB and sending result
+  const result = await product.save();
+  res.send({ insertedCount: 1, result: result });
+};
+
+exports.putProductWithId = async (req, res) => {
+  // Add a modification date
+  req.body.modificationDate = new Date();
+
+  // First round of validation with Joi
+  const joiValidation = productSchemaJoi.validate(req.body);
+  if (joiValidation.error) {
+    res.status(400).send({
+      error: `${
+        joiValidation.error.name
+      } (Joi): ${joiValidation.error.details.map((err) => {
+        return err.message;
+      })}`,
+    });
+    return;
+  }
+  console.log("Joi validation successful");
+
+  const updatedProduct = new Product(req.body);
+  // Validation with Mongoose
+  await updatedProduct.validate();
+
+  // Finding and updating at the same
+  console.log(req.params.id);
+  const result = await Product.findOneAndUpdate(
+    { productId: req.params.id },
+    req.body,
+    {
+      new: true,
+    }
+  );
+  res.send({ updatedCount: 1, updatedObj: result });
+};
+
+exports.deleteProductWithId = async (req, res) => {
+  const result = await Product.remove({ productId: req.params.id });
+  if (result.deletedCount === 0) {
+    res.status(404).send("Product not found");
+  }
+  res.send({ deletedCount: 1, result: result });
+};
