@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const fetch = require("node-fetch");
+const { v4: uuidv4 } = require("uuid");
 
 // Needed for custom validation later
 const { departmentSchema, Department } = require("./departments");
@@ -13,7 +14,7 @@ const productSchema = new mongoose.Schema(
         trim: true,
         minLength: [2, "Brand too short"],
         maxLength: [30, "Brand too long"],
-        // required: [true, "Brand is required"],
+        required: [true, "Brand is required"],
       },
       shortDesc: {
         type: String,
@@ -21,14 +22,14 @@ const productSchema = new mongoose.Schema(
         lowercase: true,
         minLength: [2, "Short desc too short"],
         maxLength: [25, "Short desc too long"],
-        // required: [true, "Short desc is required"],
+        required: [true, "Short desc is required"],
       },
       productName: {
         type: String,
         trim: true,
         minLength: [2, "Name too short"],
         maxLength: [25, "Name too long"],
-        // required: [true, "Product name is required"],
+        required: [true, "Product name is required"],
         // Capitalizing every word
         set: (value) =>
           value
@@ -44,7 +45,7 @@ const productSchema = new mongoose.Schema(
         trim: true,
         minLength: [2, "Description too short"],
         maxLength: [50, "Description too long"],
-        // required: [true, "Product description is required"],
+        required: [true, "Product description is required"],
       },
       productDesc2: {
         type: String,
@@ -64,8 +65,13 @@ const productSchema = new mongoose.Schema(
         type: String,
         trim: true,
         lowercase: true,
+        required: [true, "Gender is required"],
         enum: ["unisex", "male", "female"],
       },
+    },
+    productId: {
+      type: String,
+      default: uuidv4(),
     },
     stock: {
       type: Number,
@@ -76,6 +82,7 @@ const productSchema = new mongoose.Schema(
     seller: {
       type: String,
       trim: true,
+      required: [true, "Seller is required"],
       minLength: [2, "Description too short"],
       maxLength: [30, "Description too long"],
     },
@@ -85,7 +92,7 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       trim: true,
       lowercase: true,
-      // required: [true, "Department is required"],
+      required: [true, "Department is required"],
       ref: "Department",
       validate: {
         // Calling API to see if country code exists
@@ -110,7 +117,8 @@ const productSchema = new mongoose.Schema(
         min: [0.01, "Price cannot be smaller than 0.01"],
         max: [2000, "Current max price is 2000€"],
         set: (value) => value.toFixed(2),
-        // required: [true, "Price is required"],
+        required: [true, "Price is required"],
+        required: [true, "Price is required"],
       },
       priceHistory: [
         {
@@ -118,7 +126,7 @@ const productSchema = new mongoose.Schema(
           min: [0.01, "Price history  cannot be smaller than 0.01"],
           max: [2000, "Current max price history is 2000€"],
           set: (value) => value.toFixed(2),
-          // required: [true, "Price history is required"],
+          required: [true, "Price history is required"],
         },
       ],
     },
@@ -127,6 +135,7 @@ const productSchema = new mongoose.Schema(
         type: String,
         trim: true,
         uppercase: true,
+        required: [true, "Origin country is required"],
         match: [/^[A-Z]{3}$/, "Origin country code is not valid"],
         validate: {
           // Calling API to see if country code exists
@@ -149,7 +158,7 @@ const productSchema = new mongoose.Schema(
         type: String,
         trim: true,
         uppercase: true,
-        // required: true,
+        required: [true, "Production country code is required"],
         match: [/^[A-Z]{3}$/, "Production country code is not valid"],
         validate: {
           // Calling API to see if country code exists
@@ -171,12 +180,14 @@ const productSchema = new mongoose.Schema(
       socialMission: {
         type: String,
         trim: true,
+        required: [true, "Social mission is required"],
         minLength: [2, "Social mission too short"],
         maxLength: [500, "Social mission too long"],
       },
       environmentMission: {
         type: String,
         trim: true,
+        required: [true, "Enviromental mission is required"],
         minLength: [2, "Environment mission too short"],
         maxLength: [500, "Environment mission too long"],
       },
@@ -186,7 +197,6 @@ const productSchema = new mongoose.Schema(
 );
 
 const Product = mongoose.model("Product", productSchema);
-
 
 exports.productSchema = productSchema;
 exports.Product = Product;
