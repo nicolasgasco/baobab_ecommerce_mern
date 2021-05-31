@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./app.js",
+    "start": "node ./app.js",
     "test": "set $NODE_ENV=test && set $PORT=3001 && jest --watchAll --verbose --detectOpenHandles"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "compression": "^1.7.4",
     "express": "~4.16.1",
     "express-async-errors": "^3.1.1",
     "express-session": "^1.17.2",
