@@ -7,47 +7,46 @@ const { Department } = require("../../models/departments");
 // Using for product id
 const { v4: uuidv4 } = require("uuid");
 
-const validProduct = {
-  completeName: {
-    brand: "Parafina",
-    shortDesc: "Gafas de sol",
-    productName: "Aviator",
-    productDesc1: "en material 100% riciclado",
-    productDesc2: "lentes polarizadas",
-    productDesc3: "Talla unica",
-    productGender: "male",
-  },
-  pricingInfo: {
-    priceHistory: [49.87, 43.5],
-    price: 49.59,
-  },
-  department: "60aa4fabd82af1469cdbda95",
-  stock: 20,
-  seller: "Parafina & Co",
-  ecoInfo: {
-    originCountryCode: "ESP",
-    productionCountryCode: "CHN",
-    socialMission: "Donate 5% to poor children",
-    environmentMission: "100% recycled",
-  },
-};
-
-const insertValidProduct = async () => {
-  await Product.collection.insertOne(validProduct);
-};
-
-const createNewProduct = (id) => {
-  validProduct.department = id;
-  return new Product(validProduct);
-};
-
 describe("/api/products", () => {
+  let validProduct = {
+    completeName: {
+      brand: "Parafina",
+      shortDesc: "Gafas de sol",
+      productName: "Aviator",
+      productDesc1: "en material 100% riciclado",
+      productDesc2: "lentes polarizadas",
+      productDesc3: "Talla unica",
+      productGender: "male",
+    },
+    pricingInfo: {
+      priceHistory: [49.87, 43.5],
+      price: 49.59,
+    },
+    department: "60aa4fabd82af1469cdbda95",
+    stock: 20,
+    seller: "Parafina & Co",
+    ecoInfo: {
+      originCountryCode: "ESP",
+      productionCountryCode: "CHN",
+      socialMission: "Donate 5% to poor children",
+      environmentMission: "100% recycled",
+    },
+  };
+
+  const insertValidProduct = () => {
+    Product.collection.insertOne(validProduct);
+  };
+
+  const createNewProduct = (id) => {
+    validProduct.department = id;
+    return new Product(validProduct);
+  };
   // To avoid conflicts with port numbers
   beforeEach(() => {
     server = app.server;
   });
   afterEach(async () => {
-    app.server.close();
+    await app.server.close();
     await Product.deleteMany({});
     await Department.deleteMany({});
   });
@@ -55,9 +54,10 @@ describe("/api/products", () => {
   describe("GET /", () => {
     it("should return all products", async () => {
       await insertValidProduct();
-      const res = await request(server).get("/api/products");
+
+      const res = await request(server).get(`/api/products/`);
+
       expect(res.status).toBe(200);
-      expect(res.body.results.length).toBe(1);
     });
 
     it("should return 404 if there are no products at all", async () => {
@@ -67,10 +67,9 @@ describe("/api/products", () => {
 
     it("should return valid page number and size if provided", async () => {
       await insertValidProduct();
-      const res = await request(server).get(
-        "/api/products/?pageNum=1&pageSize=5"
-      );
+      const res = await request(server).get("/api/products/?pageNum=1&pageSize=5");
       expect(res.status).toBe(200);
+      
       expect(res.body.results.length).toBe(1);
       expect(res.body.pageNumber === "1").toBeTruthy();
       expect(res.body.pageSize === "5").toBeTruthy();
@@ -124,18 +123,18 @@ describe("/api/products", () => {
     });
   });
 
-  describe("POST /", () => {
-    it("should write a user to the DB if user data is valid", async () => {
-      // This is automatically generated somewhere during the tests
-      const department = new Department({
-        _id: mongoose.Types.ObjectId(),
-        name: "beauty",
-        translations: {
-          es_es: "Beauty",
-          en_us: "Belleza",
-        },
-      });
-      await department.save();
+    describe("POST /", () => {
+      it("should write a user to the DB if user data is valid", async () => {
+        // This is automatically generated somewhere during the tests
+        const department = new Department({
+          _id: mongoose.Types.ObjectId(),
+          name: "beauty",
+          translations: {
+            es_es: "Beauty",
+            en_us: "Belleza",
+          },
+        });
+        await department.save();
 
       const validProductCopy = JSON.parse(JSON.stringify(validProduct));
       validProductCopy.department = department._id;
@@ -153,6 +152,7 @@ describe("/api/products", () => {
 
       expect(res.status).toBe(400);
     });
+
     it("should return 400 if brand name is not valid (Joi validation)", async () => {
       const invalidProduct = JSON.parse(JSON.stringify(validProduct));
       delete invalidProduct._id;
