@@ -1,7 +1,6 @@
 const runTestDb = require("../tests/db_test");
 
 module.exports = (mongoose) => {
-
   if (process.env.NODE_ENV === "test") {
     return runTestDb(mongoose);
   }
