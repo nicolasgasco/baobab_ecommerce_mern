@@ -1,7 +1,11 @@
+const passport = require("passport");
+const mongoose = require("mongoose");
+const session = require("express-session");
+
 const initializePassport = require("./passport-config");
 
 const passportLogic = (app, passport, session, mongoose) => {
-  const { User} = require("../models/users");
+  const { User } = require("../models/users");
   const { ObjectId } = require("bson");
 
   initializePassport(
@@ -83,7 +87,7 @@ const passportLogic = (app, passport, session, mongoose) => {
       session: false,
     });
   });
-}
+};
 
 // Middleware to check if authenticated, not sure if I'll use, same can be done for checkNotAuthenticated
 // function checkAuthenticated(req, res, next) {
