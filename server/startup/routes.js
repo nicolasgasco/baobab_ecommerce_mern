@@ -1,7 +1,5 @@
 const express = require("express");
 const path = require("path");
-const helmet = require("helmet");
-// const error = require("../middleware/error");
 
 // External routes from routes folder
 const usersRouter = require("../routes/users");
@@ -11,9 +9,6 @@ const productsRouter = require("../routes/products");
 module.exports = function (app) {
   app.use(express.json());
   app.use(express.static(path.join(__dirname, "build")));
-
-  // Helmet for security
-  app.use(helmet());
 
   // Used to redirect to react page when a route other than index is refreshed by user
   app.use("/api/departments", departmentsRouter);
