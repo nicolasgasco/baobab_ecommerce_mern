@@ -2,7 +2,7 @@ const languageCodeJoi = require("../joi/languageCode");
 
 const { Department } = require("../models/departments");
 
-exports.getLocalizedDepartments = async (req, res) => {
+const getLocalizedDepartments = async (req, res) => {
   // Validating language code first
   let language = req.query.lang;
   const joiValidation = languageCodeJoi.validate(language);
@@ -16,6 +16,8 @@ exports.getLocalizedDepartments = async (req, res) => {
     });
     return;
   }
+
+  console.log("Joi validation successful");
 
   // Showing only the desired language
   let filter;
@@ -40,7 +42,7 @@ exports.getLocalizedDepartments = async (req, res) => {
   }
 };
 
-exports.getDepartmentById = async (req, res) => {
+const getDepartmentById = async (req, res) => {
   let id = req.params.id;
 
   // Database request
@@ -53,3 +55,6 @@ exports.getDepartmentById = async (req, res) => {
     result: department[0],
   });
 };
+
+exports.getLocalizedDepartments = getLocalizedDepartments;
+exports.getDepartmentById = getDepartmentById;
