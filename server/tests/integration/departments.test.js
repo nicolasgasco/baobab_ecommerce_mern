@@ -26,6 +26,8 @@
 //   });
 
 //   describe("GET /", () => {
+//     it("test", async () => {});
+
 //     it("should return all departments", async () => {
 //       await addValidDepartment();
 //       const res = await request(server).get(`/api/departments/`);
