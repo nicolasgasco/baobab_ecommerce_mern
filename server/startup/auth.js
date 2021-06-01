@@ -4,7 +4,7 @@ const session = require("express-session");
 
 const initializePassport = require("./passport-config");
 
-const passportLogic = (app, passport, session, mongoose) => {
+const passportLogic = (app) => {
   const { User } = require("../models/users");
   const { ObjectId } = require("bson");
 
