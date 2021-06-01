@@ -1,8 +1,9 @@
-module.exports = (mongoose) => {
+const mongoose = require("mongoose");
+module.exports = () => {
   // Test database connection
   mongoose
     .connect(
-      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@sandbox.1ybr6.mongodb.net/bootcamp_final_project_tests?retryWrites=true&w=majority`,
+      "mongodb://localhost:27017/bootcamp_final_project_tests",
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
