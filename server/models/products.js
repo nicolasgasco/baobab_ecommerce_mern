@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const { v4: uuidv4 } = require("uuid");
 
 // Needed for custom validation later
-const { departmentSchema, Department } = require("./departments");
+const { Department } = require("./departments");
 
 const productSchema = new mongoose.Schema(
   {
