@@ -2,7 +2,7 @@ const productSchemaJoi = require("../joi/products");
 
 const { Product } = require("../models/products");
 
-exports.getAllProducts = async (req, res) => {
+const getAllProducts = async (req, res) => {
   const pageNumber = req.query.pageNum;
   const pageSize = req.query.pageSize;
 
@@ -24,7 +24,8 @@ exports.getAllProducts = async (req, res) => {
   });
 };
 
-exports.getProductById = async (req, res) => {
+const getProductById = async (req, res) => {
+  // Id validated by middleware
   const id = req.params.id;
 
   // Populating department name from another table, with name and without id
@@ -43,19 +44,8 @@ exports.getProductById = async (req, res) => {
   });
 };
 
-exports.postNewProduct = async (req, res) => {
-  // First round of validation with Joi
-  const joiValidation = productSchemaJoi.validate(req.body);
-  if (joiValidation.error) {
-    res.status(400).send({
-      error: `${
-        joiValidation.error.name
-      } (Joi): ${joiValidation.error.details.map((err) => {
-        return err.message;
-      })}`,
-    });
-    return;
-  }
+const postNewProduct = async (req, res) => {
+  // Joi validation in middleware
   console.log("Joi validation successful");
 
   // Creating new mongoose product with body
@@ -69,7 +59,7 @@ exports.postNewProduct = async (req, res) => {
   res.send({ insertedCount: 1, result: result });
 };
 
-exports.putProductWithId = async (req, res) => {
+const putProductWithId = async (req, res) => {
   // Add a modification date
   req.body.modificationDate = new Date();
 
@@ -92,7 +82,6 @@ exports.putProductWithId = async (req, res) => {
   await updatedProduct.validate();
 
   // Finding and updating at the same
-  console.log(req.params.id);
   const result = await Product.findOneAndUpdate(
     { productId: req.params.id },
     req.body,
@@ -103,10 +92,17 @@ exports.putProductWithId = async (req, res) => {
   res.send({ updatedCount: 1, updatedObj: result });
 };
 
-exports.deleteProductWithId = async (req, res) => {
+const deleteProductWithId = async (req, res) => {
   const result = await Product.remove({ productId: req.params.id });
   if (result.deletedCount === 0) {
     res.status(404).send("Product not found");
   }
   res.send({ deletedCount: 1, result: result });
 };
+
+
+exports.getAllProducts = getAllProducts;
+exports.getProductById = getProductById;
+exports.postNewProduct = postNewProduct;
+exports.putProductWithId = putProductWithId;
+exports.deleteProductWithId = deleteProductWithId;
