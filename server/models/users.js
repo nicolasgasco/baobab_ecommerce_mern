@@ -26,16 +26,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
-      unique: true,
       minLength: [3, "Email too short"],
       maxLength: [320, "Email too long"],
-      // // Email is required only when inserting new user, not when updating
-      // required: [
-      //   function () {
-      //     return this.modificationDate === null ? true : false;
-      //   },
-      //   "Email is required",
-      // ],
+      // Email is required only when inserting new user, not when updating
+      required: [
+        function () {
+          return this.modificationDate === null ? true : false;
+        },
+        "Email is required",
+      ],
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Email format is not valid",
