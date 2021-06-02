@@ -1,9 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer utilities {
-  .search-icon {
-    background-image: url("./assets/search.svg");
-  }
-}
