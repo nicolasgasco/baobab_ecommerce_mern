@@ -13,7 +13,7 @@ const getAllProducts = async (req, res) => {
     .limit(+pageSize);
 
   if (products.length === 0) {
-    res.status(404).send({ error: "No results found" });
+    return res.status(404).send({ error: "No results found" });
   }
 
   res.send({
@@ -35,7 +35,7 @@ const getProductById = async (req, res) => {
   );
 
   if (product.length === 0) {
-    res.status(404).send({ error: "No results found" });
+    return res.status(404).send({ error: "No results found" });
   }
 
   res.send({
@@ -60,22 +60,10 @@ const postNewProduct = async (req, res) => {
 };
 
 const putProductWithId = async (req, res) => {
+  console.log("Joi validation successful");
+
   // Add a modification date
   req.body.modificationDate = new Date();
-
-  // First round of validation with Joi
-  const joiValidation = productSchemaJoi.validate(req.body);
-  if (joiValidation.error) {
-    res.status(400).send({
-      error: `${
-        joiValidation.error.name
-      } (Joi): ${joiValidation.error.details.map((err) => {
-        return err.message;
-      })}`,
-    });
-    return;
-  }
-  console.log("Joi validation successful");
 
   const updatedProduct = new Product(req.body);
   // Validation with Mongoose
@@ -89,17 +77,20 @@ const putProductWithId = async (req, res) => {
       new: true,
     }
   );
+
+  if (!result) {
+    return res.status(404).send({ error: "Nothing found" });
+  }
   res.send({ updatedCount: 1, updatedObj: result });
 };
 
 const deleteProductWithId = async (req, res) => {
   const result = await Product.remove({ productId: req.params.id });
   if (result.deletedCount === 0) {
-    res.status(404).send("Product not found");
+    return res.status(404).send("Product not found");
   }
   res.send({ deletedCount: 1, result: result });
 };
-
 
 exports.getAllProducts = getAllProducts;
 exports.getProductById = getProductById;
