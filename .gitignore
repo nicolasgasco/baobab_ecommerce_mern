@@ -119,4 +119,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # Tailwind outputted file
-src/tailwind.output.css
+main.css
