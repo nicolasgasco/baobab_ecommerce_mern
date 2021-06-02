@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* .search-icon {
+    background-image: url("./search.svg");
+  } */
+
+  /* Need for product card */
+  .wrapper{
+    display:grid;
+    height:100vh;
+    place-items:center
+  }
+}
