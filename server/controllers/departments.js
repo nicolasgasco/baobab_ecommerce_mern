@@ -56,5 +56,20 @@ const getDepartmentById = async (req, res) => {
   });
 };
 
+const postNewDepartment = async (req, res) => {
+
+  // Creating new mongoose department with body
+  const department = new Department(req.body);
+
+  // Validation with Mongoose
+  await department.validate();
+  console.log("Mongoose validation successful");
+
+  // Saving in DB and sending result
+  const result = await department.save();
+  res.send({ insertedCount: 1, result: result });
+};
+
 exports.getLocalizedDepartments = getLocalizedDepartments;
 exports.getDepartmentById = getDepartmentById;
+exports.postNewDepartment = postNewDepartment;
