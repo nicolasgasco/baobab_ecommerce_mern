@@ -16,12 +16,21 @@ describe("/api/products", () => {
       productDesc1: "en material 100% riciclado",
       productDesc2: "lentes polarizadas",
       productDesc3: "Talla unica",
+      color: "negro",
       productGender: "male",
     },
+    completeNameDesc:
+      "parafina,gafas de sol,aviator,en material 100% riciclado,lentes polarizadas,talla unica",
     pricingInfo: {
       priceHistory: [49.87, 43.5],
       price: 49.59,
     },
+    pictures: [
+      {
+        url: "https://ciao.png",
+        alt: "Picture description",
+      },
+    ],
     department: "60aa4fabd82af1469cdbda95",
     stock: 20,
     seller: "Parafina & Co",
@@ -39,6 +48,7 @@ describe("/api/products", () => {
 
   const createNewProduct = (id) => {
     validProduct.department = id;
+
     return new Product(validProduct);
   };
   // To avoid conflicts with port numbers
@@ -195,18 +205,22 @@ describe("/api/products", () => {
       });
       await department.save();
 
-      const validProductCopy = JSON.parse(JSON.stringify(validProduct));
+      let validProductCopy = JSON.parse(JSON.stringify(validProduct));
       validProductCopy.department = department._id;
       // This is necessary for some reason
       delete validProductCopy._id;
-
       const productToModify = new Product(validProductCopy);
+
       productToModify.save();
 
-      const modifiedProduct = JSON.parse(JSON.stringify(productToModify));
+      let modifiedProduct = JSON.parse(JSON.stringify(productToModify));
       delete modifiedProduct._id;
       modifiedProduct.completeName.brand = "New brand";
       modifiedProduct.pricingInfo.price = 9.99;
+      // This is necessary in order not to trigger error
+      modifiedProduct.pictures.forEach( obj => {
+        delete obj._id
+      })
 
       const res = await request(server)
         .put(`/api/products/${productToModify.productId}`)
@@ -215,124 +229,123 @@ describe("/api/products", () => {
       expect(res.status).toBe(200);
     });
 
-    it("should return 400 if product data is missing (Joi validation)", async () => {
-      const department = new Department({
-        _id: mongoose.Types.ObjectId(),
-        name: "beauty",
-        translations: {
-          es_es: "Beauty",
-          en_us: "Belleza",
-        },
+      it("should return 400 if product data is missing (Joi validation)", async () => {
+        const department = new Department({
+          _id: mongoose.Types.ObjectId(),
+          name: "beauty",
+          translations: {
+            es_es: "Beauty",
+            en_us: "Belleza",
+          },
+        });
+        await department.save();
+
+        const validProductCopy = JSON.parse(JSON.stringify(validProduct));
+        validProductCopy.department = department._id;
+        // This is necessary for some reason
+        delete validProductCopy._id;
+
+        const productToModify = new Product(validProductCopy);
+        productToModify.save();
+
+        const res = await request(server)
+          .put(`/api/products/${productToModify.productId}`)
+          .send({});
+
+        expect(res.status).toBe(400);
       });
-      await department.save();
 
-      const validProductCopy = JSON.parse(JSON.stringify(validProduct));
-      validProductCopy.department = department._id;
-      // This is necessary for some reason
-      delete validProductCopy._id;
+      it("should return 404 if product id is missing", async () => {
+        // This is route doesn' t exist
+        const res = await request(server).put("/api/products/").send({});
 
-      const productToModify = new Product(validProductCopy);
-      productToModify.save();
-
-      const res = await request(server)
-        .put(`/api/products/${productToModify.productId}`)
-        .send({});
-
-      expect(res.status).toBe(400);
-    });
-
-    it("should return 404 if product id is missing", async () => {
-      // This is route doesn' t exist
-      const res = await request(server).put("/api/products/").send({});
-
-      console.log(res)
-      expect(res.status).toBe(404);
-    });
-
-    it("should return 400 if id is not valid", async () => {
-      const department = new Department({
-        _id: mongoose.Types.ObjectId(),
-        name: "beauty",
-        translations: {
-          es_es: "Beauty",
-          en_us: "Belleza",
-        },
+        expect(res.status).toBe(404);
       });
-      await department.save();
 
-      const validProductCopy = JSON.parse(JSON.stringify(validProduct));
-      validProductCopy.department = department._id;
-      // This is necessary for some reason
-      delete validProductCopy._id;
+      it("should return 400 if id is not valid", async () => {
+        const department = new Department({
+          _id: mongoose.Types.ObjectId(),
+          name: "beauty",
+          translations: {
+            es_es: "Beauty",
+            en_us: "Belleza",
+          },
+        });
+        await department.save();
 
-      const id = uuidv4();
-      const res = await request(server)
-        .put(`/api/products/12345`)
-        .send(validProductCopy);
+        const validProductCopy = JSON.parse(JSON.stringify(validProduct));
+        validProductCopy.department = department._id;
+        // This is necessary for some reason
+        delete validProductCopy._id;
 
-      expect(res.status).toBe(400);
-      expect(res.body.error).toMatch(/Invalid/);
-    });
+        const id = uuidv4();
+        const res = await request(server)
+          .put(`/api/products/12345`)
+          .send(validProductCopy);
 
-    it("should return 404 if id is valid but not in DB", async () => {
-      const department = new Department({
-        _id: mongoose.Types.ObjectId(),
-        name: "beauty",
-        translations: {
-          es_es: "Beauty",
-          en_us: "Belleza",
-        },
+        expect(res.status).toBe(400);
+        expect(res.body.error).toMatch(/Invalid/);
       });
-      await department.save();
 
-      const validProductCopy = JSON.parse(JSON.stringify(validProduct));
-      validProductCopy.department = department._id;
-      // This is necessary for some reason
-      delete validProductCopy._id;
-      //   Renegerating because otherwise it's identical to other one
-      validProductCopy.productId = uuidv4();
+      it("should return 404 if id is valid but not in DB", async () => {
+        const department = new Department({
+          _id: mongoose.Types.ObjectId(),
+          name: "beauty",
+          translations: {
+            es_es: "Beauty",
+            en_us: "Belleza",
+          },
+        });
+        await department.save();
 
-      const id = uuidv4();
+        const validProductCopy = JSON.parse(JSON.stringify(validProduct));
+        validProductCopy.department = department._id;
+        // This is necessary for some reason
+        delete validProductCopy._id;
+        //   Renegerating because otherwise it's identical to other one
+        validProductCopy.productId = uuidv4();
 
-      const res = await request(server)
-        .put(`/api/products/${id}`)
-        .send(validProductCopy);
+        const id = uuidv4();
 
-      expect(res.status).toBe(404);
-      expect(res.body.error).toMatch(/Nothing found/);
-    });
-  });
+        const res = await request(server)
+          .put(`/api/products/${id}`)
+          .send(validProductCopy);
 
-  describe("DELETE /", () => {
-    it("should delete a user from the DB if product ID is valid", async () => {
-      const department = new Department({
-        _id: mongoose.Types.ObjectId(),
-        name: "beauty",
-        translations: {
-          es_es: "Beauty",
-          en_us: "Belleza",
-        },
+        expect(res.status).toBe(404);
+        expect(res.body.error).toMatch(/Nothing found/);
       });
-      await department.save();
-
-      const product = createNewProduct(department._id);
-      await product.save();
-
-      const res = await request(server).delete(
-        `/api/products/${product.productId}`
-      );
-
-      expect(res.status).toBe(200);
     });
 
-    it("should return 400 if wrongly formatted id is passed", async () => {
-      const res = await request(server).delete(`/api/products/1`);
-      expect(res.status).toBe(400);
-    });
+    describe("DELETE /", () => {
+      it("should delete a user from the DB if product ID is valid", async () => {
+        const department = new Department({
+          _id: mongoose.Types.ObjectId(),
+          name: "beauty",
+          translations: {
+            es_es: "Beauty",
+            en_us: "Belleza",
+          },
+        });
+        await department.save();
 
-    it("should return 404 if id of non-existing product is passed", async () => {
-      const res = await request(server).delete(`/api/products/${uuidv4()}`);
-      expect(res.status).toBe(404);
-    });
+        const product = createNewProduct(department._id);
+        await product.save();
+
+        const res = await request(server).delete(
+          `/api/products/${product.productId}`
+        );
+
+        expect(res.status).toBe(200);
+      });
+
+      it("should return 400 if wrongly formatted id is passed", async () => {
+        const res = await request(server).delete(`/api/products/1`);
+        expect(res.status).toBe(400);
+      });
+
+      it("should return 404 if id of non-existing product is passed", async () => {
+        const res = await request(server).delete(`/api/products/${uuidv4()}`);
+        expect(res.status).toBe(404);
+      });
   });
 });
