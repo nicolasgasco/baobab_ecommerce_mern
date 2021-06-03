@@ -61,6 +61,14 @@ const productSchema = new mongoose.Schema(
         minLength: [2, "Description too short"],
         maxLength: [50, "Description too long"],
       },
+      color: {
+        type: String,
+        lowercase: true,
+        trim: true,
+        minLength: [2, "Color too short"],
+        maxLength: [10, "Color too long"],
+        required: true,
+      },
       productGender: {
         type: String,
         trim: true,
@@ -69,9 +77,42 @@ const productSchema = new mongoose.Schema(
         enum: ["unisex", "male", "female"],
       },
     },
+    completeNameDesc: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      minLength: [20, "Complete desc too short"],
+      maxLength: [230, "Complete desc long"],
+      required: [true, "Complete desc is required"],
+      match: [/[A-Za-z0-9]+/, "Complete desc doesn't contain any text"],
+    },
+    pictures: [
+      {
+        url: {
+          type: String,
+          lowercase: true,
+          trim: true,
+          minLength: [10, "Url too short"],
+          maxLength: [500, "Url too long"],
+          required: true,
+          match: [
+            /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
+            "Url is not valid",
+          ],
+        },
+        alt: {
+          type: String,
+          lowercase: true,
+          trim: true,
+          required: true,
+          minLength: [5, "Alt too short"],
+          maxLength: [50, "Alt too long"],
+        },
+      },
+    ],
     productId: {
       type: String,
-      default: uuidv4(),
+      default: uuidv4,
     },
     stock: {
       type: Number,
