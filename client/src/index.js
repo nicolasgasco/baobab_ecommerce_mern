@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 // Tailwind-generated css
 import './assets/main.css';
 
+
 import App from './App';
 
 ReactDOM.render(

@@ -3,6 +3,7 @@ import HeaderBanner from "./components/UI/modals/HeaderBanner";
 import MainModal from "./components/UI/modals/MainModal";
 import StoreSearchbar from "./components/UI/search/StoreSearchbar"
 import ProductCard from "./components/layout/cards/ProductCard";
+import ProductCarousel from "./components/UI/carousel/ProductCarousel";
 
 function App() {
   return (
