@@ -24,6 +24,18 @@ const getAllProducts = async (req, res) => {
   });
 };
 
+const getProductsByKeywords = async (req, res) => {
+  if (!req.body.keywords) res.status(400).send({ error: "Keywords not valid" });
+  const keywordsRegex = new RegExp(req.body.keywords, "i");
+
+  const products = await Product.find({ completeNameDesc: keywordsRegex });
+  res.status(200).send({
+    productsFound: products.length,
+    keywords: req.body.keywords.split("|"),
+    results: products,
+  });
+};
+
 const getProductById = async (req, res) => {
   // Id validated by middleware
   const id = req.params.id;
@@ -50,12 +62,14 @@ const postNewProduct = async (req, res) => {
 
   // Creating new mongoose product with body
   const product = new Product(req.body);
+
   // Second round of validation with Mongoose
   await product.validate();
   console.log("Mongoose validation successful");
 
   // Saving in DB and sending result
   const result = await product.save();
+
   res.send({ insertedCount: 1, result: result });
 };
 
@@ -93,6 +107,7 @@ const deleteProductWithId = async (req, res) => {
 };
 
 exports.getAllProducts = getAllProducts;
+exports.getProductsByKeywords = getProductsByKeywords;
 exports.getProductById = getProductById;
 exports.postNewProduct = postNewProduct;
 exports.putProductWithId = putProductWithId;
