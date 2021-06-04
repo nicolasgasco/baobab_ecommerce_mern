@@ -12,17 +12,29 @@ const createKeywords = require("../middleware/createKeywords");
 // GET all products
 router.get("/", productsController.getAllProducts);
 
-// GET products filtering per keywords 
-router.get("/search", createKeywords, productsController.getProductsByKeywords);
-
 //  GET a specific product with id
 router.get("/:id", validateUuid, productsController.getProductById);
 
+// GET products filtering per keywords
+router.post(
+  "/search",
+  createKeywords,
+  productsController.postProductsByKeywords
+);
+
 // POST a new product
-router.post("/", [createCompleteName, joiValidationProducts], productsController.postNewProduct);
+router.post(
+  "/",
+  [createCompleteName, joiValidationProducts],
+  productsController.postNewProduct
+);
 
 // PUT a specific product (with ID) (whole product)
-router.put("/:id", [joiValidationProducts, validateUuid], productsController.putProductWithId);
+router.put(
+  "/:id",
+  [joiValidationProducts, validateUuid],
+  productsController.putProductWithId
+);
 
 // DELETE a specific order (with ID)
 router.delete("/:id", validateUuid, productsController.deleteProductWithId);
