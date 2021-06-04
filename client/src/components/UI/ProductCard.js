@@ -2,32 +2,30 @@ import { useState } from "react";
 import Spinner from "../../assets/img/Spinner-5.gif";
 
 const ProductCard = (props) => {
-  const showPictureOrLoader = () => {
-    if (props.isLoading) {
-      return (
-        <img
-          src={Spinner}
-          alt="Loading animation"
-          className="w-1/3 mx-auto p-5 object-cover object-center"
-        />
-      );
-    } else {
-      return (
-        <img
-          src={props.product.pictures[0].url}
-          alt={props.product.pictures[0].alt}
-          className="w-full object-cover object-center"
-        />
-      );
-    }
-  };
+  let showPictureOrLoader = (
+    <img
+      src={props.product.pictures[0].url}
+      alt={props.product.pictures[0].alt}
+      className="w-full object-cover object-center"
+    />
+  );
+  if (props.picturesLoading) {
+    showPictureOrLoader = (
+      <img
+        src={Spinner}
+        alt="Loading animation"
+        className="w-1/3 mx-auto p-5 object-cover object-center"
+      />
+    );
+  }
+
   return (
     <div
       id={`product${props.product.id}`}
       className="pb-10 px-0 md:px-4 md:w-1/2 lg:w-1/3 xl:w-1/4"
     >
       <div className="bg-white py-10 rounded-lg shadow-md">
-        {showPictureOrLoader()}
+        {showPictureOrLoader}
       </div>
       <div className="relative px-4 -mt-6">
         <div className="bg-green-200 p-5 rounded-lg shadow-xl">
