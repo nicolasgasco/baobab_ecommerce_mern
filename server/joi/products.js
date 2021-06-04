@@ -24,7 +24,6 @@ const productSchemaJoi = Joi.object({
       .pattern(
         /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
       )
-      .lowercase()
       .required(),
     alt: Joi.string().min(5).max(50).lowercase().trim().required()
       }),
