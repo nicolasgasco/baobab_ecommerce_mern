@@ -7,10 +7,18 @@
     background-image: url("./search.svg");
   } */
 
+  body {
+    margin: 0;
+  }
+
+  body * {
+    box-sizing: border-box;
+  }
+
   /* Need for product card */
-  .wrapper{
-    display:grid;
-    height:100vh;
-    place-items:center
+  .wrapper {
+    display: grid;
+    height: 100vh;
+    place-items: center;
   }
 }

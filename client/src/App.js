@@ -1,18 +1,18 @@
-import MainNav from "./components/layout/nav/MainNav/MainNav";
-import HeaderBanner from "./components/UI/modals/HeaderBanner";
-import MainModal from "./components/UI/modals/MainModal";
-import StoreSearchbar from "./components/UI/search/StoreSearchbar"
-import ProductCard from "./components/layout/cards/ProductCard";
-import ProductCarousel from "./components/UI/carousel/ProductCarousel";
+import MainNav from "./components/UI/MainNav";
+import HeaderBanner from "./components/UI/HeaderBanner";
+import MainModal from "./components/UI/MainModal";
+import VideoBackground from "./components/UI/VideoBackground";
+import MainContent from "./components/MainContent/MainContent";
 
 function App() {
   return (
     <>
       <HeaderBanner />
-      <MainNav />
-      <StoreSearchbar />
-      <ProductCard />
       <MainModal />
+
+      <VideoBackground />
+      <MainNav />
+      <MainContent />
     </>
   );
 }
