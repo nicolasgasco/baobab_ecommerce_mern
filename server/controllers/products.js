@@ -24,18 +24,6 @@ const getAllProducts = async (req, res) => {
   });
 };
 
-const getProductsByKeywords = async (req, res) => {
-  if (!req.body.keywords) res.status(400).send({ error: "Keywords not valid" });
-  const keywordsRegex = new RegExp(req.body.keywords, "i");
-
-  const products = await Product.find({ completeNameDesc: keywordsRegex });
-  res.status(200).send({
-    productsFound: products.length,
-    keywords: req.body.keywords.split("|"),
-    results: products,
-  });
-};
-
 const getProductById = async (req, res) => {
   // Id validated by middleware
   const id = req.params.id;
@@ -53,6 +41,18 @@ const getProductById = async (req, res) => {
   res.send({
     resultsFound: 1,
     result: product[0],
+  });
+};
+
+const postProductsByKeywords = async (req, res) => {
+  if (!req.body.keywords) res.status(400).send({ error: "Keywords not valid" });
+  const keywordsRegex = new RegExp(req.body.keywords, "i");
+
+  const products = await Product.find({ completeNameDesc: keywordsRegex });
+  res.status(200).send({
+    productsFound: products.length,
+    keywords: req.body.keywords.split("|"),
+    results: products,
   });
 };
 
@@ -107,7 +107,7 @@ const deleteProductWithId = async (req, res) => {
 };
 
 exports.getAllProducts = getAllProducts;
-exports.getProductsByKeywords = getProductsByKeywords;
+exports.postProductsByKeywords = postProductsByKeywords;
 exports.getProductById = getProductById;
 exports.postNewProduct = postNewProduct;
 exports.putProductWithId = putProductWithId;
