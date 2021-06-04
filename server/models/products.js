@@ -90,7 +90,6 @@ const productSchema = new mongoose.Schema(
       {
         url: {
           type: String,
-          lowercase: true,
           trim: true,
           minLength: [10, "Url too short"],
           maxLength: [500, "Url too long"],
