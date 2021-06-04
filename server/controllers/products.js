@@ -48,9 +48,24 @@ const postProductsByKeywords = async (req, res) => {
   if (!req.body.keywords) res.status(400).send({ error: "Keywords not valid" });
   const keywordsRegex = new RegExp(req.body.keywords, "i");
 
-  const products = await Product.find({ completeNameDesc: keywordsRegex });
+  const pageNumber = req.query.pageNum;
+  const pageSize = req.query.pageSize;
+
+  // Populating department name from another table, with name and without id
+  const totalProducts = await Product.find({
+    completeNameDesc: keywordsRegex,
+  }).count();
+
+  const products = await Product.find({ completeNameDesc: keywordsRegex })
+    .skip((pageNumber - 1) * pageSize)
+    .limit(+pageSize);
+
   res.status(200).send({
     productsFound: products.length,
+    pageNumber: +pageNumber,
+    pageSize: +pageSize,
+    totalProducts,
+    totalPages: Math.ceil(totalProducts / pageSize),
     keywords: req.body.keywords.split("|"),
     results: products,
   });
