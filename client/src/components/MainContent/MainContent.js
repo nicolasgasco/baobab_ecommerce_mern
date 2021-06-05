@@ -4,7 +4,10 @@ import ResultsBox from "./ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
 
 const MainContent = () => {
+  // Showing either result box or other content
+  const [showResultsBox, setShowResultsBox] = useState(false);
   const [fetchedProducts, setFecthedProducts] = useState([]);
+  // State for when content is loading and not showing
   const [contentLoading, setContentLoading] = useState(false);
   // Used for when pictures are still loading
   const [picturesLoading, setPicturesLoading] = useState(false);
@@ -13,10 +16,11 @@ const MainContent = () => {
 
   // Fetching the products by keywords
   const getSearchbarInput = (input) => {
+    setShowResultsBox(true);
     setContentLoading(true);
     setPicturesLoading(true);
     setIsEmpty(false);
-    // THis is necessary, otherwise some products just stay there
+    // THis is necessary, otherwise some products just stay stuck there
     setFecthedProducts([]);
 
     fetch("api/products/search", {
@@ -28,7 +32,7 @@ const MainContent = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-          console.log(res.results.length)
+        console.log(res.results.length);
         if (res.results.length === 0) {
           setIsEmpty(true);
           setPicturesLoading(false);
@@ -45,17 +49,25 @@ const MainContent = () => {
       });
   };
 
-  return (
-    <>
-      <StoreSearchbar onGetSearchbarInput={getSearchbarInput} />
-      <ResultsBox
-        fetchedProducts={fetchedProducts}
-        contentLoading={contentLoading}
-        picturesLoading={picturesLoading}
-        isEmpty={isEmpty}
-      />
-    </>
-  );
+  if (showResultsBox) {
+    return (
+      <>
+        <StoreSearchbar onGetSearchbarInput={getSearchbarInput} />
+        <ResultsBox
+          fetchedProducts={fetchedProducts}
+          contentLoading={contentLoading}
+          picturesLoading={picturesLoading}
+          isEmpty={isEmpty}
+        />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <StoreSearchbar onGetSearchbarInput={getSearchbarInput} />
+      </>
+    );
+  }
 };
 
 export default MainContent;
