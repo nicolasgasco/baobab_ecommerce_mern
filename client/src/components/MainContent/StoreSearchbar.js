@@ -1,15 +1,12 @@
 import { useState } from "react";
 
 const StoreSearchbar = (props) => {
-  const [searchbarInput, setSearchbarInput] = useState("");
 
-  const handleSearchbarInput = (event) => {
-    setSearchbarInput(event.target.value);
-  };
 
   const handleSubmitSearchbar = (event) => {
     event.preventDefault();
-    if (searchbarInput) props.onGetSearchbarInput(searchbarInput);
+    const searchbarInput = event.target.children[0].value; 
+    if (searchbarInput) props.onGetSearchbarInput(searchbarInput.trim());
   };
 
   return (
@@ -20,8 +17,6 @@ const StoreSearchbar = (props) => {
           id="search"
           type="text"
           placeholder="Search..."
-          onChange={handleSearchbarInput}
-          value={searchbarInput}
         />
 
         <div className="p-2">
