@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import BaobabLogo from "../../assets/img/baobab.svg"
 
 const MainNav = () => {
   const navigation = ["Dashboard", "Team", "Projects", "Calendar", "Reports"];
@@ -19,8 +20,8 @@ const MainNav = () => {
               <div className="flex items-center">
                 <div className="flex-shrink-0 out">
                   <img
-                    className="h-8 w-8"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                    className="h-12 w-12"
+                    src={BaobabLogo}
                     alt="Workflow"
                   />
                 </div>
