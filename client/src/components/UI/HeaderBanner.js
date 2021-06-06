@@ -1,6 +1,7 @@
 import { SpeakerphoneIcon, XIcon } from "@heroicons/react/outline";
+import ReactDOM from "react-dom";
 
-const HeaderBanner = () => {
+const BannerContent = () => {
   return (
     <div className="bg-indigo-600">
       <div className="max-w-11xl mx-auto py-1.5 px-3 sm:px-6 lg:px-8 z-10">
@@ -41,6 +42,17 @@ const HeaderBanner = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const HeaderBanner = () => {
+  return (
+    <>
+      {ReactDOM.createPortal(
+        <BannerContent />,
+        document.getElementById("overlay-root")
+      )}
+    </>
   );
 };
 
