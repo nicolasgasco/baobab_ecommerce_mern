@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import SectionLoading from "../UI/SectionLoading";
 import ResultsBox from "./ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
+import HeroMain from "../UI/HeroMain";
 
 const MainContent = () => {
   // Showing either result box or other content
@@ -22,6 +22,8 @@ const MainContent = () => {
     setIsEmpty(false);
     // THis is necessary, otherwise some products just stay stuck there
     setFecthedProducts([]);
+
+    console.log("Fetching products...");
 
     fetch("api/products/search", {
       method: "POST",
@@ -49,25 +51,21 @@ const MainContent = () => {
       });
   };
 
-  if (showResultsBox) {
-    return (
-      <>
-        <StoreSearchbar onGetSearchbarInput={getSearchbarInput} />
+  return (
+    <>
+      <StoreSearchbar onGetSearchbarInput={getSearchbarInput} />
+      {showResultsBox ? (
         <ResultsBox
           fetchedProducts={fetchedProducts}
           contentLoading={contentLoading}
           picturesLoading={picturesLoading}
           isEmpty={isEmpty}
         />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <StoreSearchbar onGetSearchbarInput={getSearchbarInput} />
-      </>
-    );
-  }
+      ) : (
+        <HeroMain />
+      )}
+    </>
+  );
 };
 
 export default MainContent;
