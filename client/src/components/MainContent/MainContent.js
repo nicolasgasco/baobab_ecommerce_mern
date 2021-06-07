@@ -7,6 +7,11 @@ const MainContent = () => {
   // Showing either result box or other content
   const [showResultsBox, setShowResultsBox] = useState(false);
   const [fetchedProducts, setFecthedProducts] = useState([]);
+
+  const [paginationData, setPaginationData] = useState({});
+  const [activePage, setActivePage] = useState(1);
+  const [searchKeywords, setSearchKeywords] = useState("");
+
   // State for when content is loading and not showing
   const [contentLoading, setContentLoading] = useState(false);
   // Used for when pictures are still loading
@@ -24,8 +29,8 @@ const MainContent = () => {
     setFecthedProducts([]);
 
     console.log("Fetching products...");
-
-    fetch("api/products/search", {
+    console.log(searchKeywords);
+    fetch(`api/products/search/?pageNum=${activePage}&pageSize=2`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,29 +39,49 @@ const MainContent = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.results.length);
         if (res.results.length === 0) {
           setIsEmpty(true);
           setPicturesLoading(false);
           setContentLoading(false);
         } else {
           setFecthedProducts(res.results);
+          console.log(res.pageNumber);
+          setPaginationData({
+            productsFound: res.productsFound,
+            pageNumber: res.pageNumber,
+            pageSize: res.pageSize,
+            totalProducts: res.totalProducts,
+            totalPages: res.totalPages,
+          });
           setPicturesLoading(false);
           setContentLoading(false);
           setIsEmpty(false);
         }
       })
       .catch((error) => {
+        setIsEmpty(true);
+        setPicturesLoading(false);
+        setContentLoading(false);
         console.log("An error ocurred:" + error.message);
       });
   };
 
+  const handlePageChange = (event) => {
+    setActivePage(event.target.value);
+  };
+
   return (
     <>
-      <StoreSearchbar onGetSearchbarInput={getSearchbarInput} />
+      <StoreSearchbar
+        onGetSearchbarInput={getSearchbarInput}
+        setActivePage={setActivePage}
+        activePage={activePage}
+      />
       {showResultsBox ? (
         <ResultsBox
           fetchedProducts={fetchedProducts}
+          paginationData={paginationData}
+          handlePageChange={handlePageChange}
           contentLoading={contentLoading}
           picturesLoading={picturesLoading}
           isEmpty={isEmpty}
