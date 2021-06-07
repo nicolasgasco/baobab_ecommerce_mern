@@ -11,6 +11,7 @@ const MainContent = () => {
   const [paginationData, setPaginationData] = useState({});
   const [activePage, setActivePage] = useState(1);
   const [searchKeywords, setSearchKeywords] = useState("");
+  const [resultsPerPage, setResultsPerPage] = useState(8);
 
   // State for when content is loading and not showing
   const [contentLoading, setContentLoading] = useState(false);
@@ -27,15 +28,15 @@ const MainContent = () => {
     setIsEmpty(false);
     // THis is necessary, otherwise some products just stay stuck there
     setFecthedProducts([]);
+    setSearchKeywords(input)
 
     console.log("Fetching products...");
-    console.log(searchKeywords);
-    fetch(`api/products/search/?pageNum=${activePage}&pageSize=2`, {
+    fetch(`api/products/search/?pageNum=${activePage}&pageSize=${resultsPerPage}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ keywords: input }),
+      body: JSON.stringify({ keywords: (input || searchKeywords) }),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -70,6 +71,11 @@ const MainContent = () => {
     setActivePage(event.target.value);
   };
 
+  function handleResultsPerPage(value) {
+    setResultsPerPage(value);
+    getSearchbarInput();
+  }
+
   return (
     <>
       <StoreSearchbar
@@ -82,6 +88,7 @@ const MainContent = () => {
           fetchedProducts={fetchedProducts}
           paginationData={paginationData}
           handlePageChange={handlePageChange}
+          handleResultsPerPage={handleResultsPerPage}
           contentLoading={contentLoading}
           picturesLoading={picturesLoading}
           isEmpty={isEmpty}
