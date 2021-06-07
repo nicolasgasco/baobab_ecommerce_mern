@@ -1,11 +1,19 @@
 import { useState } from "react";
 
-const SimpleDropdown = ({ heading, fields }) => {
-  const [show, setShow] = useState(true);
+const SimpleDropdown = ({ heading, fields, handleResultsPerPage }) => {
+  const [show, setShow] = useState(false);
 
   const showFields = fields.map((field) => {
     return (
-      <li className="cursor-pointer text-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 text-sm leading-3 tracking-normal py-3 hover:bg-gray-100 px-3 font-normal">
+      <li
+        onClick={(event) => {
+          setShow(false);
+          handleResultsPerPage(event.target.value);
+        }}
+        key={`${field}-hits`}
+        value={field}
+        className="cursor-pointer text-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 text-sm leading-3 tracking-normal py-3 hover:bg-gray-100 px-3 font-normal"
+      >
         {field}
       </li>
     );
@@ -16,7 +24,7 @@ const SimpleDropdown = ({ heading, fields }) => {
       <div className="container flex justify-center mx-auto py-2">
         <div className=" mb-2">
           {/* Code block starts */}
-          <div className="relative">
+          <div className="relative" onSubmit={handleResultsPerPage}>
             <div
               className="bg-white dark:bg-gray-800 flex items-center justify-between border rounded border-gray-300 dark:border-gray-700 w-40 cursor-pointer"
               onClick={() => setShow(!show)}
