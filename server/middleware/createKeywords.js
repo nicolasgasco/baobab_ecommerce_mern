@@ -11,14 +11,15 @@ module.exports = (req, res, next) => {
     const keywordsList = req.body.keywords
       .split(" ")
       .filter((word) => {
-        return (word.length > 1 && /[A-Za-z0-9]+/.test(word));
+        return word.length > 1 && /[A-Za-z0-9]+/.test(word);
       })
       .map((word) => {
         return word.toLowerCase();
       });
 
+    if (keywordsList.length === 0) return res.status(400).send({ error: "Invalid keywords" });
+
     req.body.keywords = keywordsList.join("|");
-    console.log(req.body.keywords);
   } else {
     return res.status(400).send({ error: "Invalid keywords" });
   }

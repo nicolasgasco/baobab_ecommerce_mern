@@ -59,7 +59,7 @@ const postProductsByKeywords = async (req, res) => {
   const products = await Product.find({ completeNameDesc: keywordsRegex })
     .skip((pageNumber - 1) * pageSize)
     .limit(+pageSize);
-
+    
   res.status(200).send({
     productsFound: products.length,
     pageNumber: +pageNumber,
