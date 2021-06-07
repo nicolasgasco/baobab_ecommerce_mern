@@ -27,7 +27,7 @@ const ProductCard = (props) => {
         {showPictureOrLoader}
       </div>
       <div className="relative px-4 -mt-6">
-        <div className="bg-green-200 p-5 rounded-lg shadow-xl">
+        <div className="bg-yellow-200 p-5 rounded-lg shadow-xl">
           <div className="flex items-baseline">
             <span className="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
               New
@@ -39,9 +39,9 @@ const ProductCard = (props) => {
           <h4 className="mt-1 text-xl leading-tight">
             {`${props.product.completeName.brand} ${props.product.completeName.productName}, ${props.product.completeName.shortDesc}, ${props.product.completeName.productDesc1}, ${props.product.completeName.productDesc2}, ${props.product.completeName.productDesc3}, ${props.product.completeName.color}`}
           </h4>
-          <div className="mt-1">
-            $1800
-            <span className="text-gray-600 text-sm"> /wk</span>
+          <div className="mt-1 text-2xl">
+            {props.product.pricingInfo.price}
+            <sup className> €</sup>
           </div>
           <div className="mt-4">
             <span className="text-teal-600 text-md font-semibold">
