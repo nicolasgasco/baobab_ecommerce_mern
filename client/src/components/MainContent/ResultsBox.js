@@ -30,6 +30,7 @@ const ResultsBox = (props) => {
               <SimpleDropdown
                 heading="Results per page"
                 fields={resultsPerPageDropdown}
+                handleResultsPerPage={props.handleResultsPerPage}
               />
             </div>
             <div className="flex flex-wrap justify-center">{showProducts}</div>
