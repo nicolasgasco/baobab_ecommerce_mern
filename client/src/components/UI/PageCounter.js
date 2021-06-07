@@ -65,9 +65,9 @@ const PageCounter = ({
               key={`button-${i + 1}`}
               value={i + 1}
               className={`focus:outline-none first:ml-0 text-xs fo
-              t-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-pink-500 bg-white text-pink-500 ${
+              t-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-green-500 bg-white text-green-500 ${
                 paginationData.pageNumber && paginationData.pageNumber === i + 1
-                  ? "bg-pink-200"
+                  ? "bg-green-200"
                   : "bg-white"
               }`}
             >
