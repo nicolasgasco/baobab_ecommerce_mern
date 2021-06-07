@@ -34,7 +34,7 @@ const StoreSearchbar = (props) => {
       />
 
       <div className="p-2">
-        <button className="search-icon bg-blue-500 text-white rounded-full p-2 hover:bg-blue-400 focus:outline-none w-10 h-10 flex items-center justify-center" />
+        <button className="search-icon bg-yellow-500 text-white rounded-full p-2 hover:bg-yellow-400 focus:outline-none w-10 h-10 flex items-center justify-center" />
       </div>
     </form>
   );
