@@ -16,7 +16,7 @@ const MainNav = () => {
     <Disclosure as="nav" className="bg-transparent">
       {({ open }) => (
         <>
-          <div className="max-w-7xl mx-auto mb-3 md:mb-0 px-4 sm:px-6 lg:px-8">
+          <header className="max-w-7xl mx-auto mb-3 md:mb-0 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
                 <div className="flex-shrink-0 out">
@@ -121,7 +121,7 @@ const MainNav = () => {
                 </Disclosure.Button>
               </div>
             </div>
-          </div>
+          </header>
 
           <Disclosure.Panel className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">

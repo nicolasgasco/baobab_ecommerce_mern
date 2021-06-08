@@ -34,7 +34,7 @@ const features = [
 
 export default function Example() {
   return (
-    <div className="py-12 my-12 mx-10 rounded-xl shadow-xl bg-white bg-opacity-80 h-2/3">
+    <div className="py-12 my-12 mx-10 rounded-xl shadow-xl bg-white h-2/3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="lg:text-center">
           <h2 className="text-base text-green-600 font-bold tracking-wide uppercase">
@@ -53,7 +53,7 @@ export default function Example() {
             {features.map((feature) => (
               <div key={feature.name} className="relative">
                 <dt>
-                  <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white">
+                  <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
                     <feature.icon className="h-6 w-6" aria-hidden="true" />
                   </div>
                   <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
