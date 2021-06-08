@@ -1,3 +1,4 @@
+import React from "react";
 import classes from "./SectionLoading.module.scss";
 
 const SectionLoading = () => {
@@ -23,4 +24,4 @@ const SectionLoading = () => {
   );
 };
 
-export default SectionLoading;
+export default React.memo(SectionLoading);
