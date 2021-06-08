@@ -1,6 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-const SimpleDropdown = ({ heading, fields, handleResultsPerPage, className }) => {
+const SimpleDropdown = ({
+  heading,
+  fields,
+  handleResultsPerPage,
+  className,
+}) => {
   const [show, setShow] = useState(false);
 
   const showFields = fields.map((field) => {
@@ -80,4 +85,4 @@ const SimpleDropdown = ({ heading, fields, handleResultsPerPage, className }) =>
     </div>
   );
 };
-export default SimpleDropdown;
+export default React.memo(SimpleDropdown);
