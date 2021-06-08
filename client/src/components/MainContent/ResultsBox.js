@@ -1,6 +1,7 @@
-import NothingFound from "../UI/NothingFound";
-import PageCounter from "../UI/PageCounter";
-import ProductCard from "../UI/ProductCard1";
+import React from "react";
+import NothingFound from "./NothingFound";
+import PageCounter from "./PageCounter";
+import ProductCard from "./ProductCard1";
 import SectionLoading from "../UI/SectionLoading";
 import SimpleDropdown from "../UI/SimpleDropdown";
 
@@ -34,19 +35,21 @@ const ResultsBox = ({
           <SectionLoading className="w-8/12" />
         ) : (
           <>
-            <div className="bg-black flex-wrap justify-end">
+            <div className="bg-black flex-wrap justify-end"></div>
+            <div className="flex flex-wrap justify-center">{showProducts}</div>
+            <div className="flex-column justify-center">
+              <PageCounter
+                paginationData={paginationData}
+                className="flex-row justify-center md:w-min md:absolute md:m-auto md:left-0 md:right-0"
+                handlePageChange={handlePageChange}
+              />
               <SimpleDropdown
                 heading="Results per page"
+                className="md:w-min md:ml-auto"
                 fields={resultsPerPageDropdown}
                 handleResultsPerPage={handleResultsPerPage}
               />
             </div>
-            <div className="flex flex-wrap justify-center">{showProducts}</div>
-            <PageCounter
-              paginationData={paginationData}
-              className="flex justify-center"
-              handlePageChange={handlePageChange}
-            />
           </>
         )}
       </div>
