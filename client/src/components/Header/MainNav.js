@@ -1,11 +1,12 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
-import BaobabLogo from "../../assets/img/baobab.svg"
+import { ShoppingCartIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import BaobabLogo from "../../assets/img/baobab.svg";
+import UserLogo from "../../assets/img/user.svg";
 
 const MainNav = () => {
-  const navigation = ["Dashboard", "Team", "Projects", "Calendar", "Reports"];
-  const profile = ["Your Profile", "Settings", "Sign out"];
+  const navigation = [];
+  const profile = ["Your Profile", "Sign out"];
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -15,12 +16,12 @@ const MainNav = () => {
     <Disclosure as="nav" className="bg-transparent">
       {({ open }) => (
         <>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto mb-3 md:mb-0 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
                 <div className="flex-shrink-0 out">
                   <img
-                    className="h-12 w-12"
+                    className="h-12 w-12 cursor-pointer"
                     src={BaobabLogo}
                     alt="Workflow"
                   />
@@ -55,7 +56,7 @@ const MainNav = () => {
                 <div className="ml-4 flex items-center md:ml-6">
                   <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                     <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                    <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
 
                   {/* Profile dropdown */}
@@ -67,8 +68,8 @@ const MainNav = () => {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                              alt=""
+                              src={UserLogo}
+                              alt="Generic avatar logo"
                             />
                           </Menu.Button>
                         </div>
@@ -165,7 +166,7 @@ const MainNav = () => {
                 </div>
                 <button className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                   <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
               <div className="mt-3 px-2 space-y-1">

@@ -1,14 +1,15 @@
+import React from "react";
 import Spinner from "../../assets/img/Spinner-5.gif";
 
-const ProductCard = (props) => {
+const ProductCard = ({product, picturesLoading, }) => {
   let showPictureOrLoader = (
     <img
-      src={props.product.pictures[0].url}
-      alt={props.product.pictures[0].alt}
+      src={product.pictures[0].url}
+      alt={product.pictures[0].alt}
       className="w-full object-cover object-center"
     />
   );
-  if (props.picturesLoading) {
+  if (picturesLoading) {
     showPictureOrLoader = (
       <img
         src={Spinner}
@@ -20,7 +21,7 @@ const ProductCard = (props) => {
 
   return (
     <div
-      id={`product${props.product.id}`}
+      id={`product${product.id}`}
       className="pb-10 px-0 md:px-4 md:w-1/2 lg:w-1/3 xl:w-1/4"
     >
       <div className="bg-white py-10 rounded-lg shadow-md">
@@ -37,10 +38,10 @@ const ProductCard = (props) => {
             </div>
           </div>
           <h4 className="mt-1 text-xl leading-tight">
-            {`${props.product.completeName.brand} ${props.product.completeName.productName}, ${props.product.completeName.shortDesc}, ${props.product.completeName.productDesc1}, ${props.product.completeName.productDesc2}, ${props.product.completeName.productDesc3}, ${props.product.completeName.color}`}
+            {`${product.completeName.brand} ${product.completeName.productName}, ${product.completeName.shortDesc}, ${product.completeName.productDesc1}, ${product.completeName.productDesc2}, ${product.completeName.productDesc3}, ${product.completeName.color}`}
           </h4>
           <div className="mt-1 text-2xl">
-            {props.product.pricingInfo.price}
+            {product.pricingInfo.price}
             <sup className> €</sup>
           </div>
           <div className="mt-4">

@@ -1,11 +1,10 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import MainNav from "./components/UI/MainNav";
-import HeaderBanner from "./components/UI/HeaderBanner";
+import MainNav from "./components/Header/MainNav";
+import HeaderBanner from "./components/Header/HeaderBanner";
 import MainModal from "./components/UI/MainModal";
-import VideoBackground from "./components/UI/VideoBackground";
+import VideoBackground from "./components/Header/VideoBackground";
 import MainContent from "./components/MainContent/MainContent";
-import HeroMain from "./components/UI/HeroMain";
-import Footer from "./components/UI/Footer";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -16,7 +15,7 @@ function App() {
 
       <Switch>
         <Route exact path="/">
-          <div>
+          <div className="h-min-screen">
             <MainNav />
             <MainContent />
           </div>
