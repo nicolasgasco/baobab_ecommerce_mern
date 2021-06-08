@@ -1,3 +1,4 @@
+import React from "react";
 import Empty from "../../assets/img/Empty.gif";
 
 const NothingFound = () => {
@@ -11,4 +12,4 @@ const NothingFound = () => {
   );
 };
 
-export default NothingFound;
+export default React.memo(NothingFound);
