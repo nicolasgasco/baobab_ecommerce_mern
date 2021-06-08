@@ -3,12 +3,10 @@
 @tailwind utilities;
 
 @layer utilities {
-  /* .search-icon {
-    background-image: url("./search.svg");
-  } */
-
   body {
     margin: 0;
+    background-image: url("https://res.cloudinary.com/ngasco/image/upload/v1623188794/bonsai_background/OC23T40_nlohlv.jpg");
+    background-size: 30%;
   }
 
   body * {
