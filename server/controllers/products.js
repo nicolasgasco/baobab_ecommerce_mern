@@ -48,7 +48,7 @@ const postProductsByKeywords = async (req, res) => {
   if (!req.body.keywords) res.status(400).send({ error: "Keywords not valid" });
   const keywordsRegex = new RegExp(req.body.keywords, "i");
 
-  const pageNumber = req.query.pageNum;
+  let pageNumber = req.query.pageNum;
   const pageSize = req.query.pageSize;
 
   // Populating department name from another table, with name and without id
@@ -56,10 +56,15 @@ const postProductsByKeywords = async (req, res) => {
     completeNameDesc: keywordsRegex,
   }).count();
 
+  // Failsafe in case page is trying to get a page that doesn't exist
+  if (+pageSize * pageNumber > totalProducts) {
+    pageNumber = 1;
+  }
+
   const products = await Product.find({ completeNameDesc: keywordsRegex })
     .skip((pageNumber - 1) * pageSize)
     .limit(+pageSize);
-    
+
   res.status(200).send({
     productsFound: products.length,
     pageNumber: +pageNumber,
