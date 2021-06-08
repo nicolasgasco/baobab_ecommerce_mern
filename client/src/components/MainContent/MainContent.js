@@ -128,22 +128,28 @@ const MainContent = () => {
     [resultsState.activePage, resultsState.resultsPerPage]
   );
 
-  const handlePageChange = useCallback((event) => {
-    handleActivePage(event.target.value);
-  }, []);
-
-  const handleResultsPerPage = (value) => {
-    if (resultsState.activePage !== 1) {
-      dispatchResults({ type: "ACTIVE_PAGE", val: 1 });
-    }
-    dispatchResults({ type: "RESULTS_PAGE", val: value });
-  };
-
   const handleActivePage = useCallback(
     (data) => {
       dispatchResults({ type: "ACTIVE_PAGE", val: data });
     },
     [dispatchResults]
+  );
+
+  const handlePageChange = useCallback(
+    (event) => {
+      handleActivePage(event.target.value);
+    },
+    [handleActivePage]
+  );
+
+  const handleResultsPerPage = useCallback(
+    (value) => {
+      if (resultsState.activePage !== 1) {
+        dispatchResults({ type: "ACTIVE_PAGE", val: 1 });
+      }
+      dispatchResults({ type: "RESULTS_PAGE", val: value });
+    },
+    [resultsState.activePage]
   );
 
   useEffect(() => {
