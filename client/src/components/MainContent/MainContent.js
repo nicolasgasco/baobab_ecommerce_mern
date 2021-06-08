@@ -1,7 +1,7 @@
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useReducer, useCallback } from "react";
 import ResultsBox from "./ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
-import HeroMain from "../UI/HeroMain";
+import HeroMain from "./HeroMain";
 
 const resultsReducer = (state, action) => {
   switch (action.type) {
@@ -23,6 +23,9 @@ const resultsReducer = (state, action) => {
       return { ...state, resultsPerPage: action.val };
     case "FETCHED_PRODUCTS":
       return { ...state, fetchedProducts: action.val };
+
+    default:
+      break;
   }
   return {
     showResultsBox: false,
@@ -67,67 +70,67 @@ const MainContent = () => {
   });
 
   // Fetching the products by keywords
-  const getSearchbarInput = (input) => {
-    dispatchResults({ type: "SHOW_RESULTS", val: true });
-    dispatchResults({ type: "CONTENT_LOADING", val: true });
-    dispatchResults({ type: "PICTURES_LOADING", val: true });
-    dispatchResults({ type: "IS_EMPTY", val: false });
-    // THis is necessary, otherwise some products just stay stuck there
-    dispatchResults({ type: "FETCHED_PRODUCTS", val: [] });
-    dispatchResults({ type: "SEARCH_KEYWORDS", val: input });
+  const getSearchbarInput = useCallback(
+    (input) => {
+      dispatchResults({ type: "SHOW_RESULTS", val: true });
+      dispatchResults({ type: "CONTENT_LOADING", val: true });
+      dispatchResults({ type: "PICTURES_LOADING", val: true });
+      dispatchResults({ type: "IS_EMPTY", val: false });
+      // THis is necessary, otherwise some products just stay stuck there
+      dispatchResults({ type: "FETCHED_PRODUCTS", val: [] });
+      dispatchResults({ type: "SEARCH_KEYWORDS", val: input });
 
-    console.log("Fetching products...");
-    console.log(
-      `api/products/search/?pageNum=${resultsState.activePage}&pageSize=${resultsState.resultsPerPage}`
-    );
+      console.log("Fetching products...");
 
-    fetch(
-      `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          keywords: input,
-          // keywords: input || resultsState.searchKeywords,
-        }),
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.results.length === 0) {
+      fetch(
+        `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            keywords: input,
+            // keywords: input || resultsState.searchKeywords,
+          }),
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.results.length === 0) {
+            dispatchResults({ type: "IS_EMPTY", val: true });
+            dispatchResults({ type: "PICTURES_LOADING", val: false });
+            dispatchResults({ type: "CONTENT_LOADING", val: false });
+          } else {
+            dispatchResults({ type: "FETCHED_PRODUCTS", val: res.results });
+            dispatchResults({
+              type: "PAGINATION_DATA",
+              val: {
+                productsFound: res.productsFound,
+                pageNumber: res.pageNumber,
+                pageSize: res.pageSize,
+                totalProducts: res.totalProducts,
+                totalPages: res.totalPages,
+              },
+            });
+            dispatchResults({ type: "PICTURES_LOADING", val: false });
+            dispatchResults({ type: "CONTENT_LOADING", val: false });
+            dispatchResults({ type: "IS_EMPTY", val: false });
+          }
+        })
+        .catch((error) => {
           dispatchResults({ type: "IS_EMPTY", val: true });
           dispatchResults({ type: "PICTURES_LOADING", val: false });
           dispatchResults({ type: "CONTENT_LOADING", val: false });
-        } else {
-          dispatchResults({ type: "FETCHED_PRODUCTS", val: res.results });
-          dispatchResults({
-            type: "PAGINATION_DATA",
-            val: {
-              productsFound: res.productsFound,
-              pageNumber: res.pageNumber,
-              pageSize: res.pageSize,
-              totalProducts: res.totalProducts,
-              totalPages: res.totalPages,
-            },
-          });
-          dispatchResults({ type: "PICTURES_LOADING", val: false });
-          dispatchResults({ type: "CONTENT_LOADING", val: false });
-          dispatchResults({ type: "IS_EMPTY", val: false });
-        }
-      })
-      .catch((error) => {
-        dispatchResults({ type: "IS_EMPTY", val: true });
-        dispatchResults({ type: "PICTURES_LOADING", val: false });
-        dispatchResults({ type: "CONTENT_LOADING", val: false });
-        console.log("An error ocurred:" + error.message);
-      });
-  };
+          console.log("An error ocurred:" + error.message);
+        });
+    },
+    [resultsState.activePage, resultsState.resultsPerPage]
+  );
 
-  const handlePageChange = (event) => {
-    dispatchResults({ type: "ACTIVE_PAGE", val: event.target.value });
-  };
+  const handlePageChange = useCallback((event) => {
+    handleActivePage(event.target.value);
+  }, []);
 
   const handleResultsPerPage = (value) => {
     if (resultsState.activePage !== 1) {
@@ -135,6 +138,13 @@ const MainContent = () => {
     }
     dispatchResults({ type: "RESULTS_PAGE", val: value });
   };
+
+  const handleActivePage = useCallback(
+    (data) => {
+      dispatchResults({ type: "ACTIVE_PAGE", val: data });
+    },
+    [dispatchResults]
+  );
 
   useEffect(() => {
     if (resultsState.searchKeywords !== "") {
@@ -144,11 +154,8 @@ const MainContent = () => {
     resultsState.resultsPerPage,
     resultsState.searchKeywords,
     resultsState.activePage,
+    getSearchbarInput,
   ]);
-
-  const handleActivePage = (data) => {
-    dispatchResults({ type: "ACTIVE_PAGE", val: data });
-  };
 
   return (
     <>
