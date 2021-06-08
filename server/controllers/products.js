@@ -57,7 +57,7 @@ const postProductsByKeywords = async (req, res) => {
   }).count();
 
   // Failsafe in case page is trying to get a page that doesn't exist
-  if (+pageSize * pageNumber > totalProducts) {
+  if (+pageSize > totalProducts) {
     pageNumber = 1;
   }
 
