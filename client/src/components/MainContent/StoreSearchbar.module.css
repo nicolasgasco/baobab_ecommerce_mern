@@ -1,0 +1,6 @@
+.search-button {
+    background-image: url("../../assets/img/magnifying-glass.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+}

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
+import classes from "./StoreSearchbar.module.css"
 
 const StoreSearchbar = ({ onGetSearchbarInput, handleActivePage }) => {
   const searchbarInputRef = useRef();
@@ -12,11 +13,11 @@ const StoreSearchbar = ({ onGetSearchbarInput, handleActivePage }) => {
       handleActivePage(1);
     }
   };
-
+  
   return (
     <form
       onSubmit={handleSubmitSearchbar}
-      className="py-2 bg-gray-200 bg-opacity-60 w-11/12 lg:w-1/2 max-w-full mx-auto flex items-center rounded-full shadow-xl"
+      className="bg-gray-200 bg-opacity-60 w-11/12 lg:w-1/2 max-w-full mx-auto flex items-center rounded-full shadow-xl"
     >
       <input
         className="rounded-l-full bg-transparent w-full py-4 px-6 text-gray-700 placeholder-gray-700 text-center leading-tight focus:outline-none tracking-wider text-lg"
@@ -27,10 +28,10 @@ const StoreSearchbar = ({ onGetSearchbarInput, handleActivePage }) => {
       />
 
       <div className="p-2">
-        <button className="search-icon bg-yellow-500 text-white rounded-full p-2 hover:bg-yellow-400 focus:outline-none w-10 h-10 flex items-center justify-center" />
+        <button className={`${classes["search-button"]} bg-yellow-500 text-white rounded-full p-2 hover:bg-yellow-400 focus:outline-none w-10 h-10 flex items-center justify-center`} />
       </div>
     </form>
   );
 };
 
-export default StoreSearchbar;
+export default React.memo(StoreSearchbar);
