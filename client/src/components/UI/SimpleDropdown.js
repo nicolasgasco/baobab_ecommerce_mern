@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SimpleDropdown = ({ heading, fields, handleResultsPerPage }) => {
+const SimpleDropdown = ({ heading, fields, handleResultsPerPage, className }) => {
   const [show, setShow] = useState(false);
 
   const showFields = fields.map((field) => {
@@ -20,7 +20,7 @@ const SimpleDropdown = ({ heading, fields, handleResultsPerPage }) => {
   });
 
   return (
-    <div className="mx-auto">
+    <div className={`${className}`}>
       <div className="container flex justify-center mx-auto py-2">
         <div className=" mb-2">
           {/* Code block starts */}
@@ -29,7 +29,7 @@ const SimpleDropdown = ({ heading, fields, handleResultsPerPage }) => {
               className="bg-white dark:bg-gray-800 flex items-center justify-between border rounded border-gray-300 dark:border-gray-700 w-40 cursor-pointer"
               onClick={() => setShow(!show)}
             >
-              <p className="pl-3 py-3 text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal font-normal">
+              <p className="pl-3 py-3 text-gray-600 dark:text-gray-400 text-xs leading-3 tracking-normal font-normal">
                 {heading}
               </p>
               <div className="cursor-pointer text-gray-600 dark:text-gray-400 mr-3">
