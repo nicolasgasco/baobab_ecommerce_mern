@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter>
       <HeaderBanner />
       <MainModal />
-      <VideoBackground />
+      {/* <VideoBackground /> */}
 
       <Switch>
         <Route exact path="/">
