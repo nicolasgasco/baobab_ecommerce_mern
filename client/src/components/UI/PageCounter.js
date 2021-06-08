@@ -46,11 +46,7 @@ import { useEffect, useState } from "react";
 //   });
 // }, []);
 
-const PageCounter = ({
-  paginationData,
-  className,
-  handlePageChange
-}) => {
+const PageCounter = ({ paginationData, className, handlePageChange }) => {
   const [paginationButtons, setPaginationButtons] = useState([]);
 
   useEffect(() => {
@@ -77,7 +73,7 @@ const PageCounter = ({
         ];
       });
     }
-  }, [paginationData]);
+  }, [paginationData.totalPages, paginationData.pageNumber, handlePageChange]);
 
   return (
     <div className={`${className} py-2`}>

@@ -7,11 +7,11 @@ const BannerContent = () => {
 
   if (show) {
     return (
-      <div className="bg-green-600">
+      <div className="bg-yellow-600">
         <div className="max-w-11xl mx-auto py-1.5 px-3 sm:px-6 lg:px-8 z-10">
           <div className="flex items-center justify-between flex-wrap">
             <div className="w-0 flex-1 flex items-center">
-              <span className="flex p-2 rounded-lg bg-green-800">
+              <span className="flex p-2 rounded-lg bg-yellow-800">
                 <SpeakerphoneIcon
                   className="h-4 w-4 text-white"
                   aria-hidden="true"
@@ -40,7 +40,7 @@ const BannerContent = () => {
                 onClick={() => {
                   setShow(false);
                 }}
-                className="-mr-1 flex p-2 rounded-md hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
+                className="-mr-1 flex p-2 rounded-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
               >
                 <span className="sr-only">Dismiss</span>
                 <XIcon className="h-5 w-5 text-white" aria-hidden="true" />

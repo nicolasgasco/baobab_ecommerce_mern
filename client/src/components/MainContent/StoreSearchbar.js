@@ -1,24 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 
-const StoreSearchbar = (props) => {
+const StoreSearchbar = ({ onGetSearchbarInput, handleActivePage }) => {
   const searchbarInputRef = useRef();
-  // This is not duplicate, I need to have a snapshot of the search in case the input gets changed before changing page
-  const [searchbarInput, setSearchbarInput] = useState("");
 
   const handleSubmitSearchbar = (event) => {
     event.preventDefault();
-    const searchbarInput = searchbarInputRef.current.value.trim();
+    const currentSearchbarInput = searchbarInputRef.current.value.trim();
 
-    if (searchbarInput) {
-      props.onGetSearchbarInput(searchbarInput);
-      setSearchbarInput(searchbarInput);
-      props.setActivePage(1);
+    if (currentSearchbarInput) {
+      onGetSearchbarInput(currentSearchbarInput);
+      handleActivePage(1);
     }
   };
-
-  useEffect(() => {
-    props.onGetSearchbarInput(searchbarInput)
-  }, [props.activePage])
 
   return (
     <form

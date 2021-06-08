@@ -1,97 +1,171 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import ResultsBox from "./ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
 import HeroMain from "../UI/HeroMain";
 
+const resultsReducer = (state, action) => {
+  switch (action.type) {
+    case "SHOW_RESULTS":
+      return { ...state, showResultsBox: action.val };
+    case "CONTENT_LOADING":
+      return { ...state, contentLoading: action.val };
+    case "PICTURES_LOADING":
+      return { ...state, picturesLoading: action.val };
+    case "IS_EMPTY":
+      return { ...state, isEmpty: action.val };
+    case "ACTIVE_PAGE":
+      return { ...state, activePage: action.val };
+    case "PAGINATION_DATA":
+      return { ...state, paginationData: action.val };
+    case "SEARCH_KEYWORDS":
+      return { ...state, searchKeywords: action.val };
+    case "RESULTS_PAGE":
+      return { ...state, resultsPerPage: action.val };
+    case "FETCHED_PRODUCTS":
+      return { ...state, fetchedProducts: action.val };
+  }
+  return {
+    showResultsBox: false,
+    contentLoading: false,
+    picturesLoading: false,
+    isEmpty: false,
+    activePage: 1,
+    paginationData: {},
+    searchKeywords: "",
+    resultsPerPage: 8,
+    fetchedProducts: [],
+  };
+};
+
 const MainContent = () => {
   // Showing either result box or other content
-  const [showResultsBox, setShowResultsBox] = useState(false);
-  const [fetchedProducts, setFecthedProducts] = useState([]);
+  // const [showResultsBox, setShowResultsBox] = useState(false);
+  // const [fetchedProducts, setFecthedProducts] = useState([]);
 
-  const [paginationData, setPaginationData] = useState({});
-  const [activePage, setActivePage] = useState(1);
-  const [searchKeywords, setSearchKeywords] = useState("");
-  const [resultsPerPage, setResultsPerPage] = useState(8);
+  // const [paginationData, setPaginationData] = useState({});
+  // const [activePage, setActivePage] = useState(1);
+  // const [searchKeywords, setSearchKeywords] = useState("");
+  // const [resultsPerPage, setResultsPerPage] = useState(8);
 
   // State for when content is loading and not showing
-  const [contentLoading, setContentLoading] = useState(false);
+  // const [contentLoading, setContentLoading] = useState(false);
   // Used for when pictures are still loading
-  const [picturesLoading, setPicturesLoading] = useState(false);
+  // const [picturesLoading, setPicturesLoading] = useState(false);
   // Used to show message when there are no results to show
-  const [isEmpty, setIsEmpty] = useState(false);
+  // const [isEmpty, setIsEmpty] = useState(false);
+
+  const [resultsState, dispatchResults] = useReducer(resultsReducer, {
+    showResultsBox: false,
+    contentLoading: false,
+    picturesLoading: false,
+    isEmpty: false,
+    activePage: 1,
+    paginationData: {},
+    searchKeywords: "",
+    resultsPerPage: 8,
+    fetchedProducts: [],
+  });
 
   // Fetching the products by keywords
   const getSearchbarInput = (input) => {
-    setShowResultsBox(true);
-    setContentLoading(true);
-    setPicturesLoading(true);
-    setIsEmpty(false);
+    dispatchResults({ type: "SHOW_RESULTS", val: true });
+    dispatchResults({ type: "CONTENT_LOADING", val: true });
+    dispatchResults({ type: "PICTURES_LOADING", val: true });
+    dispatchResults({ type: "IS_EMPTY", val: false });
     // THis is necessary, otherwise some products just stay stuck there
-    setFecthedProducts([]);
-    setSearchKeywords(input)
+    dispatchResults({ type: "FETCHED_PRODUCTS", val: [] });
+    dispatchResults({ type: "SEARCH_KEYWORDS", val: input });
 
     console.log("Fetching products...");
-    fetch(`api/products/search/?pageNum=${activePage}&pageSize=${resultsPerPage}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ keywords: (input || searchKeywords) }),
-    })
+    console.log(
+      `api/products/search/?pageNum=${resultsState.activePage}&pageSize=${resultsState.resultsPerPage}`
+    );
+
+    fetch(
+      `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          keywords: input,
+          // keywords: input || resultsState.searchKeywords,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         if (res.results.length === 0) {
-          setIsEmpty(true);
-          setPicturesLoading(false);
-          setContentLoading(false);
+          dispatchResults({ type: "IS_EMPTY", val: true });
+          dispatchResults({ type: "PICTURES_LOADING", val: false });
+          dispatchResults({ type: "CONTENT_LOADING", val: false });
         } else {
-          setFecthedProducts(res.results);
-          console.log(res.pageNumber);
-          setPaginationData({
-            productsFound: res.productsFound,
-            pageNumber: res.pageNumber,
-            pageSize: res.pageSize,
-            totalProducts: res.totalProducts,
-            totalPages: res.totalPages,
+          dispatchResults({ type: "FETCHED_PRODUCTS", val: res.results });
+          dispatchResults({
+            type: "PAGINATION_DATA",
+            val: {
+              productsFound: res.productsFound,
+              pageNumber: res.pageNumber,
+              pageSize: res.pageSize,
+              totalProducts: res.totalProducts,
+              totalPages: res.totalPages,
+            },
           });
-          setPicturesLoading(false);
-          setContentLoading(false);
-          setIsEmpty(false);
+          dispatchResults({ type: "PICTURES_LOADING", val: false });
+          dispatchResults({ type: "CONTENT_LOADING", val: false });
+          dispatchResults({ type: "IS_EMPTY", val: false });
         }
       })
       .catch((error) => {
-        setIsEmpty(true);
-        setPicturesLoading(false);
-        setContentLoading(false);
+        dispatchResults({ type: "IS_EMPTY", val: true });
+        dispatchResults({ type: "PICTURES_LOADING", val: false });
+        dispatchResults({ type: "CONTENT_LOADING", val: false });
         console.log("An error ocurred:" + error.message);
       });
   };
 
   const handlePageChange = (event) => {
-    setActivePage(event.target.value);
+    dispatchResults({ type: "ACTIVE_PAGE", val: event.target.value });
   };
 
-  function handleResultsPerPage(value) {
-    setResultsPerPage(value);
-    getSearchbarInput();
-  }
+  const handleResultsPerPage = (value) => {
+    if (resultsState.activePage !== 1) {
+      dispatchResults({ type: "ACTIVE_PAGE", val: 1 });
+    }
+    dispatchResults({ type: "RESULTS_PAGE", val: value });
+  };
+
+  useEffect(() => {
+    if (resultsState.searchKeywords !== "") {
+      getSearchbarInput(resultsState.searchKeywords);
+    }
+  }, [
+    resultsState.resultsPerPage,
+    resultsState.searchKeywords,
+    resultsState.activePage,
+  ]);
+
+  const handleActivePage = (data) => {
+    dispatchResults({ type: "ACTIVE_PAGE", val: data });
+  };
 
   return (
     <>
       <StoreSearchbar
         onGetSearchbarInput={getSearchbarInput}
-        setActivePage={setActivePage}
-        activePage={activePage}
+        handleActivePage={handleActivePage}
+        activePage={resultsState.activePage}
       />
-      {showResultsBox ? (
+      {resultsState.showResultsBox ? (
         <ResultsBox
-          fetchedProducts={fetchedProducts}
-          paginationData={paginationData}
+          fetchedProducts={resultsState.fetchedProducts}
+          paginationData={resultsState.paginationData}
           handlePageChange={handlePageChange}
           handleResultsPerPage={handleResultsPerPage}
-          contentLoading={contentLoading}
-          picturesLoading={picturesLoading}
-          isEmpty={isEmpty}
+          contentLoading={resultsState.contentLoading}
+          picturesLoading={resultsState.picturesLoading}
+          isEmpty={resultsState.isEmpty}
         />
       ) : (
         <HeroMain />

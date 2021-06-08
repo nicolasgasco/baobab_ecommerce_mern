@@ -4,13 +4,21 @@ import ProductCard from "../UI/ProductCard1";
 import SectionLoading from "../UI/SectionLoading";
 import SimpleDropdown from "../UI/SimpleDropdown";
 
-const ResultsBox = (props) => {
-  const showProducts = props.fetchedProducts.map((product) => {
+const ResultsBox = ({
+  fetchedProducts,
+  picturesLoading,
+  isEmpty,
+  contentLoading,
+  handleResultsPerPage,
+  paginationData,
+  handlePageChange,
+}) => {
+  const showProducts = fetchedProducts.map((product) => {
     return (
       <ProductCard
         key={`product-${product._id}`}
         product={product}
-        picturesLoading={props.picturesLoading}
+        picturesLoading={picturesLoading}
       />
     );
   });
@@ -20,9 +28,9 @@ const ResultsBox = (props) => {
   return (
     <section className="p-5 my-10 bg-gray-200">
       <div className="bg-white mx-auto mw-11/12 md:w-10/12 m-6 p-6 rounded-lg shadow-lg">
-        {props.isEmpty ? (
+        {isEmpty ? (
           <NothingFound />
-        ) : props.contentLoading ? (
+        ) : contentLoading ? (
           <SectionLoading className="w-8/12" />
         ) : (
           <>
@@ -30,14 +38,14 @@ const ResultsBox = (props) => {
               <SimpleDropdown
                 heading="Results per page"
                 fields={resultsPerPageDropdown}
-                handleResultsPerPage={props.handleResultsPerPage}
+                handleResultsPerPage={handleResultsPerPage}
               />
             </div>
             <div className="flex flex-wrap justify-center">{showProducts}</div>
             <PageCounter
-              paginationData={props.paginationData}
+              paginationData={paginationData}
               className="flex justify-center"
-              handlePageChange={props.handlePageChange}
+              handlePageChange={handlePageChange}
             />
           </>
         )}
