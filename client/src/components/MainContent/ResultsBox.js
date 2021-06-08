@@ -2,7 +2,7 @@ import React from "react";
 import NothingFound from "./NothingFound";
 import PageCounter from "./PageCounter";
 import ProductCard from "./ProductCard1";
-import SectionLoading from "../UI/SectionLoading";
+import SectionLoading from "./SectionLoading";
 import SimpleDropdown from "../UI/SimpleDropdown";
 
 const ResultsBox = ({
@@ -27,7 +27,7 @@ const ResultsBox = ({
   const resultsPerPageDropdown = ["4", "8", "24", "60"];
 
   return (
-    <section className="p-5 my-10 bg-gray-200">
+    <section className="p-5 my-10 bg-transparent">
       <div className="bg-white mx-auto mw-11/12 md:w-10/12 m-6 p-6 rounded-lg shadow-lg">
         {isEmpty ? (
           <NothingFound />
@@ -40,7 +40,7 @@ const ResultsBox = ({
             <div className="flex-column justify-center">
               <PageCounter
                 paginationData={paginationData}
-                className="flex-row justify-center md:w-min md:absolute md:m-auto md:left-0 md:right-0"
+                className="flex-row justify-center mx-auto w-min md:absolute md:m-auto md:left-0 md:right-0"
                 handlePageChange={handlePageChange}
               />
               <SimpleDropdown
