@@ -1,0 +1,4 @@
+.video_background {
+    z-index: -9999;
+    filter: blur(3px);
+}
