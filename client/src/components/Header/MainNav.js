@@ -1,16 +1,38 @@
-import { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { ShoppingCartIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import BaobabLogo from "../../assets/img/baobab.svg";
 import UserLogo from "../../assets/img/user.svg";
 
+import AuthContext from "../../store/auth-context";
+
 const MainNav = () => {
   const navigation = [];
-  const profile = ["Your Profile", "Sign out"];
+  const profile = ["Your Profile", "Sign in"];
+  const { handleOpenLogin } = useContext(AuthContext);
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+
+  const showDropdownItems = profile.map((item, index) => {
+    return (
+      <Menu.Item key={item}>
+        {({ active }) => (
+          <a
+            id={`menu-item-${index+1}`}
+            onClick={index === 1 && handleOpenLogin}
+            className={classNames(
+              active ? "bg-gray-100" : "",
+              "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+            )}
+          >
+            {item}
+          </a>
+        )}
+      </Menu.Item>
+    );
+  });
 
   return (
     <Disclosure as="nav" className="bg-transparent">
@@ -87,21 +109,7 @@ const MainNav = () => {
                             static
                             className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                           >
-                            {profile.map((item) => (
-                              <Menu.Item key={item}>
-                                {({ active }) => (
-                                  <a
-                                    href="#"
-                                    className={classNames(
-                                      active ? "bg-gray-100" : "",
-                                      "block px-4 py-2 text-sm text-gray-700"
-                                    )}
-                                  >
-                                    {item}
-                                  </a>
-                                )}
-                              </Menu.Item>
-                            ))}
+                            {showDropdownItems}
                           </Menu.Items>
                         </Transition>
                       </>

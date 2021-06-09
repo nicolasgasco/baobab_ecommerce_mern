@@ -1,7 +1,30 @@
-import { useEffect, useReducer, useCallback } from "react";
-import ResultsBox from "./ResultsBox";
+import {
+  useEffect,
+  useReducer,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
+import ResultsBox from "./Results/ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
 import HeroMain from "./HeroMain";
+import LoginForm from "./Auth/LoginForm";
+import SignupForm from "./Auth/LoginForm";
+
+import AuthContext from "../../store/auth-context";
+
+const defaultResultsState = {
+  showResultsBox: false,
+  contentLoading: false,
+  picturesLoading: false,
+  isEmpty: false,
+  activePage: 1,
+  paginationData: {},
+  searchKeywords: "",
+  resultsPerPage: 8,
+  fetchedProducts: [],
+  showAuth: false,
+};
 
 const resultsReducer = (state, action) => {
   switch (action.type) {
@@ -23,51 +46,23 @@ const resultsReducer = (state, action) => {
       return { ...state, resultsPerPage: action.val };
     case "FETCHED_PRODUCTS":
       return { ...state, fetchedProducts: action.val };
-
+    case "SHOW_AUTH":
+      return { ...state, showAuth: !state };
     default:
-      break;
+      return defaultResultsState;
   }
-  return {
-    showResultsBox: false,
-    contentLoading: false,
-    picturesLoading: false,
-    isEmpty: false,
-    activePage: 1,
-    paginationData: {},
-    searchKeywords: "",
-    resultsPerPage: 8,
-    fetchedProducts: [],
-  };
 };
 
 const MainContent = () => {
-  // Showing either result box or other content
-  // const [showResultsBox, setShowResultsBox] = useState(false);
-  // const [fetchedProducts, setFecthedProducts] = useState([]);
+  const [resultsState, dispatchResults] = useReducer(
+    resultsReducer,
+    defaultResultsState
+  );
 
-  // const [paginationData, setPaginationData] = useState({});
-  // const [activePage, setActivePage] = useState(1);
-  // const [searchKeywords, setSearchKeywords] = useState("");
-  // const [resultsPerPage, setResultsPerPage] = useState(8);
-
-  // State for when content is loading and not showing
-  // const [contentLoading, setContentLoading] = useState(false);
-  // Used for when pictures are still loading
-  // const [picturesLoading, setPicturesLoading] = useState(false);
-  // Used to show message when there are no results to show
-  // const [isEmpty, setIsEmpty] = useState(false);
-
-  const [resultsState, dispatchResults] = useReducer(resultsReducer, {
-    showResultsBox: false,
-    contentLoading: false,
-    picturesLoading: false,
-    isEmpty: false,
-    activePage: 1,
-    paginationData: {},
-    searchKeywords: "",
-    resultsPerPage: 8,
-    fetchedProducts: [],
-  });
+  const { openLogin, openSignup } = useContext(AuthContext);
+  // This doesn't work with the reducer for whatever reason;
+  const [showAuth, setShowAuth] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
   // Fetching the products by keywords
   const getSearchbarInput = useCallback(
@@ -163,6 +158,39 @@ const MainContent = () => {
     getSearchbarInput,
   ]);
 
+  let currentContent = <HeroMain />;
+  if (resultsState.showResultsBox) {
+    currentContent = (
+      <ResultsBox
+        fetchedProducts={resultsState.fetchedProducts}
+        paginationData={resultsState.paginationData}
+        handlePageChange={handlePageChange}
+        handleResultsPerPage={handleResultsPerPage}
+        contentLoading={resultsState.contentLoading}
+        picturesLoading={resultsState.picturesLoading}
+        isEmpty={resultsState.isEmpty}
+      />
+    );
+  }
+  if (showAuth) {
+    currentContent = <LoginForm />;
+  }
+  // if (showSignup) {
+  //   currentContent = <SignupForm />;
+  // }
+
+  useEffect(() => {
+    setShowAuth((prevState) => {
+      return !prevState;
+    });
+  }, [openLogin]);
+
+  useEffect(() => {
+    setShowSignup((prevState) => {
+      return !prevState;
+    });
+  }, [openSignup]);
+
   return (
     <>
       <StoreSearchbar
@@ -170,19 +198,7 @@ const MainContent = () => {
         handleActivePage={handleActivePage}
         activePage={resultsState.activePage}
       />
-      {resultsState.showResultsBox ? (
-        <ResultsBox
-          fetchedProducts={resultsState.fetchedProducts}
-          paginationData={resultsState.paginationData}
-          handlePageChange={handlePageChange}
-          handleResultsPerPage={handleResultsPerPage}
-          contentLoading={resultsState.contentLoading}
-          picturesLoading={resultsState.picturesLoading}
-          isEmpty={resultsState.isEmpty}
-        />
-      ) : (
-        <HeroMain />
-      )}
+      {currentContent}
     </>
   );
 };
