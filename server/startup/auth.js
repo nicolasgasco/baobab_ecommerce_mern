@@ -2,17 +2,22 @@ const passport = require("passport");
 const mongoose = require("mongoose");
 const session = require("express-session");
 
+const jwt = require("jsonwebtoken");
+
 const initializePassport = require("./passport-config");
+
+// We'll need it later to generate token
+let user;
 
 const passportLogic = (app) => {
   const { User } = require("../models/users");
   const { ObjectId } = require("bson");
 
   initializePassport(
-    passport,
+    // passport,
     async (email) => {
       try {
-        const user = await User.findOne({ email });
+        user = await User.findOne({ email });
         if (user) {
           return user;
         } else {
@@ -25,7 +30,7 @@ const passportLogic = (app) => {
     },
     async (id) => {
       try {
-        const user = await User.find({ _id: ObjectId(id) });
+        user = await User.find({ _id: ObjectId(id) });
         if (user) {
           return user;
         } else {
@@ -58,8 +63,11 @@ const passportLogic = (app) => {
   );
 
   app.get("/api/check", (req, res) => {
+    const token = jwt.sign({ _id: this._id }, process.env.JWT);
     if (req.session.passport) {
-      res.send({ session: true, user: req.session.passport.user });
+      res
+        .header("x-auth-token", token)
+        .send({ session: true, user: req.session.passport.user });
     } else {
       res.send({ session: false });
     }
@@ -72,10 +80,10 @@ const passportLogic = (app) => {
   });
 
   app.get("/success", (req, res) => {
-    res.send({
+    const token = user.generateAuthToken();
+    res.header("x-auth-token", token).send({
       success: true,
       msg: "Login successful",
-      user: req.user,
       session: true,
     });
   });

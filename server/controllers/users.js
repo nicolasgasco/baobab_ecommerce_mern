@@ -59,7 +59,9 @@ const postNewUser = async (req, res) => {
 
   // Saving in DB and sending result
   const result = await user.save();
-  res.send({ insertedCount: 1, result: result });
+  // User will be authorized automatically
+  const token = user.generateAuthToken();
+  res.header("x-auth-token", token).send({ insertedCount: 1, result: result });
 };
 
 const putUserWithId = async (req, res) => {
