@@ -8,8 +8,7 @@ import {
 import ResultsBox from "./Results/ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
 import HeroMain from "./HeroMain";
-import LoginForm from "./Auth/LoginForm";
-import SignupForm from "./Auth/LoginForm";
+import AuthContent from "./Auth/AuthContent";
 
 import AuthContext from "../../store/auth-context";
 
@@ -59,10 +58,8 @@ const MainContent = () => {
     defaultResultsState
   );
 
-  const { openLogin, openSignup } = useContext(AuthContext);
-  // This doesn't work with the reducer for whatever reason;
+  const { openAuth, handleOpenAuth } = useContext(AuthContext);
   const [showAuth, setShowAuth] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
 
   // Fetching the products by keywords
   const getSearchbarInput = useCallback(
@@ -74,6 +71,8 @@ const MainContent = () => {
       // THis is necessary, otherwise some products just stay stuck there
       dispatchResults({ type: "FETCHED_PRODUCTS", val: [] });
       dispatchResults({ type: "SEARCH_KEYWORDS", val: input });
+      // Closing login when fetching new products
+      handleOpenAuth();
 
       console.log("Fetching products...");
 
@@ -158,9 +157,13 @@ const MainContent = () => {
     getSearchbarInput,
   ]);
 
-  let currentContent = <HeroMain />;
+  useEffect(() => {
+    setShowAuth(openAuth);
+  }, [openAuth]);
+
+  let resultsContent = <HeroMain />;
   if (resultsState.showResultsBox) {
-    currentContent = (
+    resultsContent = (
       <ResultsBox
         fetchedProducts={resultsState.fetchedProducts}
         paginationData={resultsState.paginationData}
@@ -172,24 +175,6 @@ const MainContent = () => {
       />
     );
   }
-  if (showAuth) {
-    currentContent = <LoginForm />;
-  }
-  // if (showSignup) {
-  //   currentContent = <SignupForm />;
-  // }
-
-  useEffect(() => {
-    setShowAuth((prevState) => {
-      return !prevState;
-    });
-  }, [openLogin]);
-
-  useEffect(() => {
-    setShowSignup((prevState) => {
-      return !prevState;
-    });
-  }, [openSignup]);
 
   return (
     <>
@@ -198,7 +183,7 @@ const MainContent = () => {
         handleActivePage={handleActivePage}
         activePage={resultsState.activePage}
       />
-      {currentContent}
+      {openAuth ? <AuthContent /> : resultsContent}
     </>
   );
 };

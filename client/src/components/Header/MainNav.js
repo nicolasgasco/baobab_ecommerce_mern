@@ -9,7 +9,7 @@ import AuthContext from "../../store/auth-context";
 const MainNav = () => {
   const navigation = [];
   const profile = ["Your Profile", "Sign in"];
-  const { handleOpenLogin } = useContext(AuthContext);
+  const { handleOpenAuth } = useContext(AuthContext);
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -21,7 +21,7 @@ const MainNav = () => {
         {({ active }) => (
           <a
             id={`menu-item-${index+1}`}
-            onClick={index === 1 && handleOpenLogin}
+            onClick={index === 1 && handleOpenAuth}
             className={classNames(
               active ? "bg-gray-100" : "",
               "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
