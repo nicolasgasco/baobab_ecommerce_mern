@@ -1,11 +1,32 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useRef } from "react";
 import BaobabLogo from "../../../assets/img/baobab.svg";
 
 import AuthContext from "../../../store/auth-context";
+import ModalContext from "../../../store/modal-context";
 
 const Loginform = () => {
-  const { handleOpenSignup } = useContext(AuthContext);
+  const { handleOpenAuth, isLogged } = useContext(AuthContext);
+  const { handleModalText } = useContext(ModalContext);
+
+  const emailInput = useRef();
+  const passwordInput = useRef();
+
+  const { loginUser, handleOpenSignup } = useContext(AuthContext);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await loginUser({
+      email: emailInput.current.value,
+      password: passwordInput.current.value,
+    });
+    // Close signup window
+    handleOpenAuth();
+  };
+
+  useEffect(() => {
+    console.log("isLogged changed");
+  }, [isLogged]);
 
   return (
     <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 my-12 mx-10 rounded-xl shadow-xl h-2/3 ">
@@ -29,7 +50,7 @@ const Loginform = () => {
             </a>
           </p>
         </div>
-        <form className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -37,6 +58,7 @@ const Loginform = () => {
                 Email address
               </label>
               <input
+                ref={emailInput}
                 id="email-address"
                 name="email"
                 type="email"
@@ -51,6 +73,7 @@ const Loginform = () => {
                 Password
               </label>
               <input
+                ref={passwordInput}
                 id="password"
                 name="password"
                 type="password"
@@ -99,7 +122,7 @@ const Loginform = () => {
                   aria-hidden="true"
                 />
               </span>
-              Sign in
+              Log in
             </button>
           </div>
         </form>

@@ -1,7 +1,47 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
+import { useRef, useState, useContext, useEffect } from "react";
 import BaobabLogo from "../../../assets/img/baobab.svg";
 
+import AuthContext from "../../../store/auth-context";
+import ModalContext from "../../../store/modal-context";
+
 const SignupForm = () => {
+  const nameInput = useRef();
+  const surnameInput = useRef();
+  const genderInput = useRef();
+  const emailInput = useRef();
+  const passwordInput = useRef();
+
+  const { signupUser, isLogged, handleOpenAuth } = useContext(AuthContext);
+  const { handleModalText } = useContext(ModalContext);
+
+  const [logged, setLogged] = useState(isLogged);
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+
+    const userData = {
+      name: nameInput.current.value,
+      surname: surnameInput.current.value,
+      gender: genderInput.current.value,
+      email: emailInput.current.value,
+      password: passwordInput.current.value,
+    };
+    await signupUser(userData);
+
+    // Close signup window
+    handleOpenAuth();
+    // Show modal message
+    console.log(isLogged)
+    logged
+      ? handleModalText(`Welcome, ${userData.name} ${userData.surname}!`)
+      : handleModalText(`Something went wrong!`);
+  };
+
+  useEffect(() => {
+    setLogged(isLogged);
+  }, [isLogged]);
+
   return (
     <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 my-12 mx-10 rounded-xl shadow-xl h-2/3 ">
       <div className="max-w-md w-full space-y-8">
@@ -21,14 +61,72 @@ const SignupForm = () => {
             </a>
           </p> */}
         </div>
-        <form className="mt-8 space-y-6">
+        <form onSubmit={submitHandler} className="mt-8 space-y-6">
           <input type="hidden" name="remember" defaultValue="true" />
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label htmlFor="name" className="sr-only">
+                Name
+              </label>
+              <input
+                ref={nameInput}
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="given-name"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                placeholder="Name"
+              />
+            </div>
+            <div>
+              <label htmlFor="surname" className="sr-only">
+                Surname
+              </label>
+              <input
+                ref={surnameInput}
+                id="surname"
+                name="surname"
+                type="text"
+                autoComplete="family-name"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                placeholder="Surname"
+              />
+            </div>
+          </div>
+
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div className="shorter-input">
+              <label htmlFor="gender" className="sr-only">
+                Gender
+              </label>
+              <select
+                ref={genderInput}
+                id="gender"
+                name="gender"
+                autoComplete="sex"
+                required
+                placeholder="Gender"
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+              >
+                <option selected disabled style={{ display: "none" }}>
+                  Gender:
+                </option>
+                <option value="f">Female</option>
+                <option value="m">Male</option>
+                <option value="o">Other</option>
+              </select>
+            </div>
+          </div>
+
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
               </label>
               <input
+                ref={emailInput}
                 id="email-address"
                 name="email"
                 type="email"
@@ -43,6 +141,7 @@ const SignupForm = () => {
                 Password
               </label>
               <input
+                ref={passwordInput}
                 id="password"
                 name="password"
                 type="password"
