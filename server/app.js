@@ -1,9 +1,12 @@
 const indexRouter = require("./routes/index");
 
 const express = require("express");
+
+// Handle all err messages instead of using try/catch blocks
+require("express-async-errors");
+
 // Calling variuos app.use in separate file
 const app = express();
-
 
 // Includes dotenv and Morgan
 require("./startup/config")(app);
@@ -11,8 +14,6 @@ require("./startup/config")(app);
 require("./startup/db")();
 // Joi validation
 require("./startup/validation")();
-// Handle all err messages instead of using try/catch blocks
-require("express-async-errors");
 // Helmet and compress
 require("./startup/prod")(app);
 // Includes unhandled rejections and uncaught exceptions

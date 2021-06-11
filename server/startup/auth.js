@@ -1,9 +1,12 @@
 const passport = require("passport");
 const mongoose = require("mongoose");
-const session = require("express-session");
+const { User } = require("../models/users");
 
+const joiValidationUsers = require("../middleware/joiValidationUsers");
 const jwt = require("jsonwebtoken");
+const { encryptPassword } = require("../middleware/encryptPassword");
 
+const session = require("express-session");
 const initializePassport = require("./passport-config");
 
 // We'll need it later to generate token
@@ -62,8 +65,36 @@ const passportLogic = (app) => {
     })
   );
 
+  app.post("/api/signin", joiValidationUsers, async (req, res) => {
+    // First round of validation with Joi (middleware)
+    console.log("Joi validation successful");
+
+    // Encrypt password now and not before (middleware), otherwise it cannot be validated
+    req.body.password = encryptPassword(req.body.password);
+
+    // Creating new mongoose user with body
+    const user = new User(req.body);
+
+    // Second round of validation with Mongoose
+    try {
+      await user.validate();
+    } catch (error) {
+      console.log(error.message);
+      res.status(400).send({ error: `${error.name}: ${error.message}` });
+    }
+    console.log("Mongoose validation successful");
+
+    // Saving in DB and sending result
+    const result = await user.save();
+    // User will be authorized automatically
+    const token = user.generateAuthToken();
+    res
+      .header("x-auth-token", token)
+      .send({ insertedCount: 1, result: result });
+  });
+
   app.get("/api/check", (req, res) => {
-    const token = jwt.sign({ _id: this._id }, process.env.JWT);
+    const token = jwt.sign({ _id: this._id, name: this.name, surname: this.surname }, process.env.JWT);
     if (req.session.passport) {
       res
         .header("x-auth-token", token)
