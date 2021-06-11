@@ -11,18 +11,18 @@ const userSchemaJoi = Joi.object({
     otherwise: Joi.string().lowercase().email().required(),
   }),
   gender: Joi.string().valid("f", "m", "o").trim().required(),
-  birthday: Joi.date()
-    .max(
-      `${new Date().getMonth() + 1}-${new Date().getDate()}-${
-        new Date().getFullYear() - 18
-      }`
-    )
-    .min(
-      `${new Date().getMonth() + 1}-${new Date().getDate()}-${
-        new Date().getFullYear() - 125
-      }`
-    )
-    .required(),
+  // birthday: Joi.date()
+  //   .max(
+  //     `${new Date().getMonth() + 1}-${new Date().getDate()}-${
+  //       new Date().getFullYear() - 18
+  //     }`
+  //   )
+  //   .min(
+  //     `${new Date().getMonth() + 1}-${new Date().getDate()}-${
+  //       new Date().getFullYear() - 125
+  //     }`
+  //   )
+  //   .required(),
   creationDate: Joi.date().iso().default("now"),
   modificationDate: Joi.date().iso().less("now"),
   address: {
@@ -54,7 +54,7 @@ const userSchemaJoi = Joi.object({
       .pattern(new RegExp("^[0-9]*$"))
       .required(),
   },
-  tier: Joi.number().valid(0, 1).required(),
+  // tier: Joi.number().valid(0, 1).required(),
 });
 
 module.exports = userSchemaJoi;

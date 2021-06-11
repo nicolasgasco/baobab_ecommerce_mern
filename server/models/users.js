@@ -63,19 +63,19 @@ const userSchema = new mongoose.Schema(
       enum: ["m", "f", "o"],
       required: [true, "Gender is required (m, f, o)"],
     },
-    birthday: {
-      type: Date,
-      required: [true, "Birthday is required"],
-      validate: {
-        // Custom validation, no over 125 and not below 18 years old
-        validator: function (value) {
-          const today = new Date();
-          const age = today.getYear() - value.getYear();
-          return age <= 125 || age >= 18;
-        },
-        message: "Insert a valid birthday date",
-      },
-    },
+    // birthday: {
+    //   type: Date,
+    //   required: [true, "Birthday is required"],
+    //   validate: {
+    //     // Custom validation, no over 125 and not below 18 years old
+    //     validator: function (value) {
+    //       const today = new Date();
+    //       const age = today.getYear() - value.getYear();
+    //       return age <= 125 || age >= 18;
+    //     },
+    //     message: "Insert a valid birthday date",
+    //   },
+    // },
     creationDate: { type: Date, default: Date.now },
     modificationDate: Date,
     address: {
@@ -166,17 +166,20 @@ const userSchema = new mongoose.Schema(
         match: [/^[0-9]*$/, "Phone number must contain only digits"],
       },
     },
-    tier: {
-      type: Number,
-      default: 0,
-      enum: [0, 1],
-    },
+    // tier: {
+    //   type: Number,
+    //   default: 0,
+    //   enum: [0, 1],
+    // },
   },
   { collection: "users" }
 );
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, process.env.JWT);
+  const token = jwt.sign(
+    { _id: this._id, name: this.name, surname: this.surname },
+    process.env.JWT
+  );
   return token;
 };
 
