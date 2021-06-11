@@ -4,6 +4,7 @@ import ModalContext from "./modal-context";
 import jwt_decode from "jwt-decode";
 
 const AuthProvider = (props) => {
+  const [token, setToken] = useState("")
   const [isLogged, setIsLogged] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(true);
@@ -126,6 +127,7 @@ const AuthProvider = (props) => {
   };
 
   const authContext = {
+    token,
     isLogged,
     openAuth,
     openLogin,

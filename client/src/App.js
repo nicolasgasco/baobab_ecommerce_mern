@@ -10,11 +10,11 @@ import ModalProvider from "./store/ModalProvider";
 
 function App() {
   return (
-    <BrowserRouter>
-      <HeaderBanner />
+    <ModalProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <HeaderBanner />
 
-      <ModalProvider>
-        <AuthProvider>
           <MainModal />
           {/* <VideoBackground /> */}
 
@@ -26,11 +26,11 @@ function App() {
               </div>
             </Route>
           </Switch>
-        </AuthProvider>
-      </ModalProvider>
 
-      <Footer />
-    </BrowserRouter>
+          <Footer />
+        </BrowserRouter>
+      </AuthProvider>
+    </ModalProvider>
   );
 }
 
