@@ -7,6 +7,7 @@ const AuthContext = React.createContext({
   openAuth: false,
   loginUser: () => {},
   logoutUser: () => {},
+  signupUser: () => {},
   handleOpenLogin: () => {},
   handleOpenSignup: () => {},
   handleOpenAuth: () => {},
