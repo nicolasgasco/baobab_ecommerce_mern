@@ -1,26 +1,51 @@
 import React, { Fragment, useContext } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { ShoppingCartIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import {
+  ShoppingCartIcon,
+  MenuIcon,
+  XIcon,
+  UserIcon,
+} from "@heroicons/react/outline";
 import BaobabLogo from "../../assets/img/baobab.svg";
-import UserLogo from "../../assets/img/user.svg";
 
 import AuthContext from "../../store/auth-context";
 
 const MainNav = () => {
   const navigation = [];
   const profile = ["Your Profile", "Sign in"];
+  const cart = ["Your orders", "See items"];
+
   const { handleOpenAuth } = useContext(AuthContext);
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
 
-  const showDropdownItems = profile.map((item, index) => {
+  const showProfileItems = profile.map((item, index) => {
     return (
       <Menu.Item key={item}>
         {({ active }) => (
           <a
-            id={`menu-item-${index+1}`}
+            id={`profile-item-${index + 1}`}
+            onClick={index === 1 && handleOpenAuth}
+            className={classNames(
+              active ? "bg-gray-100" : "",
+              "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+            )}
+          >
+            {item}
+          </a>
+        )}
+      </Menu.Item>
+    );
+  });
+
+  const showCartItems = profile.map((item, index) => {
+    return (
+      <Menu.Item key={item}>
+        {({ active }) => (
+          <a
+            id={`cart-item-${index + 1}`}
             onClick={index === 1 && handleOpenAuth}
             className={classNames(
               active ? "bg-gray-100" : "",
@@ -35,7 +60,7 @@ const MainNav = () => {
   });
 
   return (
-    <Disclosure as="nav" className="bg-transparent">
+    <Disclosure as="nav">
       {({ open }) => (
         <>
           <header className="max-w-7xl mx-auto mb-3 md:mb-0 px-4 sm:px-6 lg:px-8">
@@ -76,22 +101,15 @@ const MainNav = () => {
               </div>
               <div className="hidden md:block">
                 <div className="ml-4 flex items-center md:ml-6">
-                  <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                    <span className="sr-only">View notifications</span>
-                    <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-
-                  {/* Profile dropdown */}
                   <Menu as="div" className="ml-3 relative">
                     {({ open }) => (
                       <>
                         <div>
-                          <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={UserLogo}
-                              alt="Generic avatar logo"
+                          <Menu.Button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                            <span className="sr-only">View profile</span>
+                            <ShoppingCartIcon
+                              className="h-6 w-6"
+                              aria-hidden="true"
                             />
                           </Menu.Button>
                         </div>
@@ -109,7 +127,46 @@ const MainNav = () => {
                             static
                             className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                           >
-                            {showDropdownItems}
+                            {showCartItems}
+                          </Menu.Items>
+                        </Transition>
+                      </>
+                    )}
+                  </Menu>
+
+                  {/* Profile dropdown */}
+                  <Menu as="div" className="ml-3 relative">
+                    {({ open }) => (
+                      <>
+                        <div>
+                          {/* <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                            <span className="sr-only">Open user menu</span>
+                            <img
+                              className="h-8 w-8 rounded-full"
+                              src={UserCircleIcon}
+                              alt="Generic avatar logo"
+                            />
+                          </Menu.Button> */}
+                          <Menu.Button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                            <span className="sr-only">View profile</span>
+                            <UserIcon className="h-6 w-6" aria-hidden="true" />
+                          </Menu.Button>
+                        </div>
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items
+                            static
+                            className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                          >
+                            {showProfileItems}
                           </Menu.Items>
                         </Transition>
                       </>
@@ -131,7 +188,7 @@ const MainNav = () => {
             </div>
           </header>
 
-          <Disclosure.Panel className="md:hidden">
+          <Disclosure.Panel className="md:hidden bg-white mb-5">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navigation.map((item, itemIdx) =>
                 itemIdx === 0 ? (
@@ -173,7 +230,7 @@ const MainNav = () => {
                   </div>
                 </div>
                 <button className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                  <span className="sr-only">View notifications</span>
+                  <span className="sr-only">View shopping cart</span>
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
