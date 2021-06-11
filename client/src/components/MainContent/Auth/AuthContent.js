@@ -7,9 +7,9 @@ import AuthContext from "../../../store/auth-context";
 const AuthContent = () => {
   const { openLogin, openSignup } = useContext(AuthContext);
 
-  console.log(openLogin, openSignup);
-
-  return <>{openLogin ? <Loginform /> : <SignupForm />}</>;
+  return (
+    <>{openLogin ? <Loginform /> : <SignupForm />}</>
+  );
 };
 
 export default AuthContent;
