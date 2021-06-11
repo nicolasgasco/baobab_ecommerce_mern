@@ -19,10 +19,22 @@ const BannerContent = () => {
               </span>
               <p className="ml-3 font-small text-white">
                 <span className="md:hidden">
-                  This page is available in English and Spanish!
+                  <a
+                    href="https://github.com/nicolasgasco"
+                    target="blank"
+                    classList=" cursor-pointer"
+                  >
+                    Click here for my GitHub!
+                  </a>
                 </span>
                 <span className="hidden md:inline">
-                  This page is available in English and Spanish!
+                  <a
+                    href="https://github.com/nicolasgasco"
+                    target="blank"
+                    classList=" cursor-pointer"
+                  >
+                    Click here to see my GitHub!
+                  </a>
                 </span>
               </p>
             </div>
@@ -51,7 +63,7 @@ const BannerContent = () => {
       </div>
     );
   } else {
-    return (<></>);
+    return <></>;
   }
 };
 
