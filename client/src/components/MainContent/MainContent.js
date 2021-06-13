@@ -59,8 +59,7 @@ const MainContent = () => {
     defaultResultsState
   );
 
-  const { openAuth } = useContext(AuthContext);
-  const [showAuth, setShowAuth] = useState(false);
+  const { checkLogin } = useContext(AuthContext);
 
   let history = useHistory();
 
@@ -167,6 +166,11 @@ const MainContent = () => {
     }
   }, []);
 
+  // Check if user is still loggedin
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
   // Conditional rendering
   const location = useLocation();
   let resultsContent;
@@ -191,8 +195,6 @@ const MainContent = () => {
       resultsContent = <AuthContent />;
       break;
   }
-
-  console.log(location.pathname);
 
   return (
     <>

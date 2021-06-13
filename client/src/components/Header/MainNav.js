@@ -14,13 +14,14 @@ import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
 
 const MainNav = () => {
-  const navigation = [];
+  const [userGreeting, setUserGreeting] = useState("");
+  const navigation = [userGreeting];
   const profile = ["Your Profile", "Sign in"];
   const cart = ["Your orders", "See items"];
 
   const history = useHistory();
 
-  const { isLogged, logoutUser } = useContext(AuthContext);
+  const { logoutUser, isLogged, token } = useContext(AuthContext);
 
   // This came with the component
   function classNames(...classes) {
@@ -28,20 +29,31 @@ const MainNav = () => {
   }
 
   const handleSignin = () => {
-    if (!isLogged) {
+    if (!localStorage.getItem("token")) {
       history.push("/signin");
     } else {
       logoutUser();
       history.go(0);
+      setUserGreeting("");
     }
   };
 
   const handleLogo = () => {
     history.push("/");
+    history.go(0);
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setUserGreeting(`Hi, ${jwt_decode(localStorage.getItem("token")).name}!`);
+    } else {
+      setUserGreeting("");
+    }
+  }, [isLogged, userGreeting, token]);
 
   // Second element is for signing in
   const showProfileItems = profile.map((item, index) => {
+    // Sign in
     if (index === 1) {
       return (
         <Menu.Item key={item}>
@@ -54,7 +66,7 @@ const MainNav = () => {
                 "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
               )}
             >
-              {isLogged ? "Log out" : item}
+              {localStorage.getItem("token") ? "Log out" : item}
             </a>
           )}
         </Menu.Item>
@@ -114,35 +126,36 @@ const MainNav = () => {
                     alt="Workflow"
                   />
                 </div>
-                {localStorage.getItem("token") && (
+                {/* {localStorage.getItem("token") && (
                   <div class="mx-5 bg-green-600 text-white font-bold py-2 px-4 rounded-full">
                     <p>{`Hi, ${
                       jwt_decode(localStorage.getItem("token")).name
                     }!`}</p>
                   </div>
-                )}
+                )} */}
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
-                    {navigation.map((item, itemIdx) =>
-                      itemIdx === 0 ? (
-                        <Fragment key={item}>
+                    {localStorage.getItem("token") &&
+                      navigation.map((item, itemIdx) =>
+                        itemIdx === 0 ? (
+                          <Fragment key={item}>
+                            <a
+                              href="#"
+                              className="bg-green-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-default"
+                            >
+                              {item}
+                            </a>
+                          </Fragment>
+                        ) : (
                           <a
+                            key={item}
                             href="#"
-                            className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
+                            className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                           >
                             {item}
                           </a>
-                        </Fragment>
-                      ) : (
-                        <a
-                          key={item}
-                          href="#"
-                          className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                        >
-                          {item}
-                        </a>
-                      )
-                    )}
+                        )
+                      )}
                   </div>
                 </div>
               </div>

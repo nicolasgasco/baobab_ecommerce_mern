@@ -3,16 +3,16 @@ import React from "react";
 const AuthContext = React.createContext({
   token: "",
   userName: "",
-  isLoggedIn: false,
+  isLoggedIn: localStorage.getItem("token"),
   openLogin: true,
   openSignup: false,
   openAuth: false,
-  loginUser: () => {},
+  loginUser: (userData) => {},
   logoutUser: () => {},
-  signupUser: () => {},
+  signupUser: (userData) => {},
   handleOpenLogin: () => {},
   handleOpenSignup: () => {},
-  handleOpenAuth: () => {},
+  checkLogin: () => {},
 });
 
 export default AuthContext;

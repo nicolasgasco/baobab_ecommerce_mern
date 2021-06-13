@@ -4,9 +4,15 @@ import ModalContext from "./modal-context";
 const ModalProvider = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalText, setModalText] = useState("");
+  const [modalBody, setModalBody] = useState("");
 
-  const handleModalText = (text) => {
-    setModalText(text);
+  const handleModalText = (title, body) => {
+    setModalText(title.charAt(0).toUpperCase() + title.slice(1));
+    if (body) {
+      setModalBody(body.charAt(0).toUpperCase() + body.slice(1));
+    } else {
+      setModalBody(null)
+    }
     toggleModal();
   };
 
@@ -16,7 +22,13 @@ const ModalProvider = (props) => {
     });
   };
 
-  const modalContext = { isOpen, modalText, handleModalText, toggleModal };
+  const modalContext = {
+    isOpen,
+    modalText,
+    modalBody,
+    handleModalText,
+    toggleModal,
+  };
 
   return (
     <ModalContext.Provider value={modalContext}>

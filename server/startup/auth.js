@@ -94,7 +94,11 @@ const passportLogic = (app) => {
   });
 
   app.get("/api/check", (req, res) => {
-    const token = jwt.sign({ _id: this._id, name: this.name, surname: this.surname }, process.env.JWT);
+    // This doesn't actually work
+    const token = jwt.sign(
+      { _id: this._id, name: this.name, surname: this.surname },
+      process.env.JWT
+    );
     if (req.session.passport) {
       res
         .header("x-auth-token", token)
@@ -112,7 +116,7 @@ const passportLogic = (app) => {
 
   app.get("/success", (req, res) => {
     const token = user.generateAuthToken();
-    res.header("x-auth-token", token).send({
+    res.status(200).header("x-auth-token", token).send({
       success: true,
       msg: "Login successful",
       session: true,
@@ -120,7 +124,7 @@ const passportLogic = (app) => {
   });
 
   app.get("/fail", (req, res) => {
-    res.send({
+    res.status(400).send({
       success: false,
       msg: "Wrong user or password",
       session: false,

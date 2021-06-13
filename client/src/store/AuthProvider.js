@@ -1,11 +1,11 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import AuthContext from "./auth-context";
 import ModalContext from "./modal-context";
 import jwt_decode from "jwt-decode";
 
 const AuthProvider = (props) => {
   const [token, setToken] = useState("");
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(localStorage.getItem("token"));
   const [openLogin, setOpenLogin] = useState(true);
   const [openSignup, setOpenSignup] = useState(false);
   let userName = "";
@@ -13,7 +13,6 @@ const AuthProvider = (props) => {
   const { handleModalText } = useContext(ModalContext);
 
   const loginUser = (userData) => {
-    setIsLogged(false);
     console.log("login");
     fetch("/api/login", {
       method: "POST",
@@ -23,9 +22,6 @@ const AuthProvider = (props) => {
       body: JSON.stringify(userData),
     })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error(res.error);
-        }
         let decodedToken;
         let token;
         // This is the token
@@ -41,15 +37,14 @@ const AuthProvider = (props) => {
         return res.json();
       })
       .then((res) => {
-        if (!res.success) throw new Error(res.error);
+        if (!res.success) throw new Error(res.msg);
         console.log("success");
-        setIsLogged(true);
         handleModalText(`Welcome, ${userName}!`);
       })
       .catch((error) => {
+        localStorage.removeItem("token");
         console.log("An error ocurred: " + error.message);
-        setIsLogged(false);
-        handleModalText(`Something went wrong!`);
+        handleModalText(`${error.message}!`);
         userName = "";
       });
   };
@@ -73,11 +68,23 @@ const AuthProvider = (props) => {
         return res.json();
       })
       .then((res) => {
-        console.log(res);
         if (res.error) throw new Error(res.error);
         loginUser({ email: userData.email, password: userData.password });
       })
       .catch((error) => {
+        console.log(error.message);
+        if (error.message.includes("Joi")) {
+          handleModalText(
+            "Something went wrong",
+            `${error.message.split("(Joi):")[1].replaceAll(",", ".\n")}`
+          );
+        } else if (error.message.includes("not unique")) {
+          handleModalText(
+            "Something went wrong",
+            `${error.message.split("email:")[1].replaceAll(",", ".\n")}`
+          );
+        }
+
         console.log("An error ocurred: " + error.message);
       });
   };
@@ -97,10 +104,28 @@ const AuthProvider = (props) => {
       })
       .then((res) => {
         if (res.error) throw new Error(res.error);
-        setIsLogged(false);
         console.log("Logout successful");
         userName = "";
         localStorage.removeItem("token");
+      })
+      .catch((error) => {
+        console.log("An error ocurred: " + error.message);
+      });
+  };
+
+  const checkLogin = () => {
+    console.log("check");
+    fetch("/api/check")
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (res.error) throw new Error(res.error);
+        if (!res.session) {
+          localStorage.removeItem("token");
+          setToken("");
+        }
+        console.log(res);
       })
       .catch((error) => {
         console.log("An error ocurred: " + error.message);
@@ -116,6 +141,11 @@ const AuthProvider = (props) => {
     setOpenSignup(true);
   };
 
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    setIsLogged(!!localStorage.getItem("token"));
+  }, [localStorage, token]);
+
   const authContext = {
     token,
     isLogged,
@@ -127,6 +157,7 @@ const AuthProvider = (props) => {
     logoutUser,
     handleOpenLogin,
     handleOpenSignup,
+    checkLogin,
   };
 
   return (

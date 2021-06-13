@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
       error: `${
         joiValidation.error.name
       } (Joi): ${joiValidation.error.details.map((err) => {
-        return err.message;
+        return ` "${err.message[1].toUpperCase()}${err.message.slice(2)}`;
       })}`,
     });
     return;

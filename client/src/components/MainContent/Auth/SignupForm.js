@@ -28,12 +28,6 @@ const SignupForm = () => {
       password: passwordInput.current.value,
     };
     await signupUser(userData);
-
-    // Show modal message
-    console.log(isLogged)
-    logged
-      ? handleModalText(`Welcome, ${userData.name} ${userData.surname}!`)
-      : handleModalText(`Something went wrong!`);
   };
 
   useEffect(() => {

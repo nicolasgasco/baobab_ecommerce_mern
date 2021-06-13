@@ -6,11 +6,12 @@ import { useHistory } from "react-router";
 import AuthContext from "../../store/auth-context";
 
 const MainModal = () => {
-  const { isOpen, modalText, toggleModal } = useContext(ModalContext);
-  const { isLogged } = useContext(AuthContext);
+  const { isOpen, modalText, modalBody, toggleModal } =
+    useContext(ModalContext);
 
   const [open, setOpen] = useState(isOpen);
   const [text, setText] = useState(modalText);
+  const [body, setBody] = useState(modalBody);
 
   const cancelButtonRef = useRef(null);
 
@@ -24,9 +25,13 @@ const MainModal = () => {
     setText(modalText);
   }, [modalText]);
 
+  useEffect(() => {
+    setBody(modalBody);
+  }, [modalBody]);
+
   const handleModalClose = () => {
     toggleModal();
-    if (isLogged) history.push("/")
+    if (localStorage.getItem("token")) history.push("/");
   };
 
   return (
@@ -82,13 +87,20 @@ const MainModal = () => {
                       as="h3"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      {modalText}
+                      {text}
                     </Dialog.Title>
-                    {/* <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {}
-                      </p>
-                    </div> */}
+                    {modalBody && (
+                      <ul className="mt-2">
+                        {body.split(/[A-Za-z]{2,}[\.|,]/).map((message) => {
+                          return (
+                            <li className="ml-5 text-left list-disc text-sm text-gray-500">
+                              {/* This is to make the message more beautiful */}
+                              {message.replaceAll(".", ",")}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                   </div>
                 </div>
               </div>
