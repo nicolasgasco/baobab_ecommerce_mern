@@ -12,7 +12,7 @@ const SignupForm = () => {
   const emailInput = useRef();
   const passwordInput = useRef();
 
-  const { signupUser, isLogged, handleOpenAuth } = useContext(AuthContext);
+  const { signupUser, isLogged } = useContext(AuthContext);
   const { handleModalText } = useContext(ModalContext);
 
   const [logged, setLogged] = useState(isLogged);
@@ -29,8 +29,6 @@ const SignupForm = () => {
     };
     await signupUser(userData);
 
-    // Close signup window
-    handleOpenAuth();
     // Show modal message
     console.log(isLogged)
     logged

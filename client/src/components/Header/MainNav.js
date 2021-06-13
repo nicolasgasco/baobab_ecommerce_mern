@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   ShoppingCartIcon,
@@ -9,35 +9,75 @@ import {
 import BaobabLogo from "../../assets/img/baobab.svg";
 
 import AuthContext from "../../store/auth-context";
+import { useHistory } from "react-router";
+
+import jwt_decode from "jwt-decode";
 
 const MainNav = () => {
   const navigation = [];
   const profile = ["Your Profile", "Sign in"];
   const cart = ["Your orders", "See items"];
 
-  const { handleOpenAuth } = useContext(AuthContext);
+  const history = useHistory();
 
+  const { isLogged, logoutUser } = useContext(AuthContext);
+
+  // This came with the component
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
 
+  const handleSignin = () => {
+    if (!isLogged) {
+      history.push("/signin");
+    } else {
+      logoutUser();
+      history.go(0);
+    }
+  };
+
+  const handleLogo = () => {
+    history.push("/");
+  };
+
+  // Second element is for signing in
   const showProfileItems = profile.map((item, index) => {
-    return (
-      <Menu.Item key={item}>
-        {({ active }) => (
-          <a
-            id={`profile-item-${index + 1}`}
-            onClick={index === 1 && handleOpenAuth}
-            className={classNames(
-              active ? "bg-gray-100" : "",
-              "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+    if (index === 1) {
+      return (
+        <Menu.Item key={item}>
+          {({ active }) => (
+            <a
+              id={`profile-item-${index + 1}`}
+              onClick={handleSignin}
+              className={classNames(
+                active ? "bg-gray-100" : "",
+                "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+              )}
+            >
+              {isLogged ? "Log out" : item}
+            </a>
+          )}
+        </Menu.Item>
+      );
+    } else {
+      return (
+        localStorage.getItem("token") && (
+          <Menu.Item key={item}>
+            {({ active }) => (
+              <a
+                id={`profile-item-${index + 1}`}
+                className={classNames(
+                  active ? "bg-gray-100" : "",
+                  "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                )}
+              >
+                {item}
+              </a>
             )}
-          >
-            {item}
-          </a>
-        )}
-      </Menu.Item>
-    );
+          </Menu.Item>
+        )
+      );
+    }
   });
 
   const showCartItems = profile.map((item, index) => {
@@ -46,7 +86,7 @@ const MainNav = () => {
         {({ active }) => (
           <a
             id={`cart-item-${index + 1}`}
-            onClick={index === 1 && handleOpenAuth}
+            onClick={index === 1 && handleSignin}
             className={classNames(
               active ? "bg-gray-100" : "",
               "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
@@ -68,17 +108,24 @@ const MainNav = () => {
               <div className="flex items-center">
                 <div className="flex-shrink-0 out">
                   <img
+                    onClick={handleLogo}
                     className="h-12 w-12 cursor-pointer"
                     src={BaobabLogo}
                     alt="Workflow"
                   />
                 </div>
+                {localStorage.getItem("token") && (
+                  <div class="mx-5 bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+                    <p>{`Hi, ${
+                      jwt_decode(localStorage.getItem("token")).name
+                    }!`}</p>
+                  </div>
+                )}
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
                     {navigation.map((item, itemIdx) =>
                       itemIdx === 0 ? (
                         <Fragment key={item}>
-                          {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                           <a
                             href="#"
                             className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"

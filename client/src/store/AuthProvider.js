@@ -4,12 +4,11 @@ import ModalContext from "./modal-context";
 import jwt_decode from "jwt-decode";
 
 const AuthProvider = (props) => {
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState("");
   const [isLogged, setIsLogged] = useState(false);
-  const [openLogin, setOpenLogin] = useState(false);
-  const [openSignup, setOpenSignup] = useState(true);
-  const [openAuth, setOpenAuth] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [openLogin, setOpenLogin] = useState(true);
+  const [openSignup, setOpenSignup] = useState(false);
+  let userName = "";
 
   const { handleModalText } = useContext(ModalContext);
 
@@ -27,29 +26,31 @@ const AuthProvider = (props) => {
         if (!res.ok) {
           throw new Error(res.error);
         }
+        let decodedToken;
         let token;
         // This is the token
         for (const header of res.headers) {
           if (header[0] === "x-auth-token") {
-            token = jwt_decode(header[1]);
+            token = header[1];
+            decodedToken = jwt_decode(header[1]);
+            setToken(decodedToken);
           }
         }
-        if (token) setUserName(`${token.name} ${token.surname}`);
-
+        if (token) userName = `${decodedToken.name} ${decodedToken.surname}`;
+        localStorage.setItem("token", token);
         return res.json();
       })
       .then((res) => {
         if (!res.success) throw new Error(res.error);
         console.log("success");
         setIsLogged(true);
-        handleModalText(`Welcome ${userName}!`);
-        setUserName("");
+        handleModalText(`Welcome, ${userName}!`);
       })
       .catch((error) => {
         console.log("An error ocurred: " + error.message);
         setIsLogged(false);
         handleModalText(`Something went wrong!`);
-        setUserName("");
+        userName = "";
       });
   };
 
@@ -97,45 +98,33 @@ const AuthProvider = (props) => {
       .then((res) => {
         if (res.error) throw new Error(res.error);
         setIsLogged(false);
-        console.log("Logoutsuccesfull");
+        console.log("Logout successful");
+        userName = "";
+        localStorage.removeItem("token");
       })
       .catch((error) => {
         console.log("An error ocurred: " + error.message);
       });
   };
 
-  const handleOpenAuth = () => {
-    setOpenAuth((prevState) => {
-      return !prevState;
-    });
-    setOpenLogin(true);
-  };
-
   const handleOpenLogin = () => {
-    setOpenLogin((prevState) => {
-      return !prevState;
-    });
-    setOpenSignup((prevState) => {
-      return !prevState;
-    });
+    setOpenLogin(true);
+    setOpenSignup(false);
   };
-
   const handleOpenSignup = () => {
-    setOpenLogin((prevState) => {
-      return !prevState;
-    });
+    setOpenLogin(false);
+    setOpenSignup(true);
   };
 
   const authContext = {
     token,
     isLogged,
-    openAuth,
     openLogin,
     openSignup,
+    userName,
     loginUser,
     signupUser,
     logoutUser,
-    handleOpenAuth,
     handleOpenLogin,
     handleOpenSignup,
   };

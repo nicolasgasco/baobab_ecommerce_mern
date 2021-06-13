@@ -3,12 +3,8 @@ import React, { useEffect, useContext, useRef } from "react";
 import BaobabLogo from "../../../assets/img/baobab.svg";
 
 import AuthContext from "../../../store/auth-context";
-import ModalContext from "../../../store/modal-context";
 
 const Loginform = () => {
-  const { handleOpenAuth, isLogged } = useContext(AuthContext);
-  const { handleModalText } = useContext(ModalContext);
-
   const emailInput = useRef();
   const passwordInput = useRef();
 
@@ -20,13 +16,7 @@ const Loginform = () => {
       email: emailInput.current.value,
       password: passwordInput.current.value,
     });
-    // Close signup window
-    handleOpenAuth();
   };
-
-  useEffect(() => {
-    console.log("isLogged changed");
-  }, [isLogged]);
 
   return (
     <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 my-12 mx-10 rounded-xl shadow-xl h-2/3 ">

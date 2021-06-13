@@ -5,7 +5,7 @@ import SignupForm from "./SignupForm";
 import AuthContext from "../../../store/auth-context";
 
 const AuthContent = () => {
-  const { openLogin, openSignup } = useContext(AuthContext);
+  const { openLogin } = useContext(AuthContext);
 
   return (
     <>{openLogin ? <Loginform /> : <SignupForm />}</>

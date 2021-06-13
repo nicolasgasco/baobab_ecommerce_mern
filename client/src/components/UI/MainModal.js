@@ -2,14 +2,19 @@ import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import ModalContext from "../../store/modal-context";
+import { useHistory } from "react-router";
+import AuthContext from "../../store/auth-context";
 
 const MainModal = () => {
   const { isOpen, modalText, toggleModal } = useContext(ModalContext);
+  const { isLogged } = useContext(AuthContext);
 
   const [open, setOpen] = useState(isOpen);
   const [text, setText] = useState(modalText);
 
   const cancelButtonRef = useRef(null);
+
+  const history = useHistory();
 
   useEffect(() => {
     setOpen(isOpen);
@@ -19,6 +24,11 @@ const MainModal = () => {
     setText(modalText);
   }, [modalText]);
 
+  const handleModalClose = () => {
+    toggleModal();
+    if (isLogged) history.push("/")
+  };
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
@@ -27,7 +37,7 @@ const MainModal = () => {
         className="fixed z-10 inset-0 overflow-y-auto"
         initialFocus={cancelButtonRef}
         open={open}
-        onClose={toggleModal}
+        onClose={handleModalClose}
       >
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
@@ -86,14 +96,14 @@ const MainModal = () => {
                 <button
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={toggleModal}
+                  onClick={handleModalClose}
                 >
                   Ok
                 </button>
                 <button
                   type="button"
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={toggleModal}
+                  onClick={handleModalClose}
                   ref={cancelButtonRef}
                 >
                   Cancel

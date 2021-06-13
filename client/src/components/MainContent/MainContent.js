@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
 } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import ResultsBox from "./Results/ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
 import HeroMain from "./HeroMain";
@@ -27,8 +28,8 @@ const defaultResultsState = {
 
 const resultsReducer = (state, action) => {
   switch (action.type) {
-    case "SHOW_RESULTS":
-      return { ...state, showResultsBox: action.val };
+    // case "SHOW_RESULTS":
+    //   return { ...state, showResultsBox: action.val };
     case "CONTENT_LOADING":
       return { ...state, contentLoading: action.val };
     case "PICTURES_LOADING":
@@ -58,21 +59,23 @@ const MainContent = () => {
     defaultResultsState
   );
 
-  const { openAuth, handleOpenAuth } = useContext(AuthContext);
+  const { openAuth } = useContext(AuthContext);
   const [showAuth, setShowAuth] = useState(false);
+
+  let history = useHistory();
 
   // Fetching the products by keywords
   const getSearchbarInput = useCallback(
     (input) => {
-      dispatchResults({ type: "SHOW_RESULTS", val: true });
+      // Redirect to search to render searchbox
+      history.push("/search");
+      // dispatchResults({ type: "SHOW_RESULTS", val: true });
       dispatchResults({ type: "CONTENT_LOADING", val: true });
       dispatchResults({ type: "PICTURES_LOADING", val: true });
       dispatchResults({ type: "IS_EMPTY", val: false });
       // THis is necessary, otherwise some products just stay stuck there
       dispatchResults({ type: "FETCHED_PRODUCTS", val: [] });
       dispatchResults({ type: "SEARCH_KEYWORDS", val: input });
-      // Closing login when fetching new products
-      handleOpenAuth();
 
       console.log("Fetching products...");
 
@@ -157,24 +160,39 @@ const MainContent = () => {
     getSearchbarInput,
   ]);
 
+  // Redirecting if there are no results on load (e.g. when manually realoding)
   useEffect(() => {
-    setShowAuth(openAuth);
-  }, [openAuth]);
+    if (resultsState.fetchedProducts.length === 0) {
+      history.push("/");
+    }
+  }, []);
 
-  let resultsContent = <HeroMain />;
-  if (resultsState.showResultsBox) {
-    resultsContent = (
-      <ResultsBox
-        fetchedProducts={resultsState.fetchedProducts}
-        paginationData={resultsState.paginationData}
-        handlePageChange={handlePageChange}
-        handleResultsPerPage={handleResultsPerPage}
-        contentLoading={resultsState.contentLoading}
-        picturesLoading={resultsState.picturesLoading}
-        isEmpty={resultsState.isEmpty}
-      />
-    );
+  // Conditional rendering
+  const location = useLocation();
+  let resultsContent;
+  switch (location.pathname) {
+    case "/":
+      resultsContent = <HeroMain />;
+      break;
+    case "/search":
+      resultsContent = (
+        <ResultsBox
+          fetchedProducts={resultsState.fetchedProducts}
+          paginationData={resultsState.paginationData}
+          handlePageChange={handlePageChange}
+          handleResultsPerPage={handleResultsPerPage}
+          contentLoading={resultsState.contentLoading}
+          picturesLoading={resultsState.picturesLoading}
+          isEmpty={resultsState.isEmpty}
+        />
+      );
+      break;
+    case "/signin":
+      resultsContent = <AuthContent />;
+      break;
   }
+
+  console.log(location.pathname);
 
   return (
     <>
@@ -183,7 +201,7 @@ const MainContent = () => {
         handleActivePage={handleActivePage}
         activePage={resultsState.activePage}
       />
-      {openAuth ? <AuthContent /> : resultsContent}
+      {resultsContent}
     </>
   );
 };
