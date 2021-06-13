@@ -21,7 +21,8 @@ const MainNav = () => {
 
   const history = useHistory();
 
-  const { logoutUser, isLogged, token } = useContext(AuthContext);
+  const { logoutUser, handleOpenLogin, isLogged, token } =
+    useContext(AuthContext);
 
   // This came with the component
   function classNames(...classes) {
@@ -31,6 +32,7 @@ const MainNav = () => {
   const handleSignin = () => {
     if (!localStorage.getItem("token")) {
       history.push("/signin");
+      handleOpenLogin();
     } else {
       logoutUser();
       history.go(0);
