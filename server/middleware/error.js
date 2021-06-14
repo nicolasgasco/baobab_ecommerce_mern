@@ -1,5 +1,5 @@
 module.exports = function (err, req, res, next) {
-  res.status(500).send({ error: err.message });
+  res.status(400).send({ error: err.message });
   console.log("Error: " + err.message);
 
 //   const errMessages = [];
