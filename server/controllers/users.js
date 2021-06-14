@@ -3,6 +3,8 @@ const { User } = require("../models/users");
 
 const { encryptPassword } = require("../middleware/encryptPassword");
 
+require("express-async-errors");
+
 const getAllUsers = async (req, res) => {
   // Query param for sorting, by which and in which order
   let sortBy = req.query.sortBy;
@@ -59,21 +61,35 @@ const postNewUser = async (req, res) => {
 
   // Saving in DB and sending result
   const result = await user.save();
+
   // User will be authorized automatically
   const token = user.generateAuthToken();
   res.header("x-auth-token", token).send({ insertedCount: 1, result: result });
 };
 
 const putUserWithId = async (req, res) => {
-  console.log("Joi validation successful");
-
   // Add a modification date
   req.body.modificationDate = new Date();
 
   const updatedUser = new User(req.body);
 
-  // Validation with Mongoose
-  await updatedUser.validate();
+  const token = updatedUser.generateAuthToken();
+  // Without this it's a 500 error
+  try {
+    // Validation with Mongoose
+    await updatedUser.validate();
+  } catch (err) {
+    return res
+      .header("x-auth-token", token)
+      .status(400)
+      .send({
+        error: Object.values(err.errors)
+          .map((error) => {
+            return error.message;
+          })
+          .join(", "),
+      });
+  }
 
   req.body.password = updatedUser.password
     ? encryptPassword(req.body.password)
@@ -83,9 +99,14 @@ const putUserWithId = async (req, res) => {
     new: true,
   });
   if (!result) {
-    return res.status(404).send({ error: "Nothing found" });
+    return res
+      .header("x-auth-token", token)
+      .status(404)
+      .send({ error: "Nothing found" });
   }
-  res.send({ updatedCount: 1, updatedObj: result });
+  res
+    .header("x-auth-token", token)
+    .send({ updatedCount: 1, updatedObj: result });
 };
 
 const deleteUser = async (req, res) => {
