@@ -24,7 +24,7 @@ const ResultsBox = ({
     );
   });
 
-  const resultsPerPageDropdown = ["4", "8", "24", "60"];
+  const resultsPerPageDropdown = ["3", "6", "24", "60"];
 
   return (
     <section className="p-5 my-10 bg-transparent">
