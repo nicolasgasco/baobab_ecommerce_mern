@@ -12,6 +12,7 @@ import AuthContext from "../../store/auth-context";
 import { useHistory } from "react-router";
 
 import jwt_decode from "jwt-decode";
+import { Link } from "react-router-dom";
 
 const MainNav = () => {
   const [userGreeting, setUserGreeting] = useState("");
@@ -47,7 +48,14 @@ const MainNav = () => {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      setUserGreeting(`Hi, ${jwt_decode(localStorage.getItem("token")).name}!`);
+      setUserGreeting(
+        `Hi, ${
+          jwt_decode(localStorage.getItem("token"))
+            .name.charAt(0)
+            .toUpperCase() +
+          jwt_decode(localStorage.getItem("token")).name.substring(1)
+        }!`
+      );
     } else {
       setUserGreeting("");
     }
@@ -60,7 +68,7 @@ const MainNav = () => {
       return (
         <Menu.Item key={item}>
           {({ active }) => (
-            <a
+            <Link
               id={`profile-item-${index + 1}`}
               onClick={handleSignin}
               className={classNames(
@@ -69,16 +77,18 @@ const MainNav = () => {
               )}
             >
               {localStorage.getItem("token") ? "Log out" : item}
-            </a>
+            </Link>
           )}
         </Menu.Item>
       );
+      // Your profile
     } else {
       return (
         localStorage.getItem("token") && (
           <Menu.Item key={item}>
             {({ active }) => (
-              <a
+              <Link
+                to="/profile"
                 id={`profile-item-${index + 1}`}
                 className={classNames(
                   active ? "bg-gray-100" : "",
@@ -86,7 +96,7 @@ const MainNav = () => {
                 )}
               >
                 {item}
-              </a>
+              </Link>
             )}
           </Menu.Item>
         )
