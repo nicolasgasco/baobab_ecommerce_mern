@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 
 const AuthProvider = (props) => {
   const [token, setToken] = useState("");
-  const [isLogged, setIsLogged] = useState(localStorage.getItem("token"));
+  const [isLogged, setIsLogged] = useState(!!localStorage.getItem("token"));
   const [openLogin, setOpenLogin] = useState(true);
   const [openSignup, setOpenSignup] = useState(false);
   let userName = "";
@@ -13,6 +13,7 @@ const AuthProvider = (props) => {
   const { handleModalText } = useContext(ModalContext);
 
   const loginUser = (userData) => {
+    console.log(userData);
     console.log("login");
     fetch("/api/login", {
       method: "POST",
@@ -32,7 +33,14 @@ const AuthProvider = (props) => {
             setToken(decodedToken);
           }
         }
-        if (token) userName = `${decodedToken.name} ${decodedToken.surname}`;
+        if (token)
+          userName = `${
+            decodedToken.name.charAt(0).toUpperCase() +
+            decodedToken.name.substring(1)
+          } ${
+            decodedToken.surname.charAt(0).toUpperCase() +
+            decodedToken.surname.substring(1)
+          }`;
         localStorage.setItem("token", token);
         return res.json();
       })
@@ -76,18 +84,25 @@ const AuthProvider = (props) => {
         if (error.message.includes("Joi")) {
           handleModalText(
             "Something went wrong",
-            `${error.message.split("(Joi):")[1].replaceAll(",", ".\n")}`
+            `${error.message
+              .split("(Joi):")[1]
+              .replaceAll(",", ".\n")
+              .split(".\n")}`
           );
         } else if (error.message.includes("not unique")) {
           handleModalText(
             "Something went wrong",
-            `${error.message.split("email:")[1].replaceAll(",", ".\n")}`
+            `${error.message
+              .split("email:")[1]
+              .replaceAll(",", ".\n")
+              .split(".\n")}`
           );
         }
 
         console.log("An error ocurred: " + error.message);
       });
   };
+
   const logoutUser = () => {
     console.log("logout");
     fetch("/api/logout", {
@@ -148,10 +163,10 @@ const AuthProvider = (props) => {
 
   const authContext = {
     token,
+    userName,
     isLogged,
     openLogin,
     openSignup,
-    userName,
     loginUser,
     signupUser,
     logoutUser,
