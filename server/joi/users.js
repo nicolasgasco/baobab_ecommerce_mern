@@ -35,9 +35,9 @@ const userSchemaJoi = Joi.object({
     province: Joi.string().trim().min(2).max(25).required(),
     city: Joi.string().trim().min(2).max(25).required(),
     zip: Joi.string().trim().length(5).regex(/^\d+$/).required(),
-    street: Joi.string().trim().min(1).max(25).required(),
-    streetNumber: Joi.string().trim().min(1).max(10).required(),
-    doorNumber: Joi.string().trim().min(1).max(10).required(),
+    street: Joi.string().trim().min(1).max(50).required(),
+    // streetNumber: Joi.string().trim().min(1).max(10).required(),
+    // doorNumber: Joi.string().trim().min(1).max(10).required(),
     other: Joi.string().trim().min(2).max(50),
   },
   telephone: {
