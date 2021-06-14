@@ -11,6 +11,7 @@ const SignupForm = () => {
   const genderInput = useRef();
   const emailInput = useRef();
   const passwordInput = useRef();
+  const repeatPasswordInput = useRef();
 
   const { signupUser, isLogged } = useContext(AuthContext);
   const { handleModalText } = useContext(ModalContext);
@@ -19,6 +20,12 @@ const SignupForm = () => {
 
   const submitHandler = async (event) => {
     event.preventDefault();
+
+    if (passwordInput.current.value !== repeatPasswordInput.current.value) {
+      console.log(passwordInput.current.value,  repeatPasswordInput.current.value);
+      handleModalText("The two passwords don't match!");
+      return;
+    }
 
     const userData = {
       name: nameInput.current.value,
@@ -139,8 +146,23 @@ const SignupForm = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
+              />
+            </div>
+            <div>
+              <label htmlFor="new-password" className="sr-only">
+                Repeat password
+              </label>
+              <input
+                ref={repeatPasswordInput}
+                id="new-password"
+                name="new-password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                placeholder="Repeat password"
               />
             </div>
           </div>
