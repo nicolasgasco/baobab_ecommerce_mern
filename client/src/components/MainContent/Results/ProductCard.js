@@ -41,7 +41,7 @@ const ProductCard = ({ product, picturesLoading }) => {
         {showPictureOrLoader}
       </div>
       <div className="relative px-4 -mt-6">
-        <div className="bg-yellow-200 p-5 rounded-lg shadow-xl">
+        <div className="bg-green-200 p-5 rounded-lg shadow-xl">
           <div className="flex items-baseline">
             <span className="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
               {departmentName}
