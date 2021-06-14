@@ -2,8 +2,7 @@ import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import ModalContext from "../../store/modal-context";
-import { useHistory } from "react-router";
-import AuthContext from "../../store/auth-context";
+import { useHistory, useLocation } from "react-router-dom";
 
 const MainModal = () => {
   const { isOpen, modalText, modalBody, toggleModal } =
@@ -16,6 +15,7 @@ const MainModal = () => {
   const cancelButtonRef = useRef(null);
 
   const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     setOpen(isOpen);
@@ -31,7 +31,11 @@ const MainModal = () => {
 
   const handleModalClose = () => {
     toggleModal();
-    if (localStorage.getItem("token")) history.push("/");
+    console.log(location.pathname);
+    // This is necessary to not redirect when changing profile data
+    if (localStorage.getItem("token") && location.pathname !== "/profile") {
+      history.push("/");
+    }
   };
 
   return (
@@ -91,7 +95,7 @@ const MainModal = () => {
                     </Dialog.Title>
                     {modalBody && (
                       <ul className="mt-2">
-                        {body.split(/[A-Za-z]{2,}[\.|,]/).map((message) => {
+                        {body.map((message) => {
                           return (
                             <li className="ml-5 text-left list-disc text-sm text-gray-500">
                               {/* This is to make the message more beautiful */}
