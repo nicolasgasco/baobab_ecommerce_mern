@@ -91,9 +91,11 @@ const putUserWithId = async (req, res) => {
       });
   }
 
-  req.body.password = updatedUser.password
-    ? encryptPassword(req.body.password)
-    : null;
+  // This was causing an issue with loggin in after modifying data
+  // req.body.password = updatedUser.password
+  //   ? encryptPassword(req.body.password)
+  //   : null;
+
   // Finding and updating at the same time
   const result = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
