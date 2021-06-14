@@ -31,6 +31,11 @@ function App() {
             <MainContent />
           </div>
         </Route>
+        <Route exact path="/profile">
+          <div className="h-min-screen">
+            <MainContent />
+          </div>
+        </Route>
         <Route path="*">
           <Redirect to="/" />
         </Route>
