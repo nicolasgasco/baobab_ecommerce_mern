@@ -45,10 +45,13 @@ const userSchema = new mongoose.Schema(
         validator: async function (value) {
           try {
             const User = mongoose.model("User", userSchema);
-            const userCount = await User.find({
+            const user = await User.find({
               email: this.email,
-            }).countDocuments();
-            return !userCount;
+            });
+            if (user.lenght > 0) {
+              return user._id !== this._id ? false : true;
+            }
+            return true;
           } catch (err) {
             console.log("Error: " + err);
           }
@@ -129,20 +132,20 @@ const userSchema = new mongoose.Schema(
         type: String,
         trim: true,
         minLength: [2, "Street name too short"],
-        maxLength: [25, "Street name too long"],
+        maxLength: [50, "Street name too long"],
       },
-      streetNumber: {
-        type: String,
-        trim: true,
-        minLength: [1, "Street number too short"],
-        maxLength: [10, "Street number too long"],
-      },
-      doorNumber: {
-        type: String,
-        trim: true,
-        minLength: [1, "Street number too short"],
-        maxLength: [10, "Street number too long"],
-      },
+      // streetNumber: {
+      //   type: String,
+      //   trim: true,
+      //   minLength: [1, "Street number too short"],
+      //   maxLength: [10, "Street number too long"],
+      // },
+      // doorNumber: {
+      //   type: String,
+      //   trim: true,
+      //   minLength: [1, "Street number too short"],
+      //   maxLength: [10, "Street number too long"],
+      // },
       other: {
         type: String,
         trim: true,
@@ -177,7 +180,13 @@ const userSchema = new mongoose.Schema(
 
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
-    { _id: this._id, name: this.name, surname: this.surname },
+    {
+      _id: this._id,
+      name: this.name,
+      surname: this.surname,
+      gender: this.gender,
+      email: this.email,
+    },
     process.env.JWT
   );
   return token;
