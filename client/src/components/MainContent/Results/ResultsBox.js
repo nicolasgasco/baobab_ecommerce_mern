@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import NothingFound from "./NothingFound";
 import PageCounter from "./PageCounter";
-import ProductCard from "./ProductCard1";
+import ProductCard from "./ProductCard";
 import SectionLoading from "../SectionLoading";
 import SimpleDropdown from "../../UI/SimpleDropdown";
 
