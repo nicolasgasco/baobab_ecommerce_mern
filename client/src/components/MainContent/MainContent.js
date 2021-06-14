@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useReducer,
-  useState,
-  useCallback,
-  useContext,
-} from "react";
+import { useEffect, useReducer, useCallback, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import ResultsBox from "./Results/ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
@@ -12,6 +6,7 @@ import HeroMain from "./HeroMain";
 import AuthContent from "./Auth/AuthContent";
 
 import AuthContext from "../../store/auth-context";
+import ProfilePage from "../Profile/ProfilePage";
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -175,9 +170,6 @@ const MainContent = () => {
   const location = useLocation();
   let resultsContent;
   switch (location.pathname) {
-    case "/":
-      resultsContent = <HeroMain />;
-      break;
     case "/search":
       resultsContent = (
         <ResultsBox
@@ -193,6 +185,12 @@ const MainContent = () => {
       break;
     case "/signin":
       resultsContent = <AuthContent />;
+      break;
+    case "/profile":
+      resultsContent = <ProfilePage />;
+      break;
+    case "/":
+      resultsContent = <HeroMain />;
       break;
   }
 
