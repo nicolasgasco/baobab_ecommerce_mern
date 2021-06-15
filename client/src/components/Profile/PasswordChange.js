@@ -3,14 +3,17 @@ import { useHistory } from "react-router";
 import AuthContext from "../../store/auth-context";
 import ModalContext from "../../store/modal-context";
 
+import LoadingOverlay from "../UI/LoadingOverlay";
+
 import jwt_decode from "jwt-decode";
-import ResultsBox from "../MainContent/Results/ResultsBox";
 
 const PasswordChange = () => {
   const { checkPassword } = useContext(AuthContext);
   const { handleModalText } = useContext(ModalContext);
 
   const history = useHistory();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const { _id: id, email } = jwt_decode(localStorage.getItem("token"));
 
@@ -22,6 +25,7 @@ const PasswordChange = () => {
 
   const handleCurrentPassword = (event) => {
     setPasswordCorrect(false);
+    setErrorMessages([]);
     setCurrentPassword(event.target.value);
   };
 
@@ -37,6 +41,7 @@ const PasswordChange = () => {
     setErrorMessages([]);
     if (passwordCorrect) return;
     if (localStorage.getItem("token")) {
+      setIsLoading(true);
       try {
         console.log("check");
         const result = await checkPassword({
@@ -45,9 +50,12 @@ const PasswordChange = () => {
         });
         if (result) {
           setPasswordCorrect(!!result);
+          setIsLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
+        setErrorMessages(["Wrong password!"]);
       }
     } else {
       history.push("/");
@@ -65,6 +73,7 @@ const PasswordChange = () => {
     if (newPassword !== confirmPassword) {
       setErrorMessages(["The two passwords don't match"]);
     } else {
+      setIsLoading(true);
       console.log(id);
       // const res = await fetch(`api/users/${id}`);
       // const oldUser = await res.json();
@@ -82,6 +91,7 @@ const PasswordChange = () => {
       try {
         const result = await put.json();
         if (result.error) {
+          setIsLoading(false);
           setErrorMessages(
             result.error
               .split("(Joi): ")[1]
@@ -92,6 +102,7 @@ const PasswordChange = () => {
           );
         }
         if (result.updatedCount === 1) {
+          setIsLoading(false);
           handleModalText("Password changed!");
         }
       } catch (error) {
@@ -107,6 +118,7 @@ const PasswordChange = () => {
 
   return (
     <>
+      {isLoading && <LoadingOverlay />}
       <div className="bg-white my-12 mx-10 rounded-xl shadow-xl h-2/3 ">
         <div className="md:col-span-1">
           <div className="mt-5 md:mt-0 md:col-span-2">
@@ -130,14 +142,18 @@ const PasswordChange = () => {
                         value={currentPassword}
                         onChange={handleCurrentPassword}
                         onBlur={checkPasswordValidity}
-                        className={`mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm "border-gray-300" ${
+                        className={`mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 ${
                           passwordCorrect
-                            ? "bg-green-100"
-                            : currentPassword && "bg-red-100"
+                            ? "bg-green-100 ring-green-900"
+                            : currentPassword && "bg-red-100 ring-red-900"
                         } rounded-md`}
                       />
                     </div>
-                    <div className="col-span-6 sm:col-span-3">
+                    <div
+                      className={`col-span-6 sm:col-span-3 ${
+                        !passwordCorrect && "hidden"
+                      }`}
+                    >
                       <label
                         htmlFor="first_name"
                         className="block text-sm font-medium text-gray-700"
@@ -157,7 +173,11 @@ const PasswordChange = () => {
                       />
                     </div>
 
-                    <div className="col-span-6 sm:col-span-3">
+                    <div
+                      className={`col-span-6 sm:col-span-3 ${
+                        !passwordCorrect && "hidden"
+                      }`}
+                    >
                       <label
                         htmlFor="last_name"
                         className="block text-sm font-medium text-gray-700"
@@ -184,7 +204,7 @@ const PasswordChange = () => {
                     class="mx-5 bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
                     role="alert"
                   >
-                    <h4 className="font-bold text-xl">Wrong data</h4>
+                    <h4 className="font-bold text-xl">Error</h4>
                     <ul className="ml-5 list-disc">{showErrorMessages}</ul>
                   </div>
                 )}
