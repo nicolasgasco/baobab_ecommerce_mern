@@ -5,9 +5,9 @@ const IndexPage = () => {
     <>
       <div className="bg-gray-200 pb-12 p-10">
         <div className="mx-auto container pt-20 lg:pt-30 flex flex-col items-center justify-center">
-          <img src={BaobabLogo} alt="Illustration of a baobap" className="w-32 h-32"/>
+          <img src={BaobabLogo} alt="Illustration of a baobab" className="w-32 h-32"/>
           <div className="text-black flex flex-col md:items-center f-f-l pt-3">
-            <h1 className="text-2xl font-black text-center">Baobap. Shopping. With conscience.</h1>
+            <h1 className="text-2xl font-black text-center">Baobab. Shopping. With conscience.</h1>
             <div className="md:flex items-center mt-5 md:mt-10 text-base text-color f-f-l">
               <h2 className=" md:mr-6 pb-4 md:py-0 cursor-pointer">
                 Download Now

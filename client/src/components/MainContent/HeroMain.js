@@ -41,7 +41,7 @@ export default function Example() {
             Green, convenient, sustainable
           </h2>
           <h1 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            Start shopping on Bonsai
+            Start shopping on Baobab
           </h1>
           <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
             
