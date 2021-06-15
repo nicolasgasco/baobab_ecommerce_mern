@@ -111,6 +111,38 @@ const putUserWithId = async (req, res) => {
     .send({ updatedCount: 1, updatedObj: result });
 };
 
+const patchPassword = async (req, res) => {
+  // Add a modification date
+  req.body.modificationDate = new Date();
+
+  const newPassword = encryptPassword(req.body.password);
+
+  try {
+    const result = await User.updateOne(
+      {
+        _id: req.params.id,
+      },
+      {
+        $set: { password: newPassword },
+      }
+    );
+
+    console.log(result);
+
+    if (!result.nModified) {
+      throw new Error("Something went wrong");
+    }
+    res
+      // .header("x-auth-token", token)
+      .send({ updatedCount: result.nModified });
+  } catch (error) {
+    res
+      // .header("x-auth-token", token)
+      .status(404)
+      .send({ error: `${error}` });
+  }
+};
+
 const deleteUser = async (req, res) => {
   const result = await User.deleteOne({ _id: req.params.id });
 
@@ -127,3 +159,4 @@ exports.getUserById = getUserById;
 exports.postNewUser = postNewUser;
 exports.putUserWithId = putUserWithId;
 exports.deleteUser = deleteUser;
+exports.patchPassword = patchPassword;

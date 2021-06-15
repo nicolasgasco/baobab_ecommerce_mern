@@ -4,7 +4,7 @@ const passwordComplexity = require("joi-password-complexity");
 const userSchemaJoi = Joi.object({
   name: Joi.string().min(2).max(25).trim().required(),
   surname: Joi.string().min(2).max(25).trim().required(),
-  password: passwordComplexity().trim().required(),
+  password: passwordComplexity().required(),
   email: Joi.when("modificationDate", {
     is: null,
     then: Joi.optional(),
