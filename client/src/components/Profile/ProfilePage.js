@@ -2,43 +2,78 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
 import ModalContext from "../../store/modal-context";
+import AuthContext from "../../store/auth-context";
+
 import LoadingOverlay from "../UI/LoadingOverlay";
 
+import useInput from "../../hooks/use-input";
+
 const ProfilePage = () => {
-  // For dropdown menu with country choice
-  const [countryNames, setCountryNames] = useState(["Loading..."]);
-
-  // Input refs
-  const countryInputRef = useRef();
-  const addressInputRef = useRef();
-  const cityInputRef = useRef();
-  const provinceInputRef = useRef();
-  const postalInputRef = useRef();
-
-  // Error messages shown in a box below form
-  const [errorMessages, setErrorMessages] = useState([]);
-
   // For authentication
   const { handleModalText } = useContext(ModalContext);
+  const { checkLogin } = useContext(AuthContext);
+
+  const history = useHistory();
+
+  // For handling editing and loading status
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Redirecting if not authorized
+  useEffect(() => {
+    if (!localStorage.getItem("token")) history.push("/");
+  }, [history]);
+
+  // Fetching countries for dropdown
+  const [countryNames, setCountryNames] = useState(["Loading..."]);
+
+  useEffect(() => {
+    fetch("https://restcountries.eu/rest/v2/all")
+      .then((res) => res.json())
+      .then((res) => {
+        const countryList = res.map((country) => {
+          return [country.name, country.alpha3Code];
+        });
+        setCountryNames(countryList);
+      })
+      .catch((error) => {
+        console.log("En error ocurred: " + error);
+      });
+  }, []);
 
   // User data from LocalStorage
-  const [userData, setUserData] = useState(() => {
-    if (localStorage.getItem("token")) {
-      return jwt_decode(localStorage.getItem("token"));
-    } else {
-      return {};
+  const [userData, setUserData] = useState(async () => {
+    setIsLoading(true);
+    console.log("fetched user data");
+    try {
+      const { _id: id } = jwt_decode(localStorage.getItem("token"));
+      // Get user and see if there's already an address
+      const res = await fetch(`/api/users/${id}`);
+      const user = await res.json();
+      if (user.resultsFound) {
+        setUserData(user.result);
+        setIsLoading(false);
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      setUserData({});
     }
   });
 
-  // Address info fetched from database
+  // Address info fetched from database, if existing
   const [userAddress, setUserAddress] = useState(async () => {
+    setIsLoading(true);
+
     try {
+      const { _id: id } = jwt_decode(localStorage.getItem("token"));
       // Get user and see if there's already an address
-      const res = await fetch(`/api/users/${userData._id}`);
+      const res = await fetch(`/api/users/${id}`);
       const user = await res.json();
       if (user.resultsFound && user.result.address) {
         console.log(user.result.address);
         setUserAddress(user.result.address);
+        setIsLoading(false);
       } else {
         throw new Error();
       }
@@ -47,12 +82,68 @@ const ProfilePage = () => {
     }
   });
 
-  // For handling editing and loading
-  const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // Custom hook for inputs
+  const {
+    value: name,
+    setEnteredValue: setEnteredName,
+    valueChangeHandler: nameChangeHandler,
+  } = useInput(userData.name);
 
-  const history = useHistory();
+  const {
+    value: surname,
+    setEnteredValue: setEnteredSurname,
+    valueChangeHandler: surnameChangeHandler,
+  } = useInput(userData.surname);
 
+  const {
+    value: street,
+    valueChangeHandler: streetChangeHandler,
+    setEnteredValue: setEnteredStreet,
+  } = useInput(userAddress.street);
+
+  const {
+    value: province,
+    valueChangeHandler: provinceChangeHandler,
+    setEnteredValue: setEnteredProvince,
+  } = useInput(userAddress.province);
+
+  const {
+    value: city,
+    valueChangeHandler: cityChangeHandler,
+    setEnteredValue: setEnteredCity,
+  } = useInput(userAddress.city);
+
+  const {
+    value: country,
+    valueChangeHandler: countryChangeHandler,
+    setEnteredValue: setEnteredCountry,
+  } = useInput(userAddress.country);
+
+  const {
+    value: zip,
+    valueChangeHandler: zipChangeHandler,
+    setEnteredValue: setEnteredZip,
+  } = useInput(userAddress.zip);
+
+  const setLegacyData = () => {
+    setEnteredName(userData.name);
+    setEnteredSurname(userData.surname);
+    setEnteredStreet(userAddress.street);
+    setEnteredProvince(userAddress.province);
+    setEnteredCity(userAddress.city);
+    setEnteredCountry(userAddress.country);
+    setEnteredZip(userAddress.zip);
+  };
+
+  // This is necessary because userAdress if asynchronous
+  useEffect(() => {
+    setLegacyData();
+  }, [userAddress, userData]);
+
+  // Error messages shown in a box below form
+  const [errorMessages, setErrorMessages] = useState([]);
+
+  // Utility function to capitalize certain words
   const capitalizeWord = (word) => {
     if (word) {
       return word.charAt(0).toUpperCase() + word.slice(1);
@@ -63,6 +154,12 @@ const ProfilePage = () => {
     setIsEditing(true);
   };
 
+  const handleCancelButton = () => {
+    setIsEditing(false);
+    setLegacyData();
+  };
+
+  // Send PUT request to modify data
   const handleForm = async (event) => {
     event.preventDefault();
 
@@ -77,12 +174,14 @@ const ProfilePage = () => {
 
     const updatedUserData = {
       ...user.result,
+      name,
+      surname,
       address: {
-        countryCode: countryInputRef.current.value,
-        province: provinceInputRef.current.value,
-        city: cityInputRef.current.value,
-        zip: postalInputRef.current.value,
-        street: addressInputRef.current.value,
+        countryCode: country,
+        province,
+        city,
+        zip,
+        street,
       },
     };
 
@@ -106,18 +205,24 @@ const ProfilePage = () => {
         console.log("json");
         return res.json();
       })
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
         if (res.error) throw new Error(res.error);
-        console.log(res);
+
+        // Reset error messages
         setErrorMessages([]);
-        history.push("/");
+
+        // No editing nor loading any more
         setIsEditing(false);
         setIsLoading(false);
+
+        // Redirect to home and show modal
+        history.push("/");
         handleModalText("Personal data changed successfully!");
       })
       .catch((error) => {
         console.log(error.message);
+        setIsLoading(false);
         setErrorMessages(error.message.split(","));
         console.log("An error ocurred: " + error.message);
       });
@@ -133,27 +238,6 @@ const ProfilePage = () => {
     setErrorMessages([]);
   }, []);
 
-  // Redirecting if not authorized
-  useEffect(() => {
-    if (!localStorage.getItem("token")) history.push("/");
-  }, [history]);
-
-  // Fetching countries from external API
-  useEffect(() => {
-    fetch("https://restcountries.eu/rest/v2/all")
-      .then((res) => res.json())
-      .then((res) => {
-        const countryList = res.map((country) => {
-          return [country.name, country.alpha3Code];
-        });
-        setCountryNames(countryList);
-      })
-      .catch((error) => {
-        console.log("En error ocurred: " + error);
-      });
-  }, []);
-
-  
   // Selecting either the current country from DB or Spain
   const showCountries = countryNames.map((country) => {
     if (
@@ -179,7 +263,7 @@ const ProfilePage = () => {
       {/* Loading animation, PUT takes a bit of time */}
       {isLoading && <LoadingOverlay />}
       <div className="bg-white my-12 mx-10 rounded-xl shadow-xl h-2/3 ">
-        <div className="px-5 md:col-span-1">
+        {/* <div className="px-5 md:col-span-1">
           <div className="px-6 py-2 sm:px-0">
             <h3 className="text-xl font-medium leading-6 text-gray-900">
               Personal Information
@@ -188,7 +272,7 @@ const ProfilePage = () => {
               Use a permanent address where you can receive mail.
             </p>
           </div>
-        </div>
+        </div> */}
         <form onSubmit={handleForm}>
           <div className="shadow overflow-hidden sm:rounded-md">
             <div className="px-4 py-5 bg-white sm:p-6">
@@ -201,13 +285,14 @@ const ProfilePage = () => {
                     First name
                   </label>
                   <input
-                    value={capitalizeWord(userData.name)}
-                    readOnly
                     type="text"
                     name="first_name"
                     id="first_name"
                     autoComplete="given-name"
-                    className="bg-gray-100 mt-2 p-1 ring-1 ring-gray-300 focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    disabled={!isEditing}
+                    value={isEditing ? name : userData.name}
+                    onChange={nameChangeHandler}
+                    className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
@@ -219,13 +304,14 @@ const ProfilePage = () => {
                     Last name
                   </label>
                   <input
-                    value={capitalizeWord(userData.surname)}
-                    readOnly
                     type="text"
                     name="last_name"
                     id="last_name"
                     autoComplete="family-name"
-                    className="bg-gray-100 mt-2 p-1 ring-1 ring-gray-300 focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    disabled={!isEditing}
+                    value={isEditing ? surname : userData.surname}
+                    onChange={surnameChangeHandler}
+                    className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
@@ -255,14 +341,16 @@ const ProfilePage = () => {
                     Gender
                   </label>
                   <select
-                    value={userData.gender}
-                    readOnly
                     id="gender"
                     name="gender"
                     autoComplete="sex"
                     required
                     placeholder="Gender"
-                    className="bg-gray-100 mt-1 block w-full py-2 px-3 placeholder-black border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+                    value={userData.gender}
+                    disabled={!isEditing}
+                    className={`${
+                      !isEditing && "bg-gray-100"
+                    } mt-1 block w-full py-2 px-3 border placeholder-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
                   >
                     <option selected value="f">
                       Female
@@ -280,12 +368,11 @@ const ProfilePage = () => {
                     Country / Region
                   </label>
                   <select
-                    ref={countryInputRef}
                     id="country"
                     name="country"
                     autoComplete="country"
                     required
-                    readOnly={!isEditing}
+                    disabled={!isEditing}
                     className={`${
                       !isEditing && "bg-gray-100"
                     } mt-1 block w-full py-2 px-3 border  placeholder-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
@@ -302,14 +389,14 @@ const ProfilePage = () => {
                     Street address
                   </label>
                   <input
-                    ref={addressInputRef}
                     type="text"
                     name="street"
                     id="street"
                     required
                     autoComplete="street-address"
                     disabled={!isEditing}
-                    placeholder={userAddress.street}
+                    value={isEditing ? street : userAddress.street}
+                    onChange={streetChangeHandler}
                     className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
@@ -322,13 +409,13 @@ const ProfilePage = () => {
                     City
                   </label>
                   <input
-                    ref={cityInputRef}
                     type="text"
                     name="city"
                     id="city"
                     required
                     disabled={!isEditing}
-                    placeholder={userAddress.city}
+                    value={isEditing ? city : userAddress.city}
+                    onChange={cityChangeHandler}
                     className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
@@ -341,13 +428,13 @@ const ProfilePage = () => {
                     State / Province
                   </label>
                   <input
-                    ref={provinceInputRef}
                     type="text"
                     name="state"
                     id="state"
                     required
                     disabled={!isEditing}
-                    placeholder={userAddress.province}
+                    value={isEditing ? province : userAddress.province}
+                    onChange={provinceChangeHandler}
                     className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
@@ -360,14 +447,14 @@ const ProfilePage = () => {
                     ZIP / Postal
                   </label>
                   <input
-                    ref={postalInputRef}
                     type="text"
                     name="postal_code"
                     id="postal_code"
                     autoComplete="postal-code"
                     required
                     disabled={!isEditing}
-                    placeholder={userAddress.zip}
+                    value={isEditing ? zip : userAddress.zip}
+                    onChange={zipChangeHandler}
                     className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
@@ -399,9 +486,7 @@ const ProfilePage = () => {
                   <button
                     type="button"
                     className="inline-flex justify-center py-2 px-4 ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                    onClick={() => {
-                      setIsEditing(false);
-                    }}
+                    onClick={handleCancelButton}
                   >
                     Cancel
                   </button>

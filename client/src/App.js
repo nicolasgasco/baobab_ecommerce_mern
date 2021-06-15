@@ -36,6 +36,11 @@ function App() {
             <MainContent />
           </div>
         </Route>
+        <Route exact path="/password">
+          <div className="h-min-screen">
+            <MainContent />
+          </div>
+        </Route>
         <Route path="*">
           <Redirect to="/" />
         </Route>

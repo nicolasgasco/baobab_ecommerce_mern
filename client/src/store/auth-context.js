@@ -12,6 +12,7 @@ const AuthContext = React.createContext({
   handleOpenLogin: () => {},
   handleOpenSignup: () => {},
   checkLogin: () => {},
+  checkPassword: (userData) => {},
 });
 
 export default AuthContext;

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useLocation } from "react";
 import AuthContext from "./auth-context";
 import ModalContext from "./modal-context";
 import jwt_decode from "jwt-decode";
@@ -52,9 +52,41 @@ const AuthProvider = (props) => {
       .catch((error) => {
         localStorage.removeItem("token");
         console.log("An error ocurred: " + error.message);
-        handleModalText(`${error.message}!`);
+        if (error.message.includes("token <")) {
+          handleModalText(`Something went wrong!`);
+        } else {
+          handleModalText(`${error.message}!`);
+        }
+
         userName = "";
       });
+  };
+
+  const checkPassword = (userData, token) => {
+    return new Promise((resolve, reject) => {
+
+      console.log(userData);
+      console.log("login");
+      fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          if (!res.success) throw new Error(res.msg);
+          console.log("success");
+          resolve("Right password");
+        })
+        .catch((error) => {
+          console.log("fail");
+          reject(Error("Wrong password"));
+        });
+    });
   };
 
   const signupUser = (userData) => {
@@ -132,6 +164,12 @@ const AuthProvider = (props) => {
     console.log("check");
     fetch("/api/check")
       .then((res) => {
+        // This is the token
+        for (const header of res.headers) {
+          if (header[0] === "x-auth-token") {
+            console.log(header[1]);
+          }
+        }
         return res.json();
       })
       .then((res) => {
@@ -173,6 +211,7 @@ const AuthProvider = (props) => {
     handleOpenLogin,
     handleOpenSignup,
     checkLogin,
+    checkPassword,
   };
 
   return (

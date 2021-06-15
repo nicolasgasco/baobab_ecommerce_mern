@@ -7,6 +7,7 @@ import AuthContent from "./Auth/AuthContent";
 
 import AuthContext from "../../store/auth-context";
 import ProfilePage from "../Profile/ProfilePage";
+import PasswordChange from "../Profile/PasswordChange";
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -188,6 +189,9 @@ const MainContent = () => {
       break;
     case "/profile":
       resultsContent = <ProfilePage />;
+      break;
+    case "/password":
+      resultsContent = <PasswordChange />;
       break;
     case "/":
       resultsContent = <HeroMain />;

@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 const MainNav = () => {
   const [userGreeting, setUserGreeting] = useState("");
   const navigation = [userGreeting];
-  const profile = ["Your Profile", "Sign in"];
+  const profile = ["Your profile", "Change password", "Sign in"];
   const cart = ["Your orders", "See items"];
 
   const history = useHistory();
@@ -64,7 +64,7 @@ const MainNav = () => {
   // Second element is for signing in
   const showProfileItems = profile.map((item, index) => {
     // Sign in
-    if (index === 1) {
+    if (item === "Sign in") {
       return (
         <Menu.Item key={item}>
           {({ active }) => (
@@ -82,13 +82,32 @@ const MainNav = () => {
         </Menu.Item>
       );
       // Your profile
-    } else {
+    } else if (item === "Your profile") {
       return (
         localStorage.getItem("token") && (
           <Menu.Item key={item}>
             {({ active }) => (
               <Link
                 to="/profile"
+                id={`profile-item-${index + 1}`}
+                className={classNames(
+                  active ? "bg-gray-100" : "",
+                  "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                )}
+              >
+                {item}
+              </Link>
+            )}
+          </Menu.Item>
+        )
+      );
+    } else if (item === "Change password") {
+      return (
+        localStorage.getItem("token") && (
+          <Menu.Item key={item}>
+            {({ active }) => (
+              <Link
+                to="/password"
                 id={`profile-item-${index + 1}`}
                 className={classNames(
                   active ? "bg-gray-100" : "",
