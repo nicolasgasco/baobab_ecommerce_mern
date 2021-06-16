@@ -30,11 +30,11 @@ const MainNav = () => {
   const { items } = useContext(CartContext);
   // I'm not using this any more
   const cart = ["See cart"];
-  const [itemsNum, setItemsNum] = useState(items.length);
+  const [itemsNum, setItemsNum] = useState(items ? items.length : 0);
   const [bounceAnimation, setBounceAnimation] = useState("");
 
   useEffect(() => {
-    setItemsNum(items.length);
+    setItemsNum(items ? items.length : 0);
     setBounceAnimation("animate-bounce");
     setTimeout(() => {
       setBounceAnimation("");
@@ -46,7 +46,6 @@ const MainNav = () => {
     return classes.filter(Boolean).join(" ");
   }
 
-  console.log(items, "items");
   const handleSignin = () => {
     if (!localStorage.getItem("token")) {
       history.push("/signin");

@@ -5,6 +5,7 @@ const path = require("path");
 const usersRouter = require("../routes/users");
 const departmentsRouter = require("../routes/departments");
 const productsRouter = require("../routes/products");
+const cartRouter = require("../routes/cart");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -14,4 +15,5 @@ module.exports = function (app) {
   app.use("/api/departments", departmentsRouter);
   app.use("/api/users", usersRouter);
   app.use("/api/products", productsRouter);
+  app.use("/api/cart", cartRouter);
 };

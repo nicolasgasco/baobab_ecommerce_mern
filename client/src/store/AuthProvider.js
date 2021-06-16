@@ -1,6 +1,8 @@
 import { useState, useContext, useEffect, useLocation } from "react";
 import AuthContext from "./auth-context";
+import CartContext from "./cart-context";
 import ModalContext from "./modal-context";
+
 import jwt_decode from "jwt-decode";
 
 const AuthProvider = (props) => {
@@ -11,6 +13,8 @@ const AuthProvider = (props) => {
   let userName = "";
 
   const { handleModalText } = useContext(ModalContext);
+
+  const { deleteCartLocal, fetchCartFromDB } = useContext(CartContext);
 
   const loginUser = (userData) => {
     console.log(userData);
@@ -47,6 +51,7 @@ const AuthProvider = (props) => {
       .then((res) => {
         if (!res.success) throw new Error(res.msg);
         console.log("success");
+        fetchCartFromDB();
         handleModalText(`Welcome, ${userName}!`);
       })
       .catch((error) => {
@@ -64,7 +69,6 @@ const AuthProvider = (props) => {
 
   const checkPassword = (userData, token) => {
     return new Promise((resolve, reject) => {
-
       console.log(userData);
       console.log("login");
       fetch("/api/login", {
@@ -154,6 +158,8 @@ const AuthProvider = (props) => {
         console.log("Logout successful");
         userName = "";
         localStorage.removeItem("token");
+        // Empty local cart
+        deleteCartLocal();
       })
       .catch((error) => {
         console.log("An error ocurred: " + error.message);
