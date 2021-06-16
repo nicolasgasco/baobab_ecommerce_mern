@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Spinner from "../../../assets/img/Spinner-5.gif";
+
+import CartContext from "../../../store/cart-context";
 
 const ProductCard = ({ product, picturesLoading }) => {
   const [departmentName, setDepartmentName] = useState("Loading...");
+
+  const { addItemToCart } = useContext(CartContext);
+
+  const [pingAnimation, setPingAnimation] = useState("");
 
   useEffect(() => {
     fetch("api/departments")
@@ -14,6 +20,16 @@ const ProductCard = ({ product, picturesLoading }) => {
         console.log("En error ocurred: " + error);
       });
   }, []);
+
+  const handleAddToCart = () => {
+    addItemToCart();
+    setPingAnimation("animate-ping");
+    let animationTimeout = setTimeout(() => setPingAnimation(""), 1000);
+
+    return () => {
+      clearTimeout(animationTimeout);
+    };
+  };
 
   let showPictureOrLoader = (
     <img
@@ -88,6 +104,12 @@ const ProductCard = ({ product, picturesLoading }) => {
               {` ${product.ecoInfo.environmentMission}`}
             </span>
           </div>
+          <button
+            onClick={handleAddToCart}
+            className={`px-6 py-2 mt-4 transition ease-in duration-200 uppercase rounded-full hover:bg-yellow-500 hover:text-white ${pingAnimation} hover:bold border-2 border-gray-900 focus:outline-none`}
+          >
+            Add to cart
+          </button>
         </div>
       </div>
     </div>

@@ -1,4 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
+
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   ShoppingCartIcon,
@@ -9,27 +12,40 @@ import {
 import BaobabLogo from "../../assets/img/baobab.svg";
 
 import AuthContext from "../../store/auth-context";
-import { useHistory } from "react-router";
+import CartContext from "../../store/cart-context";
 
 import jwt_decode from "jwt-decode";
-import { Link } from "react-router-dom";
 
 const MainNav = () => {
+  const history = useHistory();
+
+  // User related
+  const { logoutUser, handleOpenLogin, isLogged, token } =
+    useContext(AuthContext);
   const [userGreeting, setUserGreeting] = useState("");
   const navigation = [userGreeting];
   const profile = ["Your profile", "Change password", "Sign in"];
+
+  // Cart related
+  const { items } = useContext(CartContext);
   const cart = ["Your orders", "See items"];
+  const [itemsNum, setItemsNum] = useState(items);
+  const [bounceAnimation, setBounceAnimation] = useState("");
 
-  const history = useHistory();
-
-  const { logoutUser, handleOpenLogin, isLogged, token } =
-    useContext(AuthContext);
+  useEffect(() => {
+    setItemsNum(items);
+    setBounceAnimation("animate-bounce");
+    setTimeout(() => {
+      setBounceAnimation("");
+    }, 500);
+  }, [items]);
 
   // This came with the component
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
 
+  console.log(items, "items");
   const handleSignin = () => {
     if (!localStorage.getItem("token")) {
       history.push("/signin");
@@ -123,7 +139,30 @@ const MainNav = () => {
     }
   });
 
-  const showCartItems = profile.map((item, index) => {
+  // Showing counter only if there are items in cart
+  let showItemCounterMobile;
+  if (itemsNum > 0) {
+    showItemCounterMobile = (
+      <div
+        className={`relative mt-8 -ml-2 -mr-2 px-2 ${bounceAnimation} bg-yellow-500 rounded-full text-sm text-white font-bold`}
+      >
+        {itemsNum}
+      </div>
+    );
+  }
+
+  let showItemCounterDesktop;
+  if (itemsNum > 0) {
+    showItemCounterDesktop = (
+      <div
+        className={`absolute top-0 right-0 mt-7 -mr-3 px-2 ${bounceAnimation} bg-yellow-500 rounded-full text-sm text-white font-bold`}
+      >
+        {itemsNum}
+      </div>
+    );
+  }
+
+  const showCartItems = cart.map((item, index) => {
     return (
       <Menu.Item key={item}>
         {({ active }) => (
@@ -202,6 +241,7 @@ const MainNav = () => {
                               className="h-6 w-6"
                               aria-hidden="true"
                             />
+                            {!open && showItemCounterDesktop}
                           </Menu.Button>
                         </div>
                         <Transition
@@ -324,6 +364,7 @@ const MainNav = () => {
                   <span className="sr-only">View shopping cart</span>
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
+                {open && showItemCounterMobile}
               </div>
               <div className="mt-3 px-2 space-y-1">
                 {profile.map((item) => (

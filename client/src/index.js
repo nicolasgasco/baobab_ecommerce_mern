@@ -8,13 +8,16 @@ import App from "./App";
 
 import AuthProvider from "./store/AuthProvider";
 import ModalProvider from "./store/ModalProvider";
+import CartProvider from "./store/CartProvider";
 
 ReactDOM.render(
   <React.StrictMode>
     <ModalProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <CartProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </CartProvider>
     </ModalProvider>
   </React.StrictMode>,
   document.getElementById("root")
