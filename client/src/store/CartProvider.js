@@ -14,14 +14,14 @@ const CartProvider = (props) => {
 
   useEffect(() => {
     if (items.length > 0) {
+      const totalPrice = items.reduce((accumulator, currentValue) => {
+        return (
+          accumulator + currentValue.pricingInfo.price * currentValue.quantity
+        );
+      }, 0);
+
       // Get total price
-      setTotalPrice(
-        items.reduce(
-          (a, b) =>
-            +a.quantity * a.pricingInfo.price +
-            +b.quantity * b.pricingInfo.price
-        )
-      );
+      setTotalPrice(totalPrice);
     }
   }, [items]);
 
@@ -37,7 +37,9 @@ const CartProvider = (props) => {
       //   Updating total price
       setTotalPrice((prevState) => {
         setTotalPrice(
-          prevState + newProducts[updatedItemIndex].pricingInfo.price * newProducts[updatedItemIndex].quantity
+          prevState +
+            newProducts[updatedItemIndex].pricingInfo.price *
+              newProducts[updatedItemIndex].quantity
         );
       });
     });

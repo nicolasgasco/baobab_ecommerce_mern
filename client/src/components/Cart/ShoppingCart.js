@@ -3,7 +3,6 @@ import { useHistory } from "react-router";
 import { TrashIcon } from "@heroicons/react/outline";
 
 import CartContext from "../../store/cart-context";
-import ProductCard from "../MainContent/Results/ProductCard";
 
 const ShoppingCart = () => {
   const history = useHistory();
@@ -54,15 +53,15 @@ const ShoppingCart = () => {
         </td>
         <td className="justify-center md:justify-end md:flex md:mt-4">
           <div className="w-20 h-10">
-            <div className="relative flex flex-row w-full h-8">
+            <div className="relative flex flex-row w-16 h-8 mt-1">
               <input
                 id={item._id}
                 type="number"
                 defaultValue={item.quantity}
-                min={0}
+                min={1}
                 max={9}
                 onChange={changeItemQuantity}
-                className="w-full font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black focus:text-black"
+                className="w-full font-semibold text-center text-gray-700 bg-yellow-200 rounded-md outline-none focus:outline-none hover:text-black focus:text-black"
               />
             </div>
           </div>
@@ -227,7 +226,7 @@ const ShoppingCart = () => {
                   </div>
                 </div>
                 <a href="#">
-                  <button className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-gray-800 rounded-full shadow item-center hover:bg-gray-700 focus:shadow-outline focus:outline-none">
+                  <button className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-green-600 rounded-full shadow item-center hover:bg-green-700 focus:shadow-outline focus:outline-none">
                     <svg
                       aria-hidden="true"
                       data-prefix="far"
