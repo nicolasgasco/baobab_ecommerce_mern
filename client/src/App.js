@@ -41,6 +41,11 @@ function App() {
             <MainContent />
           </div>
         </Route>
+        <Route exact path="/cart">
+          <div className="h-min-screen">
+            <MainContent />
+          </div>
+        </Route>
         <Route path="*">
           <Redirect to="/" />
         </Route>

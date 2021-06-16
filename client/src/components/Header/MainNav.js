@@ -28,12 +28,13 @@ const MainNav = () => {
 
   // Cart related
   const { items } = useContext(CartContext);
-  const cart = ["Your orders", "See items"];
-  const [itemsNum, setItemsNum] = useState(items);
+  // I'm not using this any more
+  const cart = ["See cart"];
+  const [itemsNum, setItemsNum] = useState(items.length);
   const [bounceAnimation, setBounceAnimation] = useState("");
 
   useEffect(() => {
-    setItemsNum(items);
+    setItemsNum(items.length);
     setBounceAnimation("animate-bounce");
     setTimeout(() => {
       setBounceAnimation("");
@@ -166,16 +167,16 @@ const MainNav = () => {
     return (
       <Menu.Item key={item}>
         {({ active }) => (
-          <a
+          <Link
+            to={item === "See cart" && "/cart"}
             id={`cart-item-${index + 1}`}
-            onClick={index === 1 && handleSignin}
             className={classNames(
               active ? "bg-gray-100" : "",
               "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
             )}
           >
             {item}
-          </a>
+          </Link>
         )}
       </Menu.Item>
     );
@@ -238,13 +239,16 @@ const MainNav = () => {
                           <Menu.Button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">View profile</span>
                             <ShoppingCartIcon
+                              onClick={() => {
+                                history.push("/cart");
+                              }}
                               className="h-6 w-6"
                               aria-hidden="true"
                             />
-                            {!open && showItemCounterDesktop}
+                            {showItemCounterDesktop}
                           </Menu.Button>
                         </div>
-                        <Transition
+                        {/* <Transition
                           show={open}
                           as={Fragment}
                           enter="transition ease-out duration-100"
@@ -260,7 +264,7 @@ const MainNav = () => {
                           >
                             {showCartItems}
                           </Menu.Items>
-                        </Transition>
+                        </Transition> */}
                       </>
                     )}
                   </Menu>
@@ -364,7 +368,7 @@ const MainNav = () => {
                   <span className="sr-only">View shopping cart</span>
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
-                {open && showItemCounterMobile}
+                {showItemCounterMobile}
               </div>
               <div className="mt-3 px-2 space-y-1">
                 {profile.map((item) => (

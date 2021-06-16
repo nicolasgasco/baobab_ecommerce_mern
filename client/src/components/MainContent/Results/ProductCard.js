@@ -21,8 +21,8 @@ const ProductCard = ({ product, picturesLoading }) => {
       });
   }, []);
 
-  const handleAddToCart = () => {
-    addItemToCart();
+  const handleAddToCart = (id) => {
+    addItemToCart(id);
     setPingAnimation("animate-ping");
     let animationTimeout = setTimeout(() => setPingAnimation(""), 1000);
 
@@ -105,7 +105,10 @@ const ProductCard = ({ product, picturesLoading }) => {
             </span>
           </div>
           <button
-            onClick={handleAddToCart}
+            onClick={() => {
+              handleAddToCart(product);
+            }}
+            value={product._id}
             className={`px-6 py-2 mt-4 transition ease-in duration-200 uppercase rounded-full hover:bg-yellow-500 hover:text-white ${pingAnimation} hover:bold border-2 border-gray-900 focus:outline-none`}
           >
             Add to cart

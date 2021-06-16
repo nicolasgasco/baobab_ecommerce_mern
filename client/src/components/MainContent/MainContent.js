@@ -8,6 +8,7 @@ import AuthContent from "./Auth/AuthContent";
 import AuthContext from "../../store/auth-context";
 import ProfilePage from "../Profile/ProfilePage";
 import PasswordChange from "../Profile/PasswordChange";
+import ShoppingCart from "../Cart/ShoppingCart";
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -192,6 +193,9 @@ const MainContent = () => {
       break;
     case "/password":
       resultsContent = <PasswordChange />;
+      break;
+    case "/cart":
+      resultsContent = <ShoppingCart />;
       break;
     case "/":
       resultsContent = <HeroMain />;
