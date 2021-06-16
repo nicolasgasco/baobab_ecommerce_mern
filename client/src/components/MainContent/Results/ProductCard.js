@@ -57,7 +57,7 @@ const ProductCard = ({ product, picturesLoading }) => {
         {showPictureOrLoader}
       </div>
       <div className="relative px-4 -mt-6">
-        <div className="bg-green-200 p-5 rounded-lg shadow-xl">
+        <div className="bg-yellow-200 p-5 rounded-lg shadow-xl">
           <div className="flex items-baseline">
             <span className="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
               {departmentName}
@@ -109,7 +109,7 @@ const ProductCard = ({ product, picturesLoading }) => {
               handleAddToCart(product);
             }}
             value={product._id}
-            className={`px-6 py-2 mt-4 transition ease-in duration-200 uppercase rounded-full hover:bg-yellow-500 hover:text-white ${pingAnimation} hover:bold border-2 border-gray-900 focus:outline-none`}
+            className={`px-6 py-2 mt-4 transition ease-in duration-200 uppercase rounded-full hover:bg-green-500 hover:text-white ${pingAnimation} hover:bold border-2 border-green-900 focus:outline-none`}
           >
             Add to cart
           </button>

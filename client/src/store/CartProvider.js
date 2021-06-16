@@ -14,12 +14,12 @@ const CartProvider = (props) => {
       const fetchResponse = await fetch(`/api/cart/${userId}`);
       const allCartItems = await fetchResponse.json();
       if (allCartItems.results) {
-        setItems(allCartItems.results);
+        return allCartItems.results;
       } else {
-        setItems([]);
+        return [];
       }
     }
-    setItems([]);
+    return [];
   });
 
   const fetchCartFromDB = async () => {

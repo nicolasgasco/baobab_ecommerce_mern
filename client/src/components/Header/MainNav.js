@@ -239,7 +239,9 @@ const MainNav = () => {
                             <span className="sr-only">View profile</span>
                             <ShoppingCartIcon
                               onClick={() => {
-                                history.push("/cart");
+                                if (items.length > 0) {
+                                  history.push("/cart");
+                                }
                               }}
                               className="h-6 w-6"
                               aria-hidden="true"
