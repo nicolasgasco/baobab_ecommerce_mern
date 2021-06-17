@@ -35,7 +35,7 @@ function App() {
             </div>
           </Route>
           <Route exact path="/signin">
-            <div className="h-min-screen">
+            <div className="min-screen">
               <MainContent />
             </div>
           </Route>
