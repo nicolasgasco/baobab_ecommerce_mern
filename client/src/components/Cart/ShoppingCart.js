@@ -6,6 +6,9 @@ import CartContext from "../../store/cart-context";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import NothingFound from "../../components/MainContent/Results/NothingFound";
 
+import jwt_decode from "jwt-decode";
+import { Link } from "react-router-dom";
+
 const ShoppingCart = () => {
   const history = useHistory();
 
@@ -19,9 +22,34 @@ const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      // Fetching userData from database
+      if (localStorage.getItem("token")) {
+        try {
+          const { _id: id } = jwt_decode(localStorage.getItem("token"));
+          // Get user and see if there's already an address
+          const res = await fetch(`/api/users/${id}`);
+          const user = await res.json();
+          if (user.resultsFound) {
+            console.log(user.result, "cazzo");
+            setUserData(user.result);
+          } else {
+            throw new Error();
+          }
+        } catch (err) {
+          console.log(err.message);
+        }
+      }
+    };
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     if (items.length !== 0) {
+      console.log(items);
       setCartItems(items);
     }
   }, [items]);
@@ -35,13 +63,57 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     if (isLoading) setIsLoading(false);
+    // It works better without adding isLoading as dependency
   }, [items]);
 
   const changeItemQuantity = (event) => {
     updateItemQuantity(event.target.id, event.target.value);
   };
 
+  let showShippingInfo;
+  if (userData.address) {
+    showShippingInfo = (
+      <div>
+        <p classList="font-bold">{`${userData.name} ${userData.surname}`}</p>
+        <div>
+          <p>{userData.address.street}</p>
+          <p>{`${userData.address.zip}, ${userData.address.province}, ${userData.address.city}`}</p>
+          {/* <p>{userData.address.zip}</p> */}
+        </div>
+        <Link
+          to="/profile"
+          className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-green-600 rounded-md shadow item-center hover:bg-green-700 focus:shadow-outline focus:outline-none"
+        >
+          Change address
+        </Link>
+      </div>
+    );
+  } else if (console.log(localStorage.getItem("token"))) {
+    showShippingInfo = (
+      <div>
+        <p>You haven't provided your address yet.</p>
+        <Link
+          to="/profile"
+          className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-green-600 rounded-full shadow item-center hover:bg-green-700 focus:shadow-outline focus:outline-none"
+        >
+          Add address
+        </Link>
+      </div>
+    );
+  } else {
+    <div>
+      <p>Create an account to make your order.</p>
+      <Link
+        to="/profile"
+        className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-green-600 rounded-full shadow item-center hover:bg-green-700 focus:shadow-outline focus:outline-none"
+      >
+        Add address
+      </Link>
+    </div>;
+  }
+
   const showCartItems = cartItems.map((item) => {
+    console.log(item, "item");
     return (
       <tr id={`cart-item-${item._id}`}>
         <td className="hidden pb-4 md:table-cell">
@@ -161,24 +233,13 @@ const ShoppingCart = () => {
                   </form>
                 </div>
               </div> */}
-                  <div className="p-4 bg-gray-100 rounded-full">
-                    <h1 className="ml-2 font-bold uppercase">
-                      Instruction for seller
-                    </h1>
+                  <div className="p-4 bg-yellow-200 rounded-full">
+                    <h2 className="ml-2 font-bold uppercase">Shipping info</h2>
                   </div>
-                  <div className="p-4">
-                    <p className="mb-4 italic">
-                      If you have some information for the seller you can leave
-                      them in the box below
-                    </p>
-                    <textarea
-                      className="w-full h-24 p-2 bg-gray-100 rounded"
-                      defaultValue={""}
-                    />
-                  </div>
+                  <div className="p-4">{showShippingInfo}</div>
                 </div>
                 <div className="lg:px-2 lg:w-1/2">
-                  <div className="p-4 bg-gray-100 rounded-full">
+                  <div className="p-4 mt-4 bg-yellow-200 rounded-full">
                     <h1 className="ml-2 font-bold uppercase">Order Details</h1>
                   </div>
                   <div className="p-4">
@@ -244,7 +305,13 @@ const ShoppingCart = () => {
                       </div>
                     </div>
                     <a href="#">
-                      <button className="flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase bg-green-600 rounded-full shadow item-center hover:bg-green-700 focus:shadow-outline focus:outline-none">
+                      <button
+                        className={`${
+                          userData.address
+                            ? "bg-green-600 hover:bg-green-700"
+                            : "bg-gray-400"
+                        } flex justify-center w-full px-10 py-3 mt-6 font-medium text-white uppercase rounded-md shadow item-center  focus:shadow-outline focus:outline-none`}
+                      >
                         <svg
                           aria-hidden="true"
                           data-prefix="far"

@@ -119,6 +119,12 @@ const productSchema = new mongoose.Schema(
       max: [9999, "Current max stock is 9999"],
       set: (value) => Math.round(value),
     },
+    quantity: {
+      type: Number,
+      min: [1, "You cannot have negative quantity"],
+      max: [9, "Current max quantity is 9"],
+      set: (value) => Math.round(value),
+    },
     seller: {
       type: String,
       trim: true,

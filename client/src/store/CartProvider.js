@@ -36,11 +36,11 @@ const CartProvider = (props) => {
   const addItemToCart = async (item) => {
     // Adding quantity propierty to item
     item.quantity = 1;
-
     // If user is logged
     if (localStorage.getItem("token")) {
       try {
         console.log("posting cart");
+        console.log("merda", item);
         const fetchResponse = await fetch("/api/cart/", {
           method: "POST",
           headers: {
