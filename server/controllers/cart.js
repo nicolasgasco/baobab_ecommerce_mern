@@ -21,6 +21,26 @@ const getCartItems = async (req, res) => {
   }
 };
 
+// const addWholeCart = async (req, res) => {
+//   try {
+//     const userId = req.body.userId;
+//     const cartCollection = req.body.cartCollection;
+
+//     const newCartCollection = new Cart({ userId, cartItems: [cartItem] });
+//     const result = await newCartCollection.save();
+//     if (result) {
+//       res.send({
+//         insertedCount: 1,
+//       });
+//     } else {
+//       throw new Error("Something went wrong");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({ error });
+//   }
+// };
+
 const addCartItem = async (req, res) => {
   try {
     const userId = req.body.userId;
@@ -95,3 +115,4 @@ const deleteCartItem = async (req, res) => {
 exports.getCartItems = getCartItems;
 exports.addCartItem = addCartItem;
 exports.deleteCartItem = deleteCartItem;
+// exports.addWholeCart = addWholeCart;

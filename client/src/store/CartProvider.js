@@ -5,69 +5,88 @@ import jwt_decode from "jwt-decode";
 
 const CartProvider = (props) => {
   const [totalPrice, setTotalPrice] = useState(0);
-  const [operationsDone, setOperationsDone] = useState(false);
-  const [items, setItems] = useState(async () => {
+  // It starts empty and then fetched
+  const [items, setItems] = useState([]);
+
+  const fetchCartFromDB = async () => {
+    // Fetching from DB if user is logged
     console.log("fetchin items");
     if (localStorage.getItem("token")) {
       const userId = jwt_decode(localStorage.getItem("token"))._id;
-      console.log(userId, "userID");
       const fetchResponse = await fetch(`/api/cart/${userId}`);
       const allCartItems = await fetchResponse.json();
       if (allCartItems.results) {
-        return allCartItems.results;
+        console.log("items fetched");
+        setItems(allCartItems.results);
       } else {
-        return [];
+        console.log("items empty");
+        setItems([]);
       }
-    }
-    return [];
-  });
-
-  const fetchCartFromDB = async () => {
-    console.log("fetchin items");
-    if (localStorage.getItem("token")) {
-      const userId = jwt_decode(localStorage.getItem("token"))._id;
-      console.log(userId, "userID");
-      const fetchResponse = await fetch(`/api/cart/${userId}`);
-      const allCartItems = await fetchResponse.json();
-      console.log(typeof allCartItems.results, "CIAAA");
-      setItems(allCartItems.results);
+      // Fetching from localStorage if user not logged
+    } else if (localStorage.getItem("cart")) {
+      setItems(JSON.parse(localStorage.getItem("cart")));
     }
   };
 
-  const addItemToCart = async (item) => {
-    try {
-      console.log("posting cart");
-      item.quantity = 1;
-      const fetchResponse = await fetch("/api/cart/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: jwt_decode(localStorage.getItem("token"))._id,
-          cartItem: item,
-        }),
-      });
-      const data = await fetchResponse.json();
-      console.log("data", data);
-      if (data.insertedCount === 1) {
-        // Good
-      } else {
-        throw new Error("Something went wrong");
-      }
+  // Fetching cart from DB at the beginning
+  useEffect(() => {
+    fetchCartFromDB();
+  }, []);
 
-      // Doing this locally too
+  const addItemToCart = async (item) => {
+    // Adding quantity propierty to item
+    item.quantity = 1;
+
+    // If user is logged
+    if (localStorage.getItem("token")) {
+      try {
+        console.log("posting cart");
+        const fetchResponse = await fetch("/api/cart/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: jwt_decode(localStorage.getItem("token"))._id,
+            cartItem: item,
+          }),
+        });
+        const data = await fetchResponse.json();
+        console.log("data", data);
+        if (data.insertedCount === 1) {
+          // Good
+        } else {
+          throw new Error("Something went wrong");
+        }
+
+        // Doing this locally too
+        setItems((prevState) => {
+          setItems([...prevState, item]);
+        });
+      } catch (err) {
+        console.log(err.message);
+      }
+      // If user not logged
+    } else {
+      if (localStorage.getItem("cart")) {
+        const allLocalItems = JSON.parse(localStorage.getItem("cart"));
+        if (
+          allLocalItems.filter((object) => object._id == item._id).length === 0
+        ) {
+          allLocalItems.push(item);
+        }
+        console.log(allLocalItems);
+        localStorage.setItem("cart", JSON.stringify(allLocalItems));
+      } else {
+        localStorage.setItem("cart", JSON.stringify([item]));
+      }
       setItems((prevState) => {
-        item.quantity = 1;
         setItems([...prevState, item]);
       });
-    } catch (err) {
-      console.log(err.message);
     }
   };
 
   useEffect(() => {
-    console.log(items);
     if (items.length > 0) {
       const totalPrice = items.reduce((accumulator, currentValue) => {
         return (
@@ -101,36 +120,57 @@ const CartProvider = (props) => {
   };
 
   const removeItemFromCart = async (id) => {
-    setOperationsDone(false);
-    try {
-      const userId = jwt_decode(localStorage.getItem("token"))._id;
-      console.log("deleting cart");
-      const fetchResponse = await fetch("/api/cart/", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          cartItemId: id,
-        }),
-      });
-      const data = await fetchResponse.json();
-      if (data.deletedCount === 1) {
-        // Deleted
-        setItems((prevState) => {
+    // If user is logged in
+    if (localStorage.getItem("token")) {
+      try {
+        const userId = jwt_decode(localStorage.getItem("token"))._id;
+        console.log("deleting cart");
+        const fetchResponse = await fetch("/api/cart/", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            cartItemId: id,
+          }),
+        });
+        const data = await fetchResponse.json();
+        if (data.deletedCount === 1) {
+          console.log("item deleted");
+          // Deleted
+          setItems((prevState) => {
+            if (prevState.length === 1) {
+              setItems([]);
+            } else {
+              setItems(
+                prevState.filter((item) => {
+                  return item._id !== id;
+                })
+              );
+            }
+          });
+        } else {
+          throw new Error("Item wasn't deleted");
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
+    } else if (localStorage.getItem("cart")) {
+      const allItems = JSON.parse(localStorage.getItem("cart"));
+      const newItems = allItems.filter((object) => object._id !== id);
+      localStorage.setItem("cart", JSON.stringify(newItems));
+      setItems((prevState) => {
+        if (prevState.length === 1) {
+          setItems([]);
+        } else {
           setItems(
             prevState.filter((item) => {
               return item._id !== id;
             })
           );
-        });
-        setOperationsDone(true);
-      } else {
-        throw new Error("Item wasn't deleted");
-      }
-    } catch (err) {
-      console.log(err.message);
+        }
+      });
     }
   };
 
@@ -142,7 +182,6 @@ const CartProvider = (props) => {
   const cartContext = {
     items,
     totalPrice,
-    operationsDone,
     addItemToCart,
     removeItemFromCart,
     updateItemQuantity,

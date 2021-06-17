@@ -46,6 +46,7 @@ const AuthProvider = (props) => {
             decodedToken.surname.substring(1)
           }`;
         localStorage.setItem("token", token);
+        localStorage.removeItem("cart");
         return res.json();
       })
       .then((res) => {
