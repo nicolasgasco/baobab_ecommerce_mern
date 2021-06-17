@@ -1,9 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
+import { setTimeout } from "timers/promises";
 import Spinner from "../../../assets/img/Spinner-5.gif";
 
 import CartContext from "../../../store/cart-context";
 
-const ProductCard = ({ product, picturesLoading }) => {
+const ProductCard = ({
+  product,
+  picturesLoading,
+  handleStopContentLoading,
+}) => {
   const [departmentName, setDepartmentName] = useState("Loading...");
 
   const { addItemToCart } = useContext(CartContext);
@@ -15,6 +20,7 @@ const ProductCard = ({ product, picturesLoading }) => {
       .then((res) => res.json())
       .then((res) => {
         setDepartmentName(res.results[0].translations.en_us);
+        handleStopContentLoading();
       })
       .catch((error) => {
         console.log("En error ocurred: " + error);

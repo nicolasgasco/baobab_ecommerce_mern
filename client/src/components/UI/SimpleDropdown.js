@@ -17,7 +17,7 @@ const SimpleDropdown = ({
         }}
         key={`${field}-hits`}
         value={field}
-        className="cursor-pointer text-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 text-sm leading-3 tracking-normal py-3 hover:bg-gray-100 px-3 font-normal"
+        className="cursor-pointer text-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 text-sm leading-3 tracking-normal py-3 hover:bg-green-100 px-3 font-normal"
       >
         {field}
       </li>

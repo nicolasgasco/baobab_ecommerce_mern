@@ -193,8 +193,8 @@ const ShoppingCart = () => {
                   <tbody>{showCartItems}</tbody>
                 </table>
                 <hr className="pb-6 mt-6" />
-                <div className="my-4 mt-6 -mx-2 lg:flex">
-                  <div className="lg:px-2 lg:w-1/2">
+                <div className="my-4 mt-6 -mx-2">
+                  <div className="lg:px-2">
                     {/* <div className="p-4 bg-gray-100 rounded-full">
                 <h1 className="ml-2 font-bold uppercase">Coupon Code</h1>
               </div> */}
@@ -243,8 +243,8 @@ const ShoppingCart = () => {
                     </div>
                     <div className="p-4">{showShippingInfo}</div>
                   </div>
-                  <div className="lg:px-2 lg:w-1/2">
-                    <div className="p-4 mt-4 bg-yellow-200 rounded-full">
+                  <div className="lg:px-2 mt-4">
+                    <div className="p-4 bg-yellow-200 rounded-full">
                       <h1 className="ml-2 font-bold uppercase">
                         Order Details
                       </h1>

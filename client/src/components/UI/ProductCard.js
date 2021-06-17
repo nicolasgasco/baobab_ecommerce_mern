@@ -8,9 +8,8 @@ import {
 const ProductCard = (props) => {
   return (
     <>
-      <div className="bg-gray-200">
-        {/* PLease install Pure React Carousel using "npm i pure-react-carousel" in order to use this component */}
-        <div className="flex items-center justify-center w-full h-full py-8 px-4">
+      <div>
+        <div className="outline-black flex items-center justify-center w-full h-full py-8 px-4">
           <div className="w-80">
             <div className="flex items-center rounded-t-3xl justify-between bg-white p-6">
               <CarouselProvider

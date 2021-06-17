@@ -10,6 +10,7 @@ import ProfilePage from "../Profile/ProfilePage";
 import PasswordChange from "../Profile/PasswordChange";
 import ShoppingCart from "../Cart/ShoppingCart";
 import CheckoutForm from "../Cart/CheckoutForm";
+import BoxWrapper from "../UI/BoxWrapper";
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -19,7 +20,7 @@ const defaultResultsState = {
   activePage: 1,
   paginationData: {},
   searchKeywords: "",
-  resultsPerPage: 8,
+  resultsPerPage: 6,
   fetchedProducts: [],
   showAuth: false,
 };
@@ -129,6 +130,11 @@ const MainContent = () => {
     [dispatchResults]
   );
 
+  const handleStopContentLoading = useCallback(() => {
+    console.log("Madrequemepario");
+    dispatchResults({ type: "CONTENT_LOADING", val: false });
+  }, [dispatchResults]);
+
   const handlePageChange = useCallback(
     (event) => {
       handleActivePage(event.target.value);
@@ -176,6 +182,7 @@ const MainContent = () => {
     case "/search":
       resultsContent = (
         <ResultsBox
+          handleStopContentLoading={handleStopContentLoading}
           fetchedProducts={resultsState.fetchedProducts}
           paginationData={resultsState.paginationData}
           handlePageChange={handlePageChange}
@@ -215,7 +222,7 @@ const MainContent = () => {
         handleActivePage={handleActivePage}
         activePage={resultsState.activePage}
       />
-      {resultsContent}
+      <BoxWrapper>{resultsContent}</BoxWrapper>
     </>
   );
 };
