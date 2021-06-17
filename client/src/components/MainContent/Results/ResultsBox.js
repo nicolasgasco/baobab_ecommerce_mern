@@ -27,7 +27,7 @@ const ResultsBox = ({
   const resultsPerPageDropdown = ["3", "6", "24", "60"];
 
   return (
-    <section className="p-5 my-10 bg-transparent">
+    <section className="md:p-5 my-10 bg-transparent">
       <div className="bg-white mx-auto mw-11/12 md:w-10/12 m-6 p-6 rounded-lg shadow-lg">
         {isEmpty ? (
           <NothingFound />

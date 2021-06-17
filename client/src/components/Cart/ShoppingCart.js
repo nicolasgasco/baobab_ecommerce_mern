@@ -169,7 +169,7 @@ const ShoppingCart = () => {
   return (
     <>
       {isLoading && <LoadingOverlay />}
-      <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 my-12 mx-10 rounded-xl shadow-xl h-2/3">
+      <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 my-12 md:mx-10 rounded-xl shadow-xl h-2/3">
         <div className="flex justify-center my-6 ">
           <div>
             {items.length === 0 && <NothingFound />}

@@ -79,7 +79,7 @@ export default function CheckoutForm() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 py-6 pb-20 px-4 sm:px-6 lg:px-8 my-12 mt-16 mx-10 rounded-xl shadow-xl h-2/3">
+    <div className="flex items-center justify-center bg-gray-50 py-6 pb-20 px-4 sm:px-6 lg:px-8 my-12 mt-16 md:mx-10 rounded-xl shadow-xl h-2/3">
       <div className="w-full" style={{ maxWidth: "600px" }}>
         <div className="w-full pt-1 pb-5">
           <div className="bg-yellow-500 text-white overflow-hidden rounded-full w-20 h-20 -mt-16 mx-auto shadow-lg flex justify-center items-center">
@@ -126,7 +126,7 @@ export default function CheckoutForm() {
             Payment succeeded.
           </p>
         </form>
-        <div className="mt-6 flex justify-end">
+        <div className="px- mt-6 flex justify-end">
           <img
             src="https://res.cloudinary.com/ngasco/image/upload/v1623952029/bonsai_background/logo-stripe_ouoag3.png"
             alt="Logos of Visa, MasterCard, American Express, and Discover"
