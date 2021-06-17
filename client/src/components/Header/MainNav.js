@@ -235,7 +235,7 @@ const MainNav = () => {
                     {({ open }) => (
                       <>
                         <div>
-                          <Menu.Button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                          <Menu.Button className="bg-gray-600 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">View profile</span>
                             <ShoppingCartIcon
                               onClick={() => {
@@ -275,7 +275,7 @@ const MainNav = () => {
                     {({ open }) => (
                       <>
                         <div>
-                          {/* <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                          {/* <Menu.Button className="max-w-xs bg-gray-600 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
@@ -283,7 +283,7 @@ const MainNav = () => {
                               alt="Generic avatar logo"
                             />
                           </Menu.Button> */}
-                          <Menu.Button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                          <Menu.Button className="bg-gray-600 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">View profile</span>
                             <UserIcon className="h-6 w-6" aria-hidden="true" />
                           </Menu.Button>
@@ -312,7 +312,7 @@ const MainNav = () => {
               </div>
               <div className="-mr-2 flex md:hidden">
                 {/* Mobile menu button */}
-                <Disclosure.Button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                <Disclosure.Button className="bg-gray-600 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -330,12 +330,9 @@ const MainNav = () => {
                 itemIdx === 0 ? (
                   <Fragment key={item}>
                     {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                    <a
-                      href="#"
-                      className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
-                    >
+                    <div className="bg-green-900 text-white block px-3 py-2 rounded-md text-base font-medium">
                       {item}
-                    </a>
+                    </div>
                   </Fragment>
                 ) : (
                   <a
@@ -350,36 +347,34 @@ const MainNav = () => {
             </div>
             <div className="pt-4 pb-3 border-t border-gray-700">
               <div className="flex items-center px-5">
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
+                <div className="flex-shrink-0 bg-gray-600 p-1 rounded-full text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                  <UserIcon className="h-6 w-6" aria-hidden="true" />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium leading-none text-white">
+                  <div className="text-base font-medium leading-none text-gray-800">
                     Tom Cook
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-400">
                     tom@example.com
                   </div>
                 </div>
-                <button className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                <Link
+                  className="ml-auto bg-gray-600 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
                   <span className="sr-only">View shopping cart</span>
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+                </Link>
                 {showItemCounterMobile}
               </div>
               <div className="mt-3 px-2 space-y-1">
                 {profile.map((item) => (
-                  <a
+                  <Link
                     key={item}
                     href="#"
                     className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
                   >
                     {item}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

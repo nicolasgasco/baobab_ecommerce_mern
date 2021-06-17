@@ -7,11 +7,11 @@ const BannerContent = () => {
 
   if (show) {
     return (
-      <div className="bg-yellow-600">
+      <div className="bg-yellow-500">
         <div className="max-w-11xl mx-auto py-1.5 px-3 sm:px-6 lg:px-8 z-10">
           <div className="flex items-center justify-between flex-wrap">
             <div className="w-0 flex-1 flex items-center">
-              <span className="flex p-2 rounded-lg bg-yellow-800">
+              <span className="flex p-2 rounded-lg bg-yellow-700">
                 <SpeakerphoneIcon
                   className="h-4 w-4 text-white"
                   aria-hidden="true"

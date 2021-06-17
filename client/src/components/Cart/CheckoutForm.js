@@ -3,6 +3,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 import styles from "./PaymentForm.module.css";
 import { CreditCardIcon } from "@heroicons/react/outline";
+import ShoppingCart from "./ShoppingCart";
 
 export default function CheckoutForm() {
   const [succeeded, setSucceeded] = useState(false);

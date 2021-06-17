@@ -17,7 +17,7 @@ const StoreSearchbar = ({ onGetSearchbarInput, handleActivePage }) => {
   return (
     <form
       onSubmit={handleSubmitSearchbar}
-      className="bg-white bg-opacity-100 w-11/12 lg:w-1/2 max-w-full mx-auto flex items-center rounded-full shadow-xl"
+      className="bg-white bg-opacity-100 w-11/12 lg:w-1/2 mt-4 max-w-full mx-auto flex items-center rounded-full shadow-xl"
     >
       <input
         className="rounded-l-full bg-transparent w-full py-4 px-6 text-gray-700 placeholder-gray-700 text-center leading-tight focus:outline-none tracking-wider text-lg"
