@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
 
 const { productSchema } = require("./products");
 
@@ -15,7 +16,9 @@ const cartSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       unique: false,
-      default: 1,
+      // Without this field being unique, Mongoose doesn't work for whatever reason
+      type: String,
+      default: uuidv4,
     },
     cartItems: [productSchema],
   },

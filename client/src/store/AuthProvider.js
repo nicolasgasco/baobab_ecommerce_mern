@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useLocation } from "react";
+import { useState, useContext, useEffect } from "react";
 import AuthContext from "./auth-context";
 import CartContext from "./cart-context";
 import ModalContext from "./modal-context";
@@ -157,8 +157,8 @@ const AuthProvider = (props) => {
       .then((res) => {
         if (res.error) throw new Error(res.error);
         console.log("Logout successful");
-        userName = "";
         localStorage.removeItem("token");
+        userName = "";
         // Empty local cart
         deleteCartLocal();
       })
@@ -204,7 +204,7 @@ const AuthProvider = (props) => {
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     setIsLogged(!!localStorage.getItem("token"));
-  }, [localStorage, token]);
+  }, [token]);
 
   const authContext = {
     token,

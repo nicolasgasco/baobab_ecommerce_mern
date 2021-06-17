@@ -16,7 +16,7 @@ const SignupForm = () => {
   const { signupUser, isLogged } = useContext(AuthContext);
   const { handleModalText } = useContext(ModalContext);
 
-  const [logged, setLogged] = useState(isLogged);
+  // const [logged, setLogged] = useState(isLogged);
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -37,9 +37,9 @@ const SignupForm = () => {
     await signupUser(userData);
   };
 
-  useEffect(() => {
-    setLogged(isLogged);
-  }, [isLogged]);
+  // useEffect(() => {
+  //   setLogged(isLogged);
+  // }, [isLogged]);
 
   return (
     <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 my-12 mx-10 rounded-xl shadow-xl h-2/3 ">

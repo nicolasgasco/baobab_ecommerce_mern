@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import NothingFound from "./NothingFound";
 import PageCounter from "./PageCounter";
 import ProductCard from "./ProductCard";

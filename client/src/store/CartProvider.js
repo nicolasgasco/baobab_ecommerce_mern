@@ -30,7 +30,8 @@ const CartProvider = (props) => {
 
   // Fetching cart from DB at the beginning
   useEffect(() => {
-    fetchCartFromDB();
+    // Only if user is logged
+    if (localStorage.getItem("token")) fetchCartFromDB();
   }, []);
 
   const addItemToCart = async (item) => {

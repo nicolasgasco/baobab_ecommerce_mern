@@ -9,6 +9,7 @@ import AuthContext from "../../store/auth-context";
 import ProfilePage from "../Profile/ProfilePage";
 import PasswordChange from "../Profile/PasswordChange";
 import ShoppingCart from "../Cart/ShoppingCart";
+import CheckoutForm from "../Cart/CheckoutForm";
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -118,7 +119,7 @@ const MainContent = () => {
           console.log("An error ocurred:" + error.message);
         });
     },
-    [resultsState.activePage, resultsState.resultsPerPage]
+    [resultsState.activePage, resultsState.resultsPerPage, history]
   );
 
   const handleActivePage = useCallback(
@@ -199,6 +200,11 @@ const MainContent = () => {
       break;
     case "/":
       resultsContent = <HeroMain />;
+      break;
+    case "/checkout":
+      resultsContent = <CheckoutForm />;
+      break;
+    default:
       break;
   }
 

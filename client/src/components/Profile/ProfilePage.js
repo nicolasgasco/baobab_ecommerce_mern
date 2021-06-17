@@ -1,8 +1,7 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
 import ModalContext from "../../store/modal-context";
-import AuthContext from "../../store/auth-context";
 
 import LoadingOverlay from "../UI/LoadingOverlay";
 
@@ -11,8 +10,6 @@ import useInput from "../../hooks/use-input";
 const ProfilePage = () => {
   // For authentication
   const { handleModalText } = useContext(ModalContext);
-  const { checkLogin } = useContext(AuthContext);
-
   const history = useHistory();
 
   // For handling editing and loading status
@@ -57,7 +54,7 @@ const ProfilePage = () => {
         throw new Error();
       }
     } catch (err) {
-      setUserData({});
+      return {};
     }
   });
 
@@ -78,7 +75,7 @@ const ProfilePage = () => {
         throw new Error();
       }
     } catch (err) {
-      setUserAddress({});
+      return {};
     }
   });
 
@@ -115,7 +112,7 @@ const ProfilePage = () => {
 
   const {
     value: country,
-    valueChangeHandler: countryChangeHandler,
+    // valueChangeHandler: countryChangeHandler,
     setEnteredValue: setEnteredCountry,
   } = useInput(userAddress.country);
 
@@ -144,11 +141,11 @@ const ProfilePage = () => {
   const [errorMessages, setErrorMessages] = useState([]);
 
   // Utility function to capitalize certain words
-  const capitalizeWord = (word) => {
-    if (word) {
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    }
-  };
+  // const capitalizeWord = (word) => {
+  //   if (word) {
+  //     return word.charAt(0).toUpperCase() + word.slice(1);
+  //   }
+  // };
 
   const handleEditButton = () => {
     setIsEditing(true);
