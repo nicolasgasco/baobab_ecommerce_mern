@@ -9,7 +9,7 @@ import MainContent from "./components/MainContent/MainContent";
 // Stripe related
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import BoxWrapper from "./components/UI/BoxWrapper";
+// This key is public, no need to hid it
 const promise = loadStripe(
   "pk_test_51J3L3sID7BWQ1tRhAZSV4MKb1ZUS23HKoXXF3R1zdKj2kbjh03UQqvfFgSVDWakLvATspzNOBELpa7k41w6OYa2C00PDmPXqgR"
 );
