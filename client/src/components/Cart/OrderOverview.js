@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 
 const CartTable = ({ items }) => {
   const showCartItems = items.map((item) => {

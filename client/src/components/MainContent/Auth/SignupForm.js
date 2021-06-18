@@ -1,5 +1,5 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
-import { useRef, useState, useContext, useEffect } from "react";
+import { useRef, useContext } from "react";
 import BaobabLogo from "../../../assets/img/baobab.svg";
 
 import AuthContext from "../../../store/auth-context";
@@ -13,7 +13,7 @@ const SignupForm = () => {
   const passwordInput = useRef();
   const repeatPasswordInput = useRef();
 
-  const { signupUser, isLogged } = useContext(AuthContext);
+  const { signupUser } = useContext(AuthContext);
   const { handleModalText } = useContext(ModalContext);
 
   // const [logged, setLogged] = useState(isLogged);

@@ -10,7 +10,7 @@ const AuthContent = () => {
   // Check if user is still loggedin
   useEffect(() => {
     checkLogin();
-  }, []);
+  }, [checkLogin]);
 
   return <>{openLogin ? <Loginform /> : <SignupForm />}</>;
 };

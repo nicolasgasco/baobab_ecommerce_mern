@@ -1,5 +1,5 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
-import React, { useEffect, useContext, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import BaobabLogo from "../../../assets/img/baobab.svg";
 
 import AuthContext from "../../../store/auth-context";
@@ -32,12 +32,12 @@ const Loginform = () => {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or{" "}
-            <a
+            <button
               onClick={handleOpenSignup}
               className="font-medium text-green-600 hover:text-green-500 cursor-pointer"
             >
               sign up for a free account!
-            </a>
+            </button>
           </p>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6 w-full">
@@ -73,32 +73,6 @@ const Loginform = () => {
                 placeholder="Password"
               />
             </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            {/* <div className="flex items-center">
-              <input
-                id="remember_me"
-                name="remember_me"
-                type="checkbox"
-                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="remember_me"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Remember me
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-green-600 hover:text-green-500"
-              >
-                Forgot your password?
-              </a>
-            </div> */}
           </div>
 
           <div>

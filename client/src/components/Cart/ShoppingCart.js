@@ -209,10 +209,8 @@ export default ShoppingCart;
 //       </td>
 //     </tr>
 //   );
-// });
-
-{
-  /* <table
+// })
+/* <table
               className="w-full outline-black  text-sm lg:text-base"
               cellSpacing={0}
             >
@@ -232,7 +230,4 @@ export default ShoppingCart;
               </thead>
               <tbody>{showCartItems}</tbody>
             </table> */
-}
-{
-  /* <hr className="pb-6 mt-6" /> */
-}
+/* <hr className="pb-6 mt-6" /> */

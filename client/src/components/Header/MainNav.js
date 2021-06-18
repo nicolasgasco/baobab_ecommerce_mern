@@ -24,12 +24,12 @@ const MainNav = () => {
     useContext(AuthContext);
   const [userGreeting, setUserGreeting] = useState("");
   const navigation = [userGreeting];
-  const profile = ["Your profile", "Change password", "Sign in"];
+  const profile = ["Your profile", "Your orders", "Change password", "Sign in"];
 
   // Cart related
   const { items } = useContext(CartContext);
   // I'm not using this any more
-  const cart = ["See cart"];
+  // const cart = ["See cart"];
   const [itemsNum, setItemsNum] = useState(items ? items.length : 0);
   const [bounceAnimation, setBounceAnimation] = useState("");
 
@@ -82,14 +82,16 @@ const MainNav = () => {
     // Sign in
     if (item === "Sign in") {
       return (
-        <Menu.Item key={item}>
+        <Menu.Item key={`profile-item-${index + 1}`}>
           {({ active }) => (
             <Link
               id={`profile-item-${index + 1}`}
               onClick={handleSignin}
               className={classNames(
                 active ? "bg-gray-100" : "",
-                "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                `block px-4 py-2 text-sm text-gray-700 cursor-pointer ${
+                  localStorage.getItem("token") && "bg-yellow-200"
+                } rounded-md`
               )}
             >
               {localStorage.getItem("token") ? "Log out" : item}
@@ -101,7 +103,7 @@ const MainNav = () => {
     } else if (item === "Your profile") {
       return (
         localStorage.getItem("token") && (
-          <Menu.Item key={item}>
+          <Menu.Item key={`profile-item-${index + 1}`}>
             {({ active }) => (
               <Link
                 to="/profile"
@@ -120,7 +122,7 @@ const MainNav = () => {
     } else if (item === "Change password") {
       return (
         localStorage.getItem("token") && (
-          <Menu.Item key={item}>
+          <Menu.Item key={`profile-item-${index + 1}`}>
             {({ active }) => (
               <Link
                 to="/password"
@@ -136,7 +138,28 @@ const MainNav = () => {
           </Menu.Item>
         )
       );
+    } else if (item === "Your orders") {
+      return (
+        localStorage.getItem("token") && (
+          <Menu.Item key={`profile-item-${index + 1}`}>
+            {({ active }) => (
+              <Link
+                to="/orders"
+                id={`profile-item-${index + 1}`}
+                className={classNames(
+                  active ? "bg-gray-100" : "",
+                  "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                )}
+              >
+                {item}
+              </Link>
+            )}
+          </Menu.Item>
+        )
+      );
     }
+    // This is to silence warning
+    return null;
   });
 
   // Showing counter only if there are items in cart
@@ -162,24 +185,26 @@ const MainNav = () => {
     );
   }
 
-  const showCartItems = cart.map((item, index) => {
-    return (
-      <Menu.Item key={item}>
-        {({ active }) => (
-          <Link
-            to={item === "See cart" && "/cart"}
-            id={`cart-item-${index + 1}`}
-            className={classNames(
-              active ? "bg-gray-100" : "",
-              "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
-            )}
-          >
-            {item}
-          </Link>
-        )}
-      </Menu.Item>
-    );
-  });
+  // This is not used at the moment
+
+  // const showCartItems = cart.map((item, index) => {
+  //   return (
+  //     <Menu.Item key={item}>
+  //       {({ active }) => (
+  //         <Link
+  //           to={item === "See cart" && "/cart"}
+  //           id={`cart-item-${index + 1}`}
+  //           className={classNames(
+  //             active ? "bg-gray-100" : "",
+  //             "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+  //           )}
+  //         >
+  //           {item}
+  //         </Link>
+  //       )}
+  //     </Menu.Item>
+  //   );
+  // });
 
   return (
     <Disclosure as="nav">
@@ -196,34 +221,23 @@ const MainNav = () => {
                     alt="Workflow"
                   />
                 </div>
-                {/* {localStorage.getItem("token") && (
-                  <div class="mx-5 bg-green-600 text-white font-bold py-2 px-4 rounded-full">
-                    <p>{`Hi, ${
-                      jwt_decode(localStorage.getItem("token")).name
-                    }!`}</p>
-                  </div>
-                )} */}
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
                     {localStorage.getItem("token") &&
                       navigation.map((item, itemIdx) =>
                         itemIdx === 0 ? (
                           <Fragment key={item}>
-                            <a
-                              href="#"
-                              className="bg-green-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-default"
-                            >
+                            <p className="bg-green-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-default">
                               {item}
-                            </a>
+                            </p>
                           </Fragment>
                         ) : (
-                          <a
+                          <p
                             key={item}
-                            href="#"
                             className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                           >
                             {item}
-                          </a>
+                          </p>
                         )
                       )}
                   </div>
@@ -300,7 +314,7 @@ const MainNav = () => {
                         >
                           <Menu.Items
                             static
-                            className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 pb-0 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                           >
                             {showProfileItems}
                           </Menu.Items>
@@ -335,13 +349,12 @@ const MainNav = () => {
                     </div>
                   </Fragment>
                 ) : (
-                  <a
+                  <p
                     key={item}
-                    href="#"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                   >
                     {item}
-                  </a>
+                  </p>
                 )
               )}
             </div>
@@ -358,9 +371,7 @@ const MainNav = () => {
                     tom@example.com
                   </div>
                 </div>
-                <Link
-                  className="ml-auto bg-gray-600 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                >
+                <Link className="ml-auto bg-gray-600 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                   <span className="sr-only">View shopping cart</span>
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                 </Link>

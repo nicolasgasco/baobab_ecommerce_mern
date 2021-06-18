@@ -42,7 +42,7 @@ export default function CheckoutForm() {
         console.log("Error: " + err.message);
         setProcessing(false);
       });
-  }, []);
+  }, [items]);
 
   const cardStyle = {
     style: {
