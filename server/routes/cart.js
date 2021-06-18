@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const async = require("../middleware/async");
+const validateObjectId = require("../middleware/validateObjectId");
 
 const cartController = require("../controllers/cart");
 
@@ -12,6 +13,9 @@ router.post("/", cartController.addCartItem);
 
 // // POST a new cart collection
 // router.post("/collection", cartController.addWholeCart);
+
+// DELETE a whole cart
+router.delete("/whole/:id", validateObjectId, cartController.deleteWholeCart);
 
 // DELETE a new cart item
 router.delete("/", cartController.deleteCartItem);

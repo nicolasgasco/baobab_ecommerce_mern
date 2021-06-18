@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { v4: uuidv4 } = require("uuid");
+const { nanoid } = require("nanoid");
 
 const { productSchema } = require("./products");
 
@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema(
       unique: true,
       index: true,
       type: String,
-      default: uuidv4,
+      default: nanoid(),
     },
     userId: {
       // Otherwise it triggers duplicate key error

@@ -112,7 +112,24 @@ const deleteCartItem = async (req, res) => {
   }
 };
 
+const deleteWholeCart = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const result = await Cart.findOneAndDelete({ userId });
+    console.log(result);
+    if (result._id) {
+      res.send({ deletedCount: 1, result: result });
+    } else {
+      throw new Error("Cart wasn't deleted");
+    }
+  } catch (err) {
+    res.status(400).send({ error: err.message });
+  }
+};
+
 exports.getCartItems = getCartItems;
 exports.addCartItem = addCartItem;
 exports.deleteCartItem = deleteCartItem;
+exports.deleteWholeCart = deleteWholeCart;
 // exports.addWholeCart = addWholeCart;
