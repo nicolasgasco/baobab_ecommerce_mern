@@ -88,6 +88,12 @@ const productSchema = new mongoose.Schema(
     },
     pictures: [
       {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          trim: true,
+          lowercase: true,
+          unique: true,
+        },
         url: {
           type: String,
           trim: true,

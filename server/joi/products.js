@@ -2,6 +2,7 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
 const productSchemaJoi = Joi.object({
+  _id: Joi.objectId(),
   completeName: {
     brand: Joi.string().uppercase().min(2).max(30).trim().required(),
     shortDesc: Joi.string().lowercase().min(2).max(25).trim().required(),
@@ -17,6 +18,7 @@ const productSchemaJoi = Joi.object({
       .required(),
   },
   pictures: Joi.array().items({
+    _id: Joi.objectId(),
     url: Joi.string()
       .min(10)
       .max(500)
@@ -25,8 +27,8 @@ const productSchemaJoi = Joi.object({
         /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/
       )
       .required(),
-    alt: Joi.string().min(5).max(50).lowercase().trim().required()
-      }),
+    alt: Joi.string().min(5).max(50).lowercase().trim().required(),
+  }),
   completeNameDesc: Joi.string()
     .min(20)
     .max(230)
@@ -60,6 +62,8 @@ const productSchemaJoi = Joi.object({
     socialMission: Joi.string().trim().min(2).max(500).required(),
     environmentMission: Joi.string().trim().min(2).max(500).required(),
   },
+  quantity: Joi.number().min(1).max(999),
+  __v: Joi.number(),
 });
 
 module.exports = productSchemaJoi;
