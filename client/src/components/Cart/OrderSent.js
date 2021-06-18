@@ -34,12 +34,12 @@ const OrderSent = () => {
       {!order ? (
         <LoadingOverlay />
       ) : (
-        <>
-          <div className="mb-4">
-            <h2 className="text-xl font-bold mb-4">{`Your order (${order.orderId}) was received!`}</h2>
-            <p className="mb-2">
-              You will receive a confirmation via e-mail. You should receive your order betweeen 2-5 working days depending on
-              your location.
+        <div className={"p-6"}>
+          <div className="text-xl">
+            <h2 className="text-2xl font-bold mb-4">{`Your order (${order.orderId}) was received!`}</h2>
+            <p className="mb-2 ">
+              You will receive confirmation via e-mail. You should receive your
+              order betweeen 2-5 working days depending on your location.
             </p>
             <p>
               {"For any query or doubt, contact with our "}
@@ -53,10 +53,10 @@ const OrderSent = () => {
             </p>
           </div>
           <div className="mt-6">
-            <h3 className="font-bold text-xl">{"Order overview:"}</h3>
+            <h3 className="font-bold text-2xl">{"Order overview:"}</h3>
             <OrderOverview items={order.items} />
           </div>
-        </>
+        </div>
       )}
     </>
   );

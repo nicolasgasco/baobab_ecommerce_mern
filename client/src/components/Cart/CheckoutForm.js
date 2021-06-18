@@ -124,21 +124,22 @@ export default function CheckoutForm() {
           </span>
         </button>
         {/* Show any error that happens when processing the payment */}
-        {error && (
-          <div className={styles["card-error"]} role="alert">
-            {error}
+        {
+          <div
+            className={`${
+              !error && "invisible"
+            } card-error text-center text-red-600 font-bold mt-2`}
+            role="alert"
+          >
+            {error ? error : "No error"}
           </div>
-        )}
+        }
         {/* Show a success message upon completion */}
-        <p
-          className={
-            succeeded
-              ? `${styles["result-message"]}`
-              : `${styles["result-message hidden"]}`
-          }
-        >
-          Payment succeeded.
-        </p>
+        {/* {succeeded && (
+          <p className={succeeded ? "result-message" : "result-message hidden"}>
+            Payment succeeded!
+          </p>
+        )} */}
       </form>
       <div className="px- mt-6 flex justify-end">
         <img

@@ -120,7 +120,7 @@ const ShoppingCart = () => {
                       Total
                     </div>
                     <div className="lg:px-4 lg:py-2 m-2 lg:text-lg font-bold text-center text-gray-900">
-                      {totalPrice.toFixed(2)}
+                      {`${totalPrice.toFixed(2)} €`}
                     </div>
                   </div>
                   <div>
