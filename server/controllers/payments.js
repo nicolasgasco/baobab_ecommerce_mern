@@ -1,7 +1,10 @@
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 const calculateOrderAmount = (items) => {
-  return 1400;
+  const totalPrice = items.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.pricingInfo.price * currentValue.quantity;
+  }, 0);
+  return totalPrice * 100;
 };
 
 const makePayment = async (req, res) => {
