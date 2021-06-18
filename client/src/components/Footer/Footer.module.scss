@@ -1,0 +1,48 @@
+$big-fallback: 22px;
+$big-size: 3vh;
+$small-fallback: 15px;
+$small-size: 2.5vh;
+
+@mixin big-beat() {
+  font-size: $big-fallback; /* fallback */
+  font-size: $big-size;
+}
+
+@mixin small-beat() {
+  font-size: $small-fallback; /* fallback */
+  font-size: $small-size;
+}
+
+.centered-box {
+  margin-top: -3px;
+  display: inline-block;
+  width: 5vh;
+  height: 5vh;
+}
+
+.heart {
+  margin: 0 auto;
+  @include big-beat();
+}
+
+.animate-beat {
+  animation: beat 1s infinite;
+}
+
+@keyframes beat {
+  0% {
+    @include small-beat();
+  }
+  40% {
+    @include big-beat();
+  }
+  60% {
+    @include small-beat();
+  }
+  80% {
+    @include big-beat();
+  }
+  100% {
+    @include small-beat();
+  }
+}

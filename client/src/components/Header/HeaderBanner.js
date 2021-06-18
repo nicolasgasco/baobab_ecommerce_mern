@@ -19,22 +19,26 @@ const BannerContent = () => {
               </span>
               <p className="ml-3 font-small text-white">
                 <span className="md:hidden">
+                  {"Click "}
                   <a
                     href="https://github.com/nicolasgasco"
                     target="blank"
-                    classList=" cursor-pointer"
+                    classList="cursor-pointer underline"
                   >
-                    Click here for my GitHub!
+                    here
                   </a>
+                  {" for my Github!"}
                 </span>
                 <span className="hidden md:inline">
+                {"Click "}
                   <a
                     href="https://github.com/nicolasgasco"
                     target="blank"
-                    classList=" cursor-pointer"
+                    classList="cursor-pointer underline"
                   >
-                    Click here to see my GitHub!
+                    here
                   </a>
+                  {" to see my Github!"}
                 </span>
               </p>
             </div>

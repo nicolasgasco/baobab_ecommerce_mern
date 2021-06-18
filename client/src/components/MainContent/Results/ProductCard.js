@@ -37,7 +37,7 @@ const ProductCard = ({ product, picturesLoading }) => {
     <img
       src={product.pictures[0].url}
       alt={product.pictures[0].alt}
-      className="w-full object-cover object-center"
+      className="w-full object-contain h-full object-center rounded-lg"
     />
   );
   if (picturesLoading) {
@@ -45,7 +45,7 @@ const ProductCard = ({ product, picturesLoading }) => {
       <img
         src={Spinner}
         alt="Loading animation"
-        className="w-1/3 mx-auto p-5 object-cover object-center"
+        className="w-1/3 mx-auto p-5 object-cover object-center rounded-lg"
       />
     );
   }
@@ -58,7 +58,7 @@ const ProductCard = ({ product, picturesLoading }) => {
         className="pb-10 md:px-4 sm:w-1/2 xl:w-1/3 px-2"
       >
         <div className="h-full">
-          <div className="bg-white py-10 rounded-lg shadow-md">
+          <div className="bg-white p-0 rounded-lg shadow-md">
             {showPictureOrLoader}
           </div>
           <div className="relative px-4 -mt-6">
