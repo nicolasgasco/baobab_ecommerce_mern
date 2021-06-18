@@ -27,7 +27,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             <div className="min-h-screen">
-                <MainContent />
+              <MainContent />
             </div>
           </Route>
           <Route exact path="/search">
@@ -57,6 +57,12 @@ function App() {
           </Route>
 
           <Route exact path="/checkout">
+            <div className="min-h-screen">
+              <MainContent />
+            </div>
+          </Route>
+
+          <Route exact path="/success">
             <div className="min-h-screen">
               <MainContent />
             </div>
