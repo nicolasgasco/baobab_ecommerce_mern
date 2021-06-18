@@ -19,7 +19,7 @@ const Loginform = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 my-12 mx-10 rounded-xl shadow-xl h-2/3 ">
+    <div className="flex items-center justify-center">
       <div className="max-w-md w-full space-y-8">
         <div>
           <img

@@ -1,5 +1,11 @@
-$grey: rgba(0, 0, 0, 0.5);
-$blue: rgba(0, 0, 255, 0.5);
+$grey: #ffa44f;
+$blue: #26976e;
+
+.overlay {
+  background-image: url("https://res.cloudinary.com/ngasco/image/upload/v1623879147/bonsai_background/OC23T40_nlohlv_1_wlv7zi.jpg");
+  background-repeat: repeat;
+  background-size: 80%;
+}
 
 @keyframes rotate {
   0% {

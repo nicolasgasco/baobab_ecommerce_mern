@@ -259,246 +259,234 @@ const ProfilePage = () => {
     <>
       {/* Loading animation, PUT takes a bit of time */}
       {isLoading && <LoadingOverlay />}
-      <div className="bg-white my-12 mx-10 rounded-xl shadow-xl h-2/3 ">
-        {/* <div className="px-5 md:col-span-1">
-          <div className="px-6 py-2 sm:px-0">
-            <h3 className="text-xl font-medium leading-6 text-gray-900">
-              Personal Information
-            </h3>
-            <p className="mt-1 text-sm text-gray-600">
-              Use a permanent address where you can receive mail.
-            </p>
-          </div>
-        </div> */}
-        <form onSubmit={handleForm}>
-          <div className="shadow overflow-hidden sm:rounded-md">
-            <div className="px-4 py-5 bg-white sm:p-6">
-              <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="first_name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    First name
-                  </label>
-                  <input
-                    type="text"
-                    name="first_name"
-                    id="first_name"
-                    autoComplete="given-name"
-                    disabled={!isEditing}
-                    value={isEditing ? name : userData.name}
-                    onChange={nameChangeHandler}
-                    className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
+      <form onSubmit={handleForm}>
+        <div className="overflow-hidden sm:rounded-md">
+          <div className="px-4 py-5 sm:p-6">
+            <div className="grid grid-cols-6 gap-6">
+              <div className="col-span-6 sm:col-span-3">
+                <label
+                  htmlFor="first_name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  First name
+                </label>
+                <input
+                  type="text"
+                  name="first_name"
+                  id="first_name"
+                  autoComplete="given-name"
+                  disabled={!isEditing}
+                  value={isEditing ? name : userData.name}
+                  onChange={nameChangeHandler}
+                  className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+              </div>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="last_name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Last name
-                  </label>
-                  <input
-                    type="text"
-                    name="last_name"
-                    id="last_name"
-                    autoComplete="family-name"
-                    disabled={!isEditing}
-                    value={isEditing ? surname : userData.surname}
-                    onChange={surnameChangeHandler}
-                    className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label
+                  htmlFor="last_name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Last name
+                </label>
+                <input
+                  type="text"
+                  name="last_name"
+                  id="last_name"
+                  autoComplete="family-name"
+                  disabled={!isEditing}
+                  value={isEditing ? surname : userData.surname}
+                  onChange={surnameChangeHandler}
+                  className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+              </div>
 
-                <div className="col-span-6 sm:col-span-4">
-                  <label
-                    htmlFor="email_address"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Email address
-                  </label>
-                  <input
-                    value={userData.email}
-                    readOnly
-                    type="text"
-                    name="email_address"
-                    id="email_address"
-                    autoComplete="email"
-                    className="bg-gray-100 mt-2 p-1 ring-1 ring-gray-300 focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
+              <div className="col-span-6 sm:col-span-4">
+                <label
+                  htmlFor="email_address"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email address
+                </label>
+                <input
+                  value={userData.email}
+                  readOnly
+                  type="text"
+                  name="email_address"
+                  id="email_address"
+                  autoComplete="email"
+                  className="bg-gray-100 mt-2 p-1 ring-1 ring-gray-300 focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+              </div>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="gender"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Gender
-                  </label>
-                  <select
-                    id="gender"
-                    name="gender"
-                    autoComplete="sex"
-                    required
-                    placeholder="Gender"
-                    value={userData.gender}
-                    disabled={!isEditing}
-                    className={`${
-                      !isEditing && "bg-gray-100"
-                    } mt-1 block w-full py-2 px-3 border placeholder-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
-                  >
-                    <option selected value="f">
-                      Female
-                    </option>
-                    <option value="m">Male</option>
-                    <option value="o">Other</option>
-                  </select>
-                </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  autoComplete="sex"
+                  required
+                  placeholder="Gender"
+                  value={userData.gender}
+                  disabled={!isEditing}
+                  className={`${
+                    !isEditing && "bg-gray-100"
+                  } mt-1 block w-full py-2 px-3 border placeholder-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
+                >
+                  <option selected value="f">
+                    Female
+                  </option>
+                  <option value="m">Male</option>
+                  <option value="o">Other</option>
+                </select>
+              </div>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="country"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Country / Region
-                  </label>
-                  <select
-                    id="country"
-                    name="country"
-                    autoComplete="country"
-                    required
-                    disabled={!isEditing}
-                    className={`${
-                      !isEditing && "bg-gray-100"
-                    } mt-1 block w-full py-2 px-3 border  placeholder-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
-                  >
-                    {showCountries}
-                  </select>
-                </div>
+              <div className="col-span-6 sm:col-span-3">
+                <label
+                  htmlFor="country"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Country / Region
+                </label>
+                <select
+                  id="country"
+                  name="country"
+                  autoComplete="country"
+                  required
+                  disabled={!isEditing}
+                  className={`${
+                    !isEditing && "bg-gray-100"
+                  } mt-1 block w-full py-2 px-3 border  placeholder-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
+                >
+                  {showCountries}
+                </select>
+              </div>
 
-                <div className="col-span-6">
-                  <label
-                    htmlFor="street"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Street address
-                  </label>
-                  <input
-                    type="text"
-                    name="street"
-                    id="street"
-                    required
-                    autoComplete="street-address"
-                    disabled={!isEditing}
-                    value={isEditing ? street : userAddress.street}
-                    onChange={streetChangeHandler}
-                    className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
+              <div className="col-span-6">
+                <label
+                  htmlFor="street"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Street address
+                </label>
+                <input
+                  type="text"
+                  name="street"
+                  id="street"
+                  required
+                  autoComplete="street-address"
+                  disabled={!isEditing}
+                  value={isEditing ? street : userAddress.street}
+                  onChange={streetChangeHandler}
+                  className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+              </div>
 
-                <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                  <label
-                    htmlFor="city"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    City
-                  </label>
-                  <input
-                    type="text"
-                    name="city"
-                    id="city"
-                    required
-                    disabled={!isEditing}
-                    value={isEditing ? city : userAddress.city}
-                    onChange={cityChangeHandler}
-                    className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
+              <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  City
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  id="city"
+                  required
+                  disabled={!isEditing}
+                  value={isEditing ? city : userAddress.city}
+                  onChange={cityChangeHandler}
+                  className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+              </div>
 
-                <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                  <label
-                    htmlFor="state"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    State / Province
-                  </label>
-                  <input
-                    type="text"
-                    name="state"
-                    id="state"
-                    required
-                    disabled={!isEditing}
-                    value={isEditing ? province : userAddress.province}
-                    onChange={provinceChangeHandler}
-                    className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
+              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                <label
+                  htmlFor="state"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  State / Province
+                </label>
+                <input
+                  type="text"
+                  name="state"
+                  id="state"
+                  required
+                  disabled={!isEditing}
+                  value={isEditing ? province : userAddress.province}
+                  onChange={provinceChangeHandler}
+                  className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+              </div>
 
-                <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                  <label
-                    htmlFor="postal_code"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    ZIP / Postal
-                  </label>
-                  <input
-                    type="text"
-                    name="postal_code"
-                    id="postal_code"
-                    autoComplete="postal-code"
-                    required
-                    disabled={!isEditing}
-                    value={isEditing ? zip : userAddress.zip}
-                    onChange={zipChangeHandler}
-                    className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
+              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                <label
+                  htmlFor="postal_code"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  ZIP / Postal
+                </label>
+                <input
+                  type="text"
+                  name="postal_code"
+                  id="postal_code"
+                  autoComplete="postal-code"
+                  required
+                  disabled={!isEditing}
+                  value={isEditing ? zip : userAddress.zip}
+                  onChange={zipChangeHandler}
+                  className="mt-2 p-1 ring-1 ring-gray-300 placeholder-black focus:ring-yellow-500 focus:border-yellow-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
               </div>
             </div>
-            {/* Error messages */}
-            {errorMessages.length > 0 && (
-              <div
-                class="mx-5 bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
-                role="alert"
-              >
-                <h4 className="font-bold text-xl">Wrong data</h4>
-                <ul className="ml-5 list-disc">{showErrorMessages}</ul>
-              </div>
-            )}
+          </div>
+          {/* Error messages */}
+          {errorMessages.length > 0 && (
+            <div
+              class="mx-5 bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
+              role="alert"
+            >
+              <h4 className="font-bold text-xl">Wrong data</h4>
+              <ul className="ml-5 list-disc">{showErrorMessages}</ul>
+            </div>
+          )}
 
-            <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-              {!isEditing && (
+          <div className="px-4 text-right sm:px-6">
+            {!isEditing && (
+              <button
+                type="button"
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                onClick={handleEditButton}
+              >
+                Edit
+              </button>
+            )}
+            {isEditing && (
+              <>
                 <button
                   type="button"
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  onClick={handleEditButton}
+                  className="inline-flex justify-center py-2 px-4 ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                  onClick={handleCancelButton}
                 >
-                  Edit
+                  Cancel
                 </button>
-              )}
-              {isEditing && (
-                <>
-                  <button
-                    type="button"
-                    className="inline-flex justify-center py-2 px-4 ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                    onClick={handleCancelButton}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="inline-flex justify-center py-2 px-4 ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                  >
-                    Save
-                  </button>
-                </>
-              )}
-            </div>
+                <button
+                  type="submit"
+                  className="inline-flex justify-center py-2 px-4 ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                  Save
+                </button>
+              </>
+            )}
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };

@@ -109,7 +109,10 @@ const MainContent = () => {
               },
             });
             dispatchResults({ type: "PICTURES_LOADING", val: false });
-            dispatchResults({ type: "CONTENT_LOADING", val: false });
+            setTimeout(() => {
+              dispatchResults({ type: "CONTENT_LOADING", val: false });
+              console.log("ciao");
+            }, 1000);
             dispatchResults({ type: "IS_EMPTY", val: false });
           }
         })
@@ -129,11 +132,6 @@ const MainContent = () => {
     },
     [dispatchResults]
   );
-
-  const handleStopContentLoading = useCallback(() => {
-    console.log("Madrequemepario");
-    dispatchResults({ type: "CONTENT_LOADING", val: false });
-  }, [dispatchResults]);
 
   const handlePageChange = useCallback(
     (event) => {
@@ -182,7 +180,6 @@ const MainContent = () => {
     case "/search":
       resultsContent = (
         <ResultsBox
-          handleStopContentLoading={handleStopContentLoading}
           fetchedProducts={resultsState.fetchedProducts}
           paginationData={resultsState.paginationData}
           handlePageChange={handlePageChange}

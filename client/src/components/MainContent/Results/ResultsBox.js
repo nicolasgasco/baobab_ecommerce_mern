@@ -14,12 +14,10 @@ const ResultsBox = ({
   handleResultsPerPage,
   paginationData,
   handlePageChange,
-  handleStopContentLoading,
 }) => {
   const showProducts = fetchedProducts.map((product) => {
     return (
       <ProductCard
-        handleStopContentLoading={handleStopContentLoading}
         key={`product-${product._id}`}
         product={product}
         picturesLoading={picturesLoading}
