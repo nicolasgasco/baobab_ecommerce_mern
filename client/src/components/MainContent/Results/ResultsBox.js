@@ -2,7 +2,6 @@ import React from "react";
 import NothingFound from "./NothingFound";
 import PageCounter from "./PageCounter";
 import ProductCard from "./ProductCard";
-import SectionLoading from "../SectionLoading";
 import SimpleDropdown from "../../UI/SimpleDropdown";
 import LoadingOverlay from "../../UI/LoadingOverlay";
 
