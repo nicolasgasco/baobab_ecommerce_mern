@@ -11,6 +11,7 @@ import PasswordChange from "../Profile/PasswordChange";
 import ShoppingCart from "../Cart/ShoppingCart";
 import CheckoutForm from "../Cart/CheckoutForm";
 import BoxWrapper from "../UI/BoxWrapper";
+import CartTable from "../Cart/CartTable";
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -60,7 +61,7 @@ const MainContent = () => {
 
   const { checkLogin } = useContext(AuthContext);
 
-  let history = useHistory();
+  const history = useHistory();
 
   // Fetching the products by keywords
   const getSearchbarInput = useCallback(
@@ -173,6 +174,14 @@ const MainContent = () => {
     checkLogin();
   }, []);
 
+  // Used for route protection
+  const redirectIfNotLoggedIn = () => {
+    if (!localStorage.getItem("token")) {
+      history.push("/");
+      history.go(0);
+    }
+  };
+
   // Conditional rendering
   const location = useLocation();
   let resultsContent;
@@ -194,9 +203,11 @@ const MainContent = () => {
       resultsContent = <AuthContent />;
       break;
     case "/profile":
+      redirectIfNotLoggedIn();
       resultsContent = <ProfilePage />;
       break;
     case "/password":
+      redirectIfNotLoggedIn();
       resultsContent = <PasswordChange />;
       break;
     case "/cart":
@@ -206,7 +217,13 @@ const MainContent = () => {
       resultsContent = <HeroMain />;
       break;
     case "/checkout":
+      redirectIfNotLoggedIn();
       resultsContent = <CheckoutForm />;
+      break;
+    case "/success":
+      redirectIfNotLoggedIn();
+      console.log("JOdeeeer");
+      resultsContent = <CartTable />;
       break;
     default:
       break;
