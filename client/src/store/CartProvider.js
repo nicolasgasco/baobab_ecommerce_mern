@@ -7,6 +7,7 @@ const CartProvider = (props) => {
   const [totalPrice, setTotalPrice] = useState(0);
   // It starts empty and then fetched
   const [items, setItems] = useState([]);
+  const [lastOrder, setLastOrder] = useState({});
 
   const fetchCartFromDB = async () => {
     // Fetching from DB if user is logged
@@ -180,14 +181,56 @@ const CartProvider = (props) => {
     setItems([]);
   };
 
+  const saveOrder = async (id, items) => {
+    try {
+      const fetchResponse = await fetch(`/api/order/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ items: items }),
+      });
+      const order = await fetchResponse.json();
+      deleteUserCart(id);
+      setLastOrder(order.result);
+      console.log("Order saved");
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const deleteUserCart = async (id) => {
+    console.log("Deleting user cart")
+    try {
+      const fetchResponse = await fetch(`/api/cart/whole/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const deletedCart = await fetchResponse.json();
+      if (deletedCart.deletedCount) {
+        console.log("Cart deleted");
+        deleteCartLocal();
+      } else {
+        throw new Error("It wasn't possible to delete the cart");
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   const cartContext = {
     items,
     totalPrice,
+    lastOrder,
     addItemToCart,
     removeItemFromCart,
     updateItemQuantity,
     deleteCartLocal,
     fetchCartFromDB,
+    saveOrder,
+    deleteUserCart,
   };
 
   return (

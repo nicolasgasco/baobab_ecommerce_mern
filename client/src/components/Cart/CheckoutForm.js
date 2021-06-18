@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
+import jwt_decode from "jwt-decode";
+
 import styles from "./PaymentForm.module.css";
 import { CreditCardIcon } from "@heroicons/react/outline";
 
@@ -8,7 +10,7 @@ import CartContext from "../../store/cart-context";
 import { useHistory } from "react-router";
 
 export default function CheckoutForm() {
-  const { items } = useContext(CartContext);
+  const { items, saveOrder } = useContext(CartContext);
 
   const history = useHistory();
 
@@ -31,8 +33,6 @@ export default function CheckoutForm() {
         body: JSON.stringify({ items }),
       })
       .then((res) => {
-        console.log("Merdaaaa,", res);
-
         return res.json();
       })
       .then((data) => {
@@ -84,6 +84,8 @@ export default function CheckoutForm() {
       setProcessing(false);
     } else {
       console.log("payment processed");
+      const userId = jwt_decode(localStorage.getItem("token"))._id;
+      saveOrder(userId, items);
       setError(null);
       setProcessing(false);
       setSucceeded(true);

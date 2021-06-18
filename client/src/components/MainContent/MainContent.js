@@ -11,7 +11,7 @@ import PasswordChange from "../Profile/PasswordChange";
 import ShoppingCart from "../Cart/ShoppingCart";
 import CheckoutForm from "../Cart/CheckoutForm";
 import BoxWrapper from "../UI/BoxWrapper";
-import CartTable from "../Cart/CartTable";
+import OrderSent from "../Cart/OrderSent";
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -222,8 +222,7 @@ const MainContent = () => {
       break;
     case "/success":
       redirectIfNotLoggedIn();
-      console.log("JOdeeeer");
-      resultsContent = <CartTable />;
+      resultsContent = <OrderSent />;
       break;
     default:
       break;
