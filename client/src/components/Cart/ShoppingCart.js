@@ -1,27 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router";
-import { TrashIcon } from "@heroicons/react/outline";
 
 import CartContext from "../../store/cart-context";
-import LoadingOverlay from "../UI/LoadingOverlay";
 import NothingFound from "../../components/MainContent/Results/NothingFound";
 
 import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
+import CartTable from "./CartTable";
 
 const ShoppingCart = () => {
-  const history = useHistory();
+  const { items, totalPrice } = useContext(CartContext);
 
-  const {
-    items,
-    totalPrice,
-    operationsDone,
-    removeItemFromCart,
-    updateItemQuantity,
-  } = useContext(CartContext);
-  const [cartItems, setCartItems] = useState([]);
-
-  const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
@@ -34,7 +22,6 @@ const ShoppingCart = () => {
           const res = await fetch(`/api/users/${id}`);
           const user = await res.json();
           if (user.resultsFound) {
-            console.log(user.result, "cazzo");
             setUserData(user.result);
           } else {
             throw new Error();
@@ -47,28 +34,23 @@ const ShoppingCart = () => {
     fetchUserData();
   }, []);
 
-  useEffect(() => {
-    if (items.length !== 0) {
-      console.log(items);
-      setCartItems(items);
-    }
-  }, [items]);
+  // useEffect(() => {
+  //   if (items.length !== 0) {
+  //     setCartItems(items);
+  //   }
+  // }, [items]);
 
-  const removeItem = (id) => {
-    setIsLoading(true);
-    removeItemFromCart(id);
-    // Otherwise not working for last item
-    if (cartItems.length === 1) setCartItems([]);
-  };
+  // const removeItem = (id) => {
+  //   setIsLoading(true);
+  //   removeItemFromCart(id);
+  //   // Otherwise not working for last item
+  //   if (cartItems.length === 1) setCartItems([]);
+  // };
 
-  useEffect(() => {
-    if (isLoading) setIsLoading(false);
-    // It works better without adding isLoading as dependency
-  }, [items]);
-
-  const changeItemQuantity = (event) => {
-    updateItemQuantity(event.target.id, event.target.value);
-  };
+  // useEffect(() => {
+  //   if (isLoading) setIsLoading(false);
+  //   // It works better without adding isLoading as dependency
+  // }, [items]);
 
   let showShippingInfo;
   if (userData.address) {
@@ -114,87 +96,13 @@ const ShoppingCart = () => {
     );
   }
 
-  const showCartItems = cartItems.map((item) => {
-    console.log(item, "item");
-    return (
-      <tr id={`cart-item-${item._id}`}>
-        <td className="hidden pb-4 md:table-cell">
-          <img
-            src={item.pictures[0].url}
-            className="w-20 h-20 object-contain rounded-full ring-2 ring-green-500"
-            alt={item.pictures[0].alt}
-          />
-        </td>
-        <td>
-          <p className="mb-2 md:ml-4 ">{`${item.completeName.brand} ${item.completeName.productName}, ${item.completeName.color}, ${item.completeName.productGender}`}</p>
-          <div className="cursor-pointer">
-            <span className="sr-only">Remove item</span>
-            <TrashIcon
-              id={`cart-item-${item._id}`}
-              onClick={() => {
-                removeItem(item._id);
-              }}
-              className="h-6 w-6 ml-4 mt-1"
-              aria-hidden="true"
-            />
-          </div>
-        </td>
-        <td className="justify-center md:justify-end md:flex md:mt-4">
-          <div className="w-20 h-10">
-            <div className="relative flex flex-row w-16 h-8 mt-1">
-              <input
-                id={item._id}
-                type="number"
-                defaultValue={item.quantity}
-                min={1}
-                max={9}
-                onChange={changeItemQuantity}
-                className="w-full font-semibold text-center text-gray-700 bg-yellow-200 rounded-md outline-none focus:outline-none hover:text-black focus:text-black"
-              />
-            </div>
-          </div>
-        </td>
-        <td className="hidden text-right md:table-cell">
-          <span className="text-sm lg:text-base font-medium">{`${item.pricingInfo.price} €`}</span>
-        </td>
-        <td className="text-right">
-          <span className="text-sm lg:text-base font-medium">{`${(
-            item.pricingInfo.price * item.quantity
-          ).toFixed(2)} €`}</span>
-        </td>
-      </tr>
-    );
-  });
-
   return (
     <>
-      {isLoading && <LoadingOverlay />}
-      <div className="outline-black lg:px-6 mx-0 md:mx-6">
+      <div className="lg:px-6 mx-0 md:mx-6">
         {items.length === 0 && <NothingFound />}
         {items.length !== 0 && (
           <>
-            {" "}
-            <table
-              className="w-full outline-black  text-sm lg:text-base"
-              cellSpacing={0}
-            >
-              <thead className="outline-black">
-                <tr className="h-12 uppercase text-center">
-                  <th className="hidden md:table-cell outline-black" />
-                  <th className="outline-black">Product</th>
-                  <th className="pl-5 lg:pl-0 outline-black">
-                    <span className="lg:hidden" title="Quantity">
-                      Qtd
-                    </span>
-                    <span className="hidden lg:inline">Quantity</span>
-                  </th>
-                  <th className="hidden md:table-cell outline-black">Unit</th>
-                  <th className="outline-black">Total</th>
-                </tr>
-              </thead>
-              <tbody>{showCartItems}</tbody>
-            </table>
-            <hr className="pb-6 mt-6" />
+            <CartTable />
             <div className="my-4 mt-6 -mx-2">
               <div className="lg:px-2">
                 <div className="p-4 w-11/12 md:w-full mx-auto bg-yellow-200 rounded-full">
@@ -251,3 +159,80 @@ const ShoppingCart = () => {
 };
 
 export default ShoppingCart;
+
+// const showCartItems = cartItems.map((item) => {
+//   return (
+//     <tr id={`cart-item-${item._id}`}>
+//       <td className="hidden pb-4 md:table-cell">
+//         <img
+//           src={item.pictures[0].url}
+//           className="w-20 h-20 object-contain rounded-full ring-2 ring-green-500"
+//           alt={item.pictures[0].alt}
+//         />
+//       </td>
+//       <td>
+//         <p className="mb-2 md:ml-4 ">{`${item.completeName.brand} ${item.completeName.productName}, ${item.completeName.color}, ${item.completeName.productGender}`}</p>
+//         <div className="cursor-pointer">
+//           <span className="sr-only">Remove item</span>
+//           <TrashIcon
+//             id={`cart-item-${item._id}`}
+//             onClick={() => {
+//               removeItem(item._id);
+//             }}
+//             className="h-6 w-6 ml-4 mt-1"
+//             aria-hidden="true"
+//           />
+//         </div>
+//       </td>
+//       <td className="justify-center md:justify-end md:flex md:mt-4">
+//         <div className="w-20 h-10">
+//           <div className="relative flex flex-row w-16 h-8 mt-1">
+//             <input
+//               id={item._id}
+//               type="number"
+//               defaultValue={item.quantity}
+//               min={1}
+//               max={9}
+//               onChange={changeItemQuantity}
+//               className="w-full font-semibold text-center text-gray-700 bg-yellow-200 rounded-md outline-none focus:outline-none hover:text-black focus:text-black"
+//             />
+//           </div>
+//         </div>
+//       </td>
+//       <td className="hidden text-right md:table-cell">
+//         <span className="text-sm lg:text-base font-medium">{`${item.pricingInfo.price} €`}</span>
+//       </td>
+//       <td className="text-right">
+//         <span className="text-sm lg:text-base font-medium">{`${(
+//           item.pricingInfo.price * item.quantity
+//         ).toFixed(2)} €`}</span>
+//       </td>
+//     </tr>
+//   );
+// });
+
+{
+  /* <table
+              className="w-full outline-black  text-sm lg:text-base"
+              cellSpacing={0}
+            >
+              <thead className="outline-black">
+                <tr className="h-12 uppercase text-center">
+                  <th className="hidden md:table-cell outline-black" />
+                  <th className="outline-black">Product</th>
+                  <th className="pl-5 lg:pl-0 outline-black">
+                    <span className="lg:hidden" title="Quantity">
+                      Qtd
+                    </span>
+                    <span className="hidden lg:inline">Quantity</span>
+                  </th>
+                  <th className="hidden md:table-cell outline-black">Unit</th>
+                  <th className="outline-black">Total</th>
+                </tr>
+              </thead>
+              <tbody>{showCartItems}</tbody>
+            </table> */
+}
+{
+  /* <hr className="pb-6 mt-6" /> */
+}
