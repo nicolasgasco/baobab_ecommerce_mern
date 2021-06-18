@@ -4,6 +4,7 @@ import CartContext from "./cart-context";
 import ModalContext from "./modal-context";
 
 import jwt_decode from "jwt-decode";
+import { useHistory } from "react-router";
 
 const AuthProvider = (props) => {
   const [token, setToken] = useState("");
@@ -15,6 +16,8 @@ const AuthProvider = (props) => {
   const { handleModalText } = useContext(ModalContext);
 
   const { deleteCartLocal, fetchCartFromDB } = useContext(CartContext);
+
+  const history = useHistory();
 
   const loginUser = (userData) => {
     console.log(userData);
@@ -161,6 +164,8 @@ const AuthProvider = (props) => {
         userName = "";
         // Empty local cart
         deleteCartLocal();
+        history.push("/");
+        history.go(0);
       })
       .catch((error) => {
         console.log("An error ocurred: " + error.message);
