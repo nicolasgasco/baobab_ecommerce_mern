@@ -6,51 +6,36 @@ import NothingFound from "../../components/MainContent/Results/NothingFound";
 import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
 import CartTable from "./CartTable";
+import useHttp from "../../hooks/use-http";
 
 const ShoppingCart = () => {
   const { items, totalPrice } = useContext(CartContext);
 
   const [userData, setUserData] = useState({});
 
+  const { sendRequest: fetchUser } = useHttp();
+
   useEffect(() => {
     const fetchUserData = async () => {
       // Fetching userData from database
       if (localStorage.getItem("token")) {
-        try {
-          const { _id: id } = jwt_decode(localStorage.getItem("token"));
-          // Get user and see if there's already an address
-          const res = await fetch(`/api/users/${id}`);
-          const user = await res.json();
+        const handleUserFound = (user) => {
           if (user.resultsFound) {
             setUserData(user.result);
           } else {
-            throw new Error();
+            throw new Error("User not found");
           }
-        } catch (err) {
-          console.log(err.message);
-        }
+        };
+
+        const { _id: id } = jwt_decode(
+          localStorage.getItem("token"),
+          handleUserFound
+        );
+        fetchUser({ url: `/api/users/${id}` }, handleUserFound);
       }
     };
     fetchUserData();
-  }, []);
-
-  // useEffect(() => {
-  //   if (items.length !== 0) {
-  //     setCartItems(items);
-  //   }
-  // }, [items]);
-
-  // const removeItem = (id) => {
-  //   setIsLoading(true);
-  //   removeItemFromCart(id);
-  //   // Otherwise not working for last item
-  //   if (cartItems.length === 1) setCartItems([]);
-  // };
-
-  // useEffect(() => {
-  //   if (isLoading) setIsLoading(false);
-  //   // It works better without adding isLoading as dependency
-  // }, [items]);
+  }, [fetchUser]);
 
   let showShippingInfo;
   if (userData.address) {
@@ -159,75 +144,3 @@ const ShoppingCart = () => {
 };
 
 export default ShoppingCart;
-
-// const showCartItems = cartItems.map((item) => {
-//   return (
-//     <tr id={`cart-item-${item._id}`}>
-//       <td className="hidden pb-4 md:table-cell">
-//         <img
-//           src={item.pictures[0].url}
-//           className="w-20 h-20 object-contain rounded-full ring-2 ring-green-500"
-//           alt={item.pictures[0].alt}
-//         />
-//       </td>
-//       <td>
-//         <p className="mb-2 md:ml-4 ">{`${item.completeName.brand} ${item.completeName.productName}, ${item.completeName.color}, ${item.completeName.productGender}`}</p>
-//         <div className="cursor-pointer">
-//           <span className="sr-only">Remove item</span>
-//           <TrashIcon
-//             id={`cart-item-${item._id}`}
-//             onClick={() => {
-//               removeItem(item._id);
-//             }}
-//             className="h-6 w-6 ml-4 mt-1"
-//             aria-hidden="true"
-//           />
-//         </div>
-//       </td>
-//       <td className="justify-center md:justify-end md:flex md:mt-4">
-//         <div className="w-20 h-10">
-//           <div className="relative flex flex-row w-16 h-8 mt-1">
-//             <input
-//               id={item._id}
-//               type="number"
-//               defaultValue={item.quantity}
-//               min={1}
-//               max={9}
-//               onChange={changeItemQuantity}
-//               className="w-full font-semibold text-center text-gray-700 bg-yellow-200 rounded-md outline-none focus:outline-none hover:text-black focus:text-black"
-//             />
-//           </div>
-//         </div>
-//       </td>
-//       <td className="hidden text-right md:table-cell">
-//         <span className="text-sm lg:text-base font-medium">{`${item.pricingInfo.price} €`}</span>
-//       </td>
-//       <td className="text-right">
-//         <span className="text-sm lg:text-base font-medium">{`${(
-//           item.pricingInfo.price * item.quantity
-//         ).toFixed(2)} €`}</span>
-//       </td>
-//     </tr>
-//   );
-// })
-/* <table
-              className="w-full outline-black  text-sm lg:text-base"
-              cellSpacing={0}
-            >
-              <thead className="outline-black">
-                <tr className="h-12 uppercase text-center">
-                  <th className="hidden md:table-cell outline-black" />
-                  <th className="outline-black">Product</th>
-                  <th className="pl-5 lg:pl-0 outline-black">
-                    <span className="lg:hidden" title="Quantity">
-                      Qtd
-                    </span>
-                    <span className="hidden lg:inline">Quantity</span>
-                  </th>
-                  <th className="hidden md:table-cell outline-black">Unit</th>
-                  <th className="outline-black">Total</th>
-                </tr>
-              </thead>
-              <tbody>{showCartItems}</tbody>
-            </table> */
-/* <hr className="pb-6 mt-6" /> */

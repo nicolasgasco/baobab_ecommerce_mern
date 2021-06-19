@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import AuthContext from "./auth-context";
 import CartContext from "./cart-context";
 import ModalContext from "./modal-context";
@@ -172,7 +172,7 @@ const AuthProvider = (props) => {
       });
   };
 
-  const checkLogin = () => {
+  const checkLogin = useCallback(() => {
     console.log("check");
     fetch("/api/check")
       .then((res) => {
@@ -195,7 +195,7 @@ const AuthProvider = (props) => {
       .catch((error) => {
         console.log("An error ocurred: " + error.message);
       });
-  };
+  }, []);
 
   const handleOpenLogin = () => {
     setOpenLogin(true);

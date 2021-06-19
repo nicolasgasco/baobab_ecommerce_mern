@@ -56,6 +56,7 @@ const resultsReducer = (state, action) => {
 };
 
 const MainContent = () => {
+  // Reducer for handling form
   const [resultsState, dispatchResults] = useReducer(
     resultsReducer,
     defaultResultsState
@@ -64,6 +65,8 @@ const MainContent = () => {
   const { checkLogin } = useContext(AuthContext);
 
   const history = useHistory();
+
+  const { sendRequest: fetchProducts } = useHttp();
 
   // Fetching the products by keywords
   const getSearchbarInput = useCallback(
@@ -80,53 +83,60 @@ const MainContent = () => {
 
       console.log("Fetching products...");
 
-      fetch(
-        `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}`,
+      // Function with logic for when products are fetched
+      const handleFetchedProducts = (res) => {
+        if (res.results.length === 0) {
+          dispatchResults({ type: "IS_EMPTY", val: true });
+          dispatchResults({ type: "PICTURES_LOADING", val: false });
+          dispatchResults({ type: "CONTENT_LOADING", val: false });
+        } else {
+          dispatchResults({ type: "FETCHED_PRODUCTS", val: res.results });
+          dispatchResults({
+            type: "PAGINATION_DATA",
+            val: {
+              productsFound: res.productsFound,
+              pageNumber: res.pageNumber,
+              pageSize: res.pageSize,
+              totalProducts: res.totalProducts,
+              totalPages: res.totalPages,
+            },
+          });
+          dispatchResults({ type: "PICTURES_LOADING", val: false });
+          setTimeout(() => {
+            dispatchResults({ type: "CONTENT_LOADING", val: false });
+          }, 1000);
+          dispatchResults({ type: "IS_EMPTY", val: false });
+        }
+      };
+
+      // Function with logic for when an error occurs
+      const handleError = () => {
+        dispatchResults({ type: "IS_EMPTY", val: true });
+        dispatchResults({ type: "PICTURES_LOADING", val: false });
+        dispatchResults({ type: "CONTENT_LOADING", val: false });
+      };
+
+      fetchProducts(
         {
+          url: `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}`,
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
+          body: {
             keywords: input,
-            // keywords: input || resultsState.searchKeywords,
-          }),
-        }
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.results.length === 0) {
-            dispatchResults({ type: "IS_EMPTY", val: true });
-            dispatchResults({ type: "PICTURES_LOADING", val: false });
-            dispatchResults({ type: "CONTENT_LOADING", val: false });
-          } else {
-            dispatchResults({ type: "FETCHED_PRODUCTS", val: res.results });
-            dispatchResults({
-              type: "PAGINATION_DATA",
-              val: {
-                productsFound: res.productsFound,
-                pageNumber: res.pageNumber,
-                pageSize: res.pageSize,
-                totalProducts: res.totalProducts,
-                totalPages: res.totalPages,
-              },
-            });
-            dispatchResults({ type: "PICTURES_LOADING", val: false });
-            setTimeout(() => {
-              dispatchResults({ type: "CONTENT_LOADING", val: false });
-              console.log("ciao");
-            }, 1000);
-            dispatchResults({ type: "IS_EMPTY", val: false });
-          }
-        })
-        .catch((error) => {
-          dispatchResults({ type: "IS_EMPTY", val: true });
-          dispatchResults({ type: "PICTURES_LOADING", val: false });
-          dispatchResults({ type: "CONTENT_LOADING", val: false });
-          console.log("An error ocurred:" + error.message);
-        });
+          },
+        },
+        handleFetchedProducts,
+        handleError
+      );
     },
-    [resultsState.activePage, resultsState.resultsPerPage, history]
+    [
+      resultsState.activePage,
+      resultsState.resultsPerPage,
+      history,
+      fetchProducts,
+    ]
   );
 
   const handleActivePage = useCallback(
@@ -166,15 +176,17 @@ const MainContent = () => {
 
   // Redirecting if there are no results on load (e.g. when manually realoding)
   useEffect(() => {
+    console.log("No products fetched");
     if (resultsState.fetchedProducts.length === 0) {
       history.push("/");
     }
+    // This only works without dependencies
   }, []);
 
-  // Check if user is still loggedin
+  // Check if user is still logged in
   useEffect(() => {
     checkLogin();
-  }, []);
+  }, [checkLogin]);
 
   // Used for route protection
   const redirectIfNotLoggedIn = () => {
