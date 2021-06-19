@@ -13,6 +13,8 @@ import CheckoutForm from "../Cart/CheckoutForm";
 import BoxWrapper from "../UI/BoxWrapper";
 import OrderSent from "../Cart/OrderSent";
 
+import useHttp from "../../hooks/use-http";
+
 const defaultResultsState = {
   showResultsBox: false,
   contentLoading: false,

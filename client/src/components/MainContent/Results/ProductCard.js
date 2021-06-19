@@ -1,27 +1,29 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Spinner from "../../../assets/img/Spinner-5.gif";
 import LoadingOverlay from "../../UI/LoadingOverlay";
 
 import CartContext from "../../../store/cart-context";
+import useHttp from "../../../hooks/use-http";
 
 const ProductCard = ({ product, picturesLoading }) => {
   const [departmentName, setDepartmentName] = useState("Loading...");
 
   const { addItemToCart } = useContext(CartContext);
 
+  // Animation used for cart icon
   const [pingAnimation, setPingAnimation] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
+  // Custom hook per HTTP requests
+  const { isLoading, setIsLoading, sendRequest: fetchDepartments } = useHttp();
+
+  // Fetch departments when rendering product card
   useEffect(() => {
-    fetch("api/departments")
-      .then((res) => res.json())
-      .then((res) => {
-        setDepartmentName(res.results[0].translations.en_us);
-      })
-      .catch((error) => {
-        console.log("En error ocurred: " + error);
-      });
-  }, []);
+    const modifyFetchedDepartments = (res) => {
+      setDepartmentName(res.results[0].translations.en_us);
+    };
+    fetchDepartments({ url: "api/departments" }, modifyFetchedDepartments);
+    // Works better without dependencies
+  }, [fetchDepartments]);
 
   const handleAddToCart = (id) => {
     console.log("loading");
