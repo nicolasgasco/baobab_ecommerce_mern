@@ -3,14 +3,16 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 import jwt_decode from "jwt-decode";
 
-import styles from "./PaymentForm.module.css";
+import styles from "./CheckoutForm.module.css";
 import { CreditCardIcon } from "@heroicons/react/outline";
 
 import CartContext from "../../store/cart-context";
 import { useHistory } from "react-router";
 
+import useHttp from "../../hooks/use-http";
+
 export default function CheckoutForm() {
-  const { items, saveOrder } = useContext(CartContext);
+  const { items, saveOrder, userAddress } = useContext(CartContext);
 
   const history = useHistory();
 
@@ -22,27 +24,30 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
+  const { sendRequest: paymentIntent } = useHttp();
+
   useEffect(() => {
+    const handlePaymentIntent = (data) => {
+      setClientSecret(data.clientSecret);
+    };
+
+    const handleError = () => {
+      setProcessing(false);
+    };
     // Create PaymentIntent as soon as the page loads
-    window
-      .fetch("/api/order/payment", {
+    paymentIntent(
+      {
+        url: "/api/order/payment",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ items }),
-      })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setClientSecret(data.clientSecret);
-      })
-      .catch((err) => {
-        console.log("Error: " + err.message);
-        setProcessing(false);
-      });
-  }, [items]);
+        body: { items },
+      },
+      handlePaymentIntent,
+      handleError
+    );
+  }, [items, paymentIntent]);
 
   const cardStyle = {
     style: {
@@ -85,7 +90,7 @@ export default function CheckoutForm() {
     } else {
       console.log("payment processed");
       const userId = jwt_decode(localStorage.getItem("token"))._id;
-      saveOrder(userId, items);
+      saveOrder(userId, items, userAddress);
       setError(null);
       setProcessing(false);
       setSucceeded(true);
