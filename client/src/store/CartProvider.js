@@ -8,6 +8,7 @@ const CartProvider = (props) => {
   // It starts empty and then fetched
   const [items, setItems] = useState([]);
   const [lastOrder, setLastOrder] = useState({});
+  const [userAddress, setUserAddress] = useState({});
 
   const fetchCartFromDB = async () => {
     // Fetching from DB if user is logged
@@ -188,7 +189,7 @@ const CartProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ items: items }),
+        body: JSON.stringify({ items, userAddress }),
       });
       const order = await fetchResponse.json();
       deleteUserCart(id);
@@ -200,7 +201,7 @@ const CartProvider = (props) => {
   };
 
   const deleteUserCart = async (id) => {
-    console.log("Deleting user cart")
+    console.log("Deleting user cart");
     try {
       const fetchResponse = await fetch(`/api/cart/whole/${id}`, {
         method: "DELETE",
@@ -224,6 +225,8 @@ const CartProvider = (props) => {
     items,
     totalPrice,
     lastOrder,
+    userAddress,
+    setUserAddress,
     addItemToCart,
     removeItemFromCart,
     updateItemQuantity,
