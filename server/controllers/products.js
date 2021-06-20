@@ -61,7 +61,15 @@ const postProductsByKeywords = async (req, res) => {
     pageNumber = 1;
   }
 
+  // Query param for sorting, by which and in which order
+  let sortBy = req.query.sortBy;
+  const order = req.query.order;
+
+  // You can add a - in front of key for descending order
+  sortBy = order === "-1" ? "-" + sortBy : sortBy;
+
   const products = await Product.find({ completeNameDesc: keywordsRegex })
+    .sort(sortBy)
     .skip((pageNumber - 1) * pageSize)
     .limit(+pageSize);
 
