@@ -22,14 +22,10 @@ const orderSchema = new mongoose.Schema(
       index: false,
       required: [true, "User id is required"],
     },
-    // name: {
-    //   type: String,
-    //   lowercase: true,
-    //   unique: false,
-    //   // Without this field being unique, Mongoose doesn't work for whatever reason
-    //   type: String,
-    //   default: uuidv4,
-    // },
+    userAddress: {
+      type: Object,
+      required: [true, "User address is required"],
+    },
     items: [
       {
         type: Object,
