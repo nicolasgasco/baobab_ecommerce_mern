@@ -39,7 +39,7 @@ const CartTable = () => {
         <td className="hidden md:table-cell text-sm whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">
           <img
             src={item.pictures[0].url}
-            className="w-16 h-16 mx-auto object-contain rounded-full ring-2 ring-green-500"
+            className="w-16 h-16 mx-auto object-cover rounded-full ring-2 ring-green-500"
             alt={item.pictures[0].alt}
           />
         </td>
