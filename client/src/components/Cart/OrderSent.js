@@ -6,28 +6,36 @@ import LoadingOverlay from "../UI/LoadingOverlay";
 
 import jwt_decode from "jwt-decode";
 
+import useHttp from "../../hooks/use-http";
+
 const OrderSent = () => {
   const { lastOrder } = useContext(CartContext);
+  const { sendRequest: fetchLastOrder } = useHttp();
+
   const [order, setOrder] = useState(() => {
-    const fetchLastOrder = async () => {
-      console.log("fetching last order");
-      const userToken = jwt_decode(localStorage.getItem("token"));
-      try {
-        const res = await fetch(`api/order/${userToken._id}`);
-        const result = await res.json();
-        if (result) {
-          setOrder(result.result);
-        }
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
     if (lastOrder && Object.keys(lastOrder).length > 0) {
       setOrder(lastOrder);
     } else {
-      fetchLastOrder();
+      const handleFetchedOrder = (result) => {
+        setOrder(result.result);
+      };
+      const userToken = jwt_decode(localStorage.getItem("token"));
+
+      fetchLastOrder(
+        { url: `api/order/latest/${userToken._id}` },
+        handleFetchedOrder
+      );
     }
   });
+
+  const formatDate = (dateObj) => {
+    const date = dateObj.getDate();
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Since getMonth() returns month from 0-11 not 1-12
+    const year = dateObj.getFullYear();
+
+    const dateStr = date + "/" + month + "/" + year;
+    return dateStr;
+  };
 
   return (
     <>
@@ -55,6 +63,10 @@ const OrderSent = () => {
           <div className="mt-6">
             <h3 className="font-bold text-2xl">{"Order overview:"}</h3>
             <OrderOverview items={order.items} />
+            <h4>
+              <span className="font-bold">Estimated arrival date: </span>
+              {`${formatDate(new Date())} - ${formatDate(new Date())}.`}
+            </h4>
           </div>
         </div>
       )}
