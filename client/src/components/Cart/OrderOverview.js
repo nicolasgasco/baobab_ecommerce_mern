@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
-const CartTable = ({ items }) => {
-  const showCartItems = items.map((item) => {
+const OrderOverview = ({ items, classes }) => {
+  const showCartItems = items.map((item, index) => {
     return (
-      <tr className="h-24 border-gray-300 dark:border-gray-200 border-b">
+      <tr className={`h-24 border-gray-300 dark:border-gray-200 border-b `}>
         <td className="hidden md:table-cell text-sm whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">
           <img
             src={item.pictures[0].url}
@@ -38,8 +38,8 @@ const CartTable = ({ items }) => {
 
   return (
     <>
-      <div className="w-full">
-        <table className="min-w-full overflow-x-auto ">
+      <div className={`w-full ${classes}`}>
+        <table className="min-w-full overflow-x-auto">
           <thead>
             <tr className="w-full h-16 border-gray-300 dark:border-gray-200 border-b py-8">
               <th className="w-2/12 hidden md:table-cell text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4"></th>
@@ -63,4 +63,4 @@ const CartTable = ({ items }) => {
     </>
   );
 };
-export default CartTable;
+export default OrderOverview;
