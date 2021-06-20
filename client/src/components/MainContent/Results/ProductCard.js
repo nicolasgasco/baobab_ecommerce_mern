@@ -5,7 +5,7 @@ import LoadingOverlay from "../../UI/LoadingOverlay";
 import CartContext from "../../../store/cart-context";
 import useHttp from "../../../hooks/use-http";
 
-const ProductCard = ({ product, picturesLoading }) => {
+const ProductCard = ({ product, picturesLoading, classes, short }) => {
   const [departmentName, setDepartmentName] = useState("Loading...");
 
   const { addItemToCart } = useContext(CartContext);
@@ -56,8 +56,11 @@ const ProductCard = ({ product, picturesLoading }) => {
     <>
       {isLoading && <LoadingOverlay />}
       <div
-        id={`product-${product._id}`}
-        className="pb-10 md:px-4 sm:w-1/2 xl:w-1/3 px-2"
+        key={`product-${product._id}`}
+        className={`${
+          classes ? classes : "pb-10 md:px-4 sm:w-1/2 xl:w-1/3 px-2"
+        }
+        `}
       >
         <div className="h-full">
           <div className="bg-white p-0 rounded-lg shadow-md">
@@ -87,38 +90,43 @@ const ProductCard = ({ product, picturesLoading }) => {
                 }
                 <p className="inline text-2xl"> €</p>
               </div>
-              <div className="mt-4">
-                <span className="text-teal-600 text-md font-semibold">
-                  FROM:
-                </span>
-                <span className="text-sm text-gray-600">
-                  {` ${product.ecoInfo.originCountryCode}`}
-                </span>
-              </div>
-              <div className="mt-1">
-                <span className="text-teal-600 text-md font-semibold uppercase">
-                  Made in:
-                </span>
-                <span className="text-sm text-gray-600">
-                  {` ${product.ecoInfo.productionCountryCode}`}
-                </span>
-              </div>
-              <div className="mt-4">
-                <span className="text-teal-600 text-md font-semibold uppercase">
-                  Social:
-                </span>
-                <span className="text-sm text-gray-600">
-                  {` ${product.ecoInfo.socialMission}`}
-                </span>
-              </div>
-              <div className="mt-1">
-                <span className="text-teal-600 text-md font-semibold uppercase">
-                  Environment:
-                </span>
-                <span className="text-sm text-gray-600">
-                  {` ${product.ecoInfo.environmentMission}`}
-                </span>
-              </div>
+              {!short && (
+                <>
+                  <div className="mt-4">
+                    <span className="text-teal-600 text-md font-semibold">
+                      FROM:
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      {` ${product.ecoInfo.originCountryCode}`}
+                    </span>
+                  </div>
+                  <div className="mt-1">
+                    <span className="text-teal-600 text-md font-semibold uppercase">
+                      Made in:
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      {` ${product.ecoInfo.productionCountryCode}`}
+                    </span>
+                  </div>
+                  <div className="mt-4">
+                    <span className="text-teal-600 text-md font-semibold uppercase">
+                      Social:
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      {` ${product.ecoInfo.socialMission}`}
+                    </span>
+                  </div>
+                  <div className="mt-1">
+                    <span className="text-teal-600 text-md font-semibold uppercase">
+                      Environment:
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      {` ${product.ecoInfo.environmentMission}`}
+                    </span>
+                  </div>
+                </>
+              )}
+
               <div className="w-full flex justify-center">
                 <button
                   onClick={() => {
