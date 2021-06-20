@@ -7,7 +7,23 @@ const getAllProducts = async (req, res) => {
   const pageSize = req.query.pageSize;
 
   // Populating department name from another table, with name and without id
+  const totalProducts = await Product.find().countDocuments();
+
+  // Failsafe in case page is trying to get a page that doesn't exist
+  if (+pageSize > totalProducts) {
+    pageNumber = 1;
+  }
+
+  // Query param for sorting, by which and in which order
+  let sortBy = req.query.sortBy;
+  const order = req.query.order;
+
+  // You can add a - in front of key for descending order
+  sortBy = order === "-1" ? "-" + sortBy : sortBy;
+
+  // Populating department name from another table, with name and without id
   const products = await Product.find()
+    .sort(sortBy)
     .populate("department", "name -_id")
     .skip((pageNumber - 1) * pageSize)
     .limit(+pageSize);
@@ -20,6 +36,8 @@ const getAllProducts = async (req, res) => {
     resultsFound: products.length,
     pageNumber,
     pageSize,
+    order: order === "1" || order === "-1" ? order : undefined,
+    sortBy,
     results: products,
   });
 };
@@ -54,7 +72,7 @@ const postProductsByKeywords = async (req, res) => {
   // Populating department name from another table, with name and without id
   const totalProducts = await Product.find({
     completeNameDesc: keywordsRegex,
-  }).count();
+  }).countDocuments();
 
   // Failsafe in case page is trying to get a page that doesn't exist
   if (+pageSize > totalProducts) {
@@ -80,6 +98,8 @@ const postProductsByKeywords = async (req, res) => {
     totalProducts,
     totalPages: Math.ceil(totalProducts / pageSize),
     keywords: req.body.keywords.split("|"),
+    sortBy,
+    order: order === "1" || order === "-1" ? order : undefined,
     results: products,
   });
 };
