@@ -9,7 +9,7 @@ import CartTable from "./CartTable";
 import useHttp from "../../hooks/use-http";
 
 const ShoppingCart = () => {
-  const { items, totalPrice } = useContext(CartContext);
+  const { items, totalPrice, setUserAddress } = useContext(CartContext);
 
   const [userData, setUserData] = useState({});
 
@@ -39,6 +39,7 @@ const ShoppingCart = () => {
 
   let showShippingInfo;
   if (userData.address) {
+    setUserAddress(userData.address);
     showShippingInfo = (
       <div>
         <p classList="font-bold">{`${userData.name} ${userData.surname}`}</p>
