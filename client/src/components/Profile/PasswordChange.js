@@ -7,13 +7,17 @@ import LoadingOverlay from "../UI/LoadingOverlay";
 
 import jwt_decode from "jwt-decode";
 
+import useHttp from "../../hooks/use-http";
+
 const PasswordChange = () => {
   const { checkPassword } = useContext(AuthContext);
   const { handleModalText } = useContext(ModalContext);
 
   const history = useHistory();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const { sendRequest: patchPassword, isLoading, setIsLoading } = useHttp();
+
+  // const [isLoading, setIsLoading] = useState(false);
 
   const { _id: id, email } = jwt_decode(localStorage.getItem("token"));
 
@@ -74,22 +78,7 @@ const PasswordChange = () => {
       setErrorMessages(["The two passwords don't match"]);
     } else {
       setIsLoading(true);
-      console.log(id);
-      // const res = await fetch(`api/users/${id}`);
-      // const oldUser = await res.json();
-
-      // // Updating password
-      // const updatedUser = { ...oldUser.result, password: confirmPassword };
-
-      const put = await fetch(`/api/users/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password: confirmPassword }),
-      });
-      try {
-        const result = await put.json();
+      const handlePatchedUser = (result) => {
         if (result.error) {
           setIsLoading(false);
           setErrorMessages(
@@ -101,13 +90,24 @@ const PasswordChange = () => {
               })
           );
         }
+        console.log("Patching passowrd");
         if (result.updatedCount === 1) {
           setIsLoading(false);
           handleModalText("Password changed!");
         }
-      } catch (error) {
-        console.log(error);
-      }
+      };
+
+      patchPassword(
+        {
+          url: `/api/users/${id}`,
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: { password: confirmPassword },
+        },
+        handlePatchedUser
+      );
     }
   };
 
