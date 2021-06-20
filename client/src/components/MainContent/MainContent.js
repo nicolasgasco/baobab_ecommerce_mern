@@ -1,18 +1,24 @@
 import { useEffect, useReducer, useCallback, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+
+// Components
 import ResultsBox from "./Results/ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
 import HeroMain from "./HeroMain";
-import AuthContent from "./Auth/AuthContent";
-
-import AuthContext from "../../store/auth-context";
+import ProductsSectionCard from "./ProductsSection/ProductsSectionCard";
 import ProfilePage from "../Profile/ProfilePage";
 import PasswordChange from "../Profile/PasswordChange";
 import ShoppingCart from "../Cart/ShoppingCart";
 import CheckoutForm from "../Cart/CheckoutForm";
 import BoxWrapper from "../UI/BoxWrapper";
 import OrderSent from "../Cart/OrderSent";
+import AuthContent from "./Auth/AuthContent";
+import Orders from "../Cart/Orders";
 
+// Auth context for authentication
+import AuthContext from "../../store/auth-context";
+
+// Custom hook for querying APIK
 import useHttp from "../../hooks/use-http";
 
 const defaultResultsState = {
@@ -197,11 +203,12 @@ const MainContent = () => {
   };
 
   // Conditional rendering
+  // Squared brackets because I'm using map later
   const location = useLocation();
   let resultsContent;
   switch (location.pathname) {
     case "/search":
-      resultsContent = (
+      resultsContent = [
         <ResultsBox
           fetchedProducts={resultsState.fetchedProducts}
           paginationData={resultsState.paginationData}
@@ -210,33 +217,37 @@ const MainContent = () => {
           contentLoading={resultsState.contentLoading}
           picturesLoading={resultsState.picturesLoading}
           isEmpty={resultsState.isEmpty}
-        />
-      );
+        />,
+      ];
       break;
     case "/signin":
-      resultsContent = <AuthContent />;
+      resultsContent = [<AuthContent />];
       break;
     case "/profile":
       redirectIfNotLoggedIn();
-      resultsContent = <ProfilePage />;
+      resultsContent = [<ProfilePage />];
       break;
     case "/password":
       redirectIfNotLoggedIn();
-      resultsContent = <PasswordChange />;
+      resultsContent = [<PasswordChange />];
       break;
     case "/cart":
-      resultsContent = <ShoppingCart />;
-      break;
-    case "/":
-      resultsContent = <HeroMain />;
+      resultsContent = [<ShoppingCart />];
       break;
     case "/checkout":
       redirectIfNotLoggedIn();
-      resultsContent = <CheckoutForm />;
+      resultsContent = [<CheckoutForm />];
       break;
     case "/success":
       redirectIfNotLoggedIn();
-      resultsContent = <OrderSent />;
+      resultsContent = [<OrderSent />];
+      break;
+    case "/orders":
+      redirectIfNotLoggedIn();
+      resultsContent = [<Orders />];
+      break;
+    case "/":
+      resultsContent = [<HeroMain />, <ProductsSectionCard />];
       break;
     default:
       break;
@@ -249,7 +260,9 @@ const MainContent = () => {
         handleActivePage={handleActivePage}
         activePage={resultsState.activePage}
       />
-      <BoxWrapper>{resultsContent}</BoxWrapper>
+      {resultsContent.map((component) => {
+        return <BoxWrapper>{component}</BoxWrapper>;
+      })}
     </>
   );
 };
