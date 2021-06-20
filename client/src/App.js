@@ -30,6 +30,7 @@ function App() {
               <MainContent />
             </div>
           </Route>
+          
           <Route exact path="/search">
             <div className="min-h-screen">
               <MainContent />
@@ -63,6 +64,12 @@ function App() {
           </Route>
 
           <Route exact path="/success">
+            <div className="min-h-screen">
+              <MainContent />
+            </div>
+          </Route>
+
+          <Route exact path="/orders">
             <div className="min-h-screen">
               <MainContent />
             </div>
