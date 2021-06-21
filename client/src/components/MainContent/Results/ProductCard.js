@@ -51,7 +51,7 @@ const ProductCard = ({ product, picturesLoading, classes, short }) => {
       />
     );
   }
-  
+
   return (
     <>
       {isLoading && <LoadingOverlay />}

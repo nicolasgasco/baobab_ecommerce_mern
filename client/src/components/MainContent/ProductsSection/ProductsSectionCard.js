@@ -31,7 +31,7 @@ const ProductsSectionCard = () => {
           <ProductCard
             short={true}
             classes={
-              "w-full py-4 lg:py-0 lg:w-1/3 px-2 flex flex-col items-center"
+              "mx-auto max-w-md w-full md:w-1/2 xl:w-1/3 py-4 lg:py-0  px-2 flex flex-col justify-center"
             }
             product={product}
           />
@@ -46,9 +46,9 @@ const ProductsSectionCard = () => {
       <h2 className="-mt-4 mb-8 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl text-center">
         Our latest arrivals
       </h2>
-      <div className="container flex items-center">
+      <div className="flex items-center">
         <div className="w-full">
-          <div className="flex flex-col md:flex-row mx-auto">{showCards}</div>
+          <div className="flex flex-col md:flex-row">{showCards}</div>
         </div>
       </div>
     </div>

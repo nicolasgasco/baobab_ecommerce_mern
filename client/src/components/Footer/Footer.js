@@ -4,7 +4,7 @@ import classes from "./Footer.module.scss";
 const IndexPage = () => {
   return (
     <>
-      <div className="bg-gray-200 bg-opacity-60 pb-6 p-0 footer-background border-gray-200 border-t-8">
+      <div className="bg-gray-200 bg-opacity-60 pb-6 p-0 mt-8 footer-background border-gray-200 border-t-8">
         <div className="mx-auto container pt-20 lg:pt-30 flex flex-col items-center justify-center">
           <img
             src={BaobabLogo}
@@ -125,7 +125,7 @@ const IndexPage = () => {
             </div>
             <div>
               <a
-                href={"https://github.com/nicolasgasco"}
+                href={"https://www.linkedin.com/in/nicolasgasco/"}
                 target={"_blank"}
                 rel="noreferrer"
               >
