@@ -33,6 +33,7 @@ const defaultResultsState = {
   fetchedProducts: [],
   showAuth: false,
   departmentFilter: { name: "all" },
+  sortingFilter: "",
 };
 
 const resultsReducer = (state, action) => {
@@ -59,6 +60,8 @@ const resultsReducer = (state, action) => {
       return { ...state, showAuth: !state };
     case "DEPARTMENT_FILTER":
       return { ...state, departmentFilter: action.val };
+    case "SORTING_FILTER":
+      return { ...state, sortingFilter: action.val };
     default:
       return defaultResultsState;
   }
@@ -129,7 +132,11 @@ const MainContent = () => {
         {
           url: `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}${
             resultsState.departmentFilter.name !== "all"
-              ? `&department=${resultsState.departmentFilter._id}`
+              ? `&department=${resultsState.departmentFilter._id || ""}`
+              : ""
+          }${
+            resultsState.sortingFilter
+              ? `&sortBy=${resultsState.sortingFilter}`
               : ""
           }`,
           method: "POST",
@@ -150,6 +157,7 @@ const MainContent = () => {
       history,
       fetchProducts,
       resultsState.departmentFilter,
+      resultsState.sortingFilter,
     ]
   );
 
@@ -181,6 +189,12 @@ const MainContent = () => {
     if (value.name) {
       dispatchResults({ type: "DEPARTMENT_FILTER", val: value });
     }
+  }, []);
+
+  const handleSortingFilter = useCallback((value) => {
+    console.log("VALUEEE", value);
+    dispatchResults({ type: "SORTING_FILTER", val: value });
+    dispatchResults({ type: "SEARCH_KEYWORDS", val: "" });
   }, []);
 
   useEffect(() => {
@@ -231,6 +245,7 @@ const MainContent = () => {
           contentLoading={resultsState.contentLoading}
           picturesLoading={resultsState.picturesLoading}
           isEmpty={resultsState.isEmpty}
+          handleSortingFilter={handleSortingFilter}
         />,
       ];
       break;

@@ -64,7 +64,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
         }
         `}
       >
-        <div className="shadow-lg rounded-3xl">
+        <div className="shadow-lg rounded-3xl z-0">
           <div
             className="flex items-center rounded-t-3xl justify-between bg-white px-2
            py-4"

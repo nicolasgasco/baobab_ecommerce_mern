@@ -1,10 +1,10 @@
 import React from "react";
 import NothingFound from "./NothingFound";
 import PageCounter from "./PageCounter";
-import ProductCard from "./ProductCard";
 import SimpleDropdown from "../../UI/SimpleDropdown";
 import LoadingOverlay from "../../UI/LoadingOverlay";
 import ProductCardSlideshow from "./ProductCardSlideshow";
+import SectionedDropdown from "../../UI/SectionedDropdown";
 
 const ResultsBox = ({
   fetchedProducts,
@@ -14,6 +14,7 @@ const ResultsBox = ({
   handleResultsPerPage,
   paginationData,
   handlePageChange,
+  handleSortingFilter,
 }) => {
   const showProducts = fetchedProducts.map((product) => {
     return (
@@ -34,6 +35,10 @@ const ResultsBox = ({
       ) : (
         <>
           {contentLoading && <LoadingOverlay />}
+          <div className="flex justify-end align-center items-baseline mr-4 mb-4">
+            <span className="sr-only">Sort by:</span>
+            <SectionedDropdown handleSortingFilter={handleSortingFilter} />
+          </div>
           <div className="flex flex-wrap justify-center">{showProducts}</div>
           <div className="flex-column justify-center">
             <PageCounter
