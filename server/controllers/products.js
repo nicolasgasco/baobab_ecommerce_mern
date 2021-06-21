@@ -1,3 +1,4 @@
+const { ObjectID } = require("mongodb");
 const productSchemaJoi = require("../joi/products");
 
 const { Product } = require("../models/products");
@@ -5,6 +6,8 @@ const { Product } = require("../models/products");
 const getAllProducts = async (req, res) => {
   const pageNumber = req.query.pageNum;
   const pageSize = req.query.pageSize;
+
+  const department = req.query.department;
 
   // Populating department name from another table, with name and without id
   const totalProducts = await Product.find().countDocuments();
@@ -21,12 +24,24 @@ const getAllProducts = async (req, res) => {
   // You can add a - in front of key for descending order
   sortBy = order === "-1" ? "-" + sortBy : sortBy;
 
-  // Populating department name from another table, with name and without id
-  const products = await Product.find()
-    .sort(sortBy)
-    .populate("department", "name -_id")
-    .skip((pageNumber - 1) * pageSize)
-    .limit(+pageSize);
+  let products;
+  if (department) {
+    // Populating department name from another table, with name and without id
+    products = await Product.find({
+      department: new ObjectID(department),
+    })
+      .sort(sortBy)
+      .populate("department", "name _id")
+      .skip((pageNumber - 1) * pageSize)
+      .limit(+pageSize);
+  } else {
+    // Populating department name from another table, with name and without id
+    products = await Product.find()
+      .sort(sortBy)
+      .populate("department", "name _id")
+      .skip((pageNumber - 1) * pageSize)
+      .limit(+pageSize);
+  }
 
   if (products.length === 0) {
     return res.status(404).send({ error: "No results found" });
@@ -63,16 +78,26 @@ const getProductById = async (req, res) => {
 };
 
 const postProductsByKeywords = async (req, res) => {
-  if (!req.body.keywords) res.status(400).send({ error: "Keywords not valid" });
+  // I will actually use an empty string as signal for "search all"
+  // if (!req.body.keywords) res.status(400).send({ error: "Keywords not valid" });
   const keywordsRegex = new RegExp(req.body.keywords, "i");
 
   let pageNumber = req.query.pageNum;
   const pageSize = req.query.pageSize;
+  const department = req.query.department;
 
   // Populating department name from another table, with name and without id
-  const totalProducts = await Product.find({
-    completeNameDesc: keywordsRegex,
-  }).countDocuments();
+  let totalProducts;
+  if (department) {
+    const totalProducts = await Product.find({
+      completeNameDesc: keywordsRegex,
+      department: new ObjectID(department),
+    }).countDocuments();
+  } else {
+    const totalProducts = await Product.find({
+      completeNameDesc: keywordsRegex,
+    }).countDocuments();
+  }
 
   // Failsafe in case page is trying to get a page that doesn't exist
   if (+pageSize > totalProducts) {
@@ -85,11 +110,24 @@ const postProductsByKeywords = async (req, res) => {
 
   // You can add a - in front of key for descending order
   sortBy = order === "-1" ? "-" + sortBy : sortBy;
-
-  const products = await Product.find({ completeNameDesc: keywordsRegex })
-    .sort(sortBy)
-    .skip((pageNumber - 1) * pageSize)
-    .limit(+pageSize);
+  // Filtering per department only if provided
+  let products;
+  if (department) {
+    products = await Product.find({
+      completeNameDesc: keywordsRegex,
+      department: new ObjectID(department),
+    })
+      .sort(sortBy)
+      .skip((pageNumber - 1) * pageSize)
+      .limit(+pageSize);
+  } else {
+    products = await Product.find({
+      completeNameDesc: keywordsRegex,
+    })
+      .sort(sortBy)
+      .skip((pageNumber - 1) * pageSize)
+      .limit(+pageSize);
+  }
 
   res.status(200).send({
     productsFound: products.length,

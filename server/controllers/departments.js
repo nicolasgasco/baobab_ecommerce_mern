@@ -29,6 +29,7 @@ const getLocalizedDepartments = async (req, res) => {
   // Database request
   const departments = await Department.find()
     .sort(`translations.${language}`)
+    .sort("name")
     .select(filter);
 
   if (departments.length === 0) {
@@ -57,7 +58,6 @@ const getDepartmentById = async (req, res) => {
 };
 
 const postNewDepartment = async (req, res) => {
-
   // Creating new mongoose department with body
   const department = new Department(req.body);
 

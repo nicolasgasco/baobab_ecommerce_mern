@@ -135,26 +135,33 @@ const productSchema = new mongoose.Schema(
     creationDate: { type: Date, default: Date.now },
     modificationDate: Date,
     department: {
-      type: mongoose.Schema.Types.ObjectId,
-      trim: true,
-      lowercase: true,
-      required: [true, "Department is required"],
-      ref: "Department",
-      validate: {
-        // Calling API to see if country code exists
-        validator: async function (value) {
-          try {
-            const department = await Department.findById(value);
-            if (!department) {
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        trim: true,
+        lowercase: true,
+        required: false,
+        ref: "Department",
+        validate: {
+          // Calling API to see if country code exists
+          validator: async function (value) {
+            try {
+              const department = await Department.findById(value);
+              if (!department) {
+                return false;
+              }
+              return true;
+            } catch (err) {
+              console.log("Error: " + err.message);
               return false;
             }
-            return true;
-          } catch (err) {
-            console.log("Error: " + err.message);
-            return false;
-          }
+          },
+          message: "Insert a valid ID",
         },
-        message: "Insert a valid ID",
+      },
+      name: {
+        type: String,
+        trim: true,
+        required: false,
       },
     },
     pricingInfo: {

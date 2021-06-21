@@ -20,9 +20,10 @@ module.exports = (req, res, next) => {
     if (keywordsList.length === 0) return res.status(400).send({ error: "Invalid keywords" });
 
     req.body.keywords = keywordsList.join("|");
-  } else {
-    return res.status(400).send({ error: "Invalid keywords" });
   }
+  // else {
+  //   return res.status(400).send({ error: "Invalid keywords" });
+  // }
 
   next();
 };
