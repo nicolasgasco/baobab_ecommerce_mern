@@ -37,6 +37,7 @@ const CartProvider = (props) => {
   }, []);
 
   const addItemToCart = async (item) => {
+    console.log("Adding item to cart");
     // Adding quantity propierty to item
     item.quantity = 1;
     // If user is logged
@@ -78,7 +79,6 @@ const CartProvider = (props) => {
         ) {
           allLocalItems.push(item);
         }
-        console.log(allLocalItems);
         localStorage.setItem("cart", JSON.stringify(allLocalItems));
       } else {
         localStorage.setItem("cart", JSON.stringify([item]));

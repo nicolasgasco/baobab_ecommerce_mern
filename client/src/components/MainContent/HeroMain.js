@@ -34,7 +34,7 @@ const features = [
 
 export default function Example() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <>
       <div className="lg:text-center">
         <h2 className="text-base text-green-600 font-bold tracking-wide uppercase">
           Green, convenient, sustainable
@@ -44,7 +44,6 @@ export default function Example() {
         </h1>
         <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto"></p>
       </div>
-
       <div className="mt-10">
         <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
           {features.map((feature) => (
@@ -64,6 +63,6 @@ export default function Example() {
           ))}
         </dl>
       </div>
-    </div>
+    </>
   );
 }

@@ -51,7 +51,7 @@ const ProductCard = ({ product, picturesLoading, classes, short }) => {
       />
     );
   }
-
+  
   return (
     <>
       {isLoading && <LoadingOverlay />}
@@ -66,14 +66,14 @@ const ProductCard = ({ product, picturesLoading, classes, short }) => {
           <div className="bg-white p-0 rounded-lg shadow-md">
             {showPictureOrLoader}
           </div>
-          <div className="relative px-4 -mt-6">
+          <div className="relative px-1 -mt-6">
             <div className="bg-yellow-200 p-4 rounded-lg shadow-xl">
               <div className="flex items-baseline">
                 <span className="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
                   {departmentName}
                 </span>
               </div>
-              <h3 className="mt-2 text-xl leading-tight">
+              <h3 className="mt-2 text-xl font-semibold leading-tight mb-2">
                 {`${product.completeName.brand} ${product.completeName.productName}, ${product.completeName.shortDesc}, ${product.completeName.productDesc1}, ${product.completeName.productDesc2}, ${product.completeName.productDesc3}, ${product.completeName.color}`}
               </h3>
               <div className="mt-2 text-3xl">

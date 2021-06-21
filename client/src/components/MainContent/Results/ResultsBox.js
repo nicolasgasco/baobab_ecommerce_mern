@@ -4,6 +4,7 @@ import PageCounter from "./PageCounter";
 import ProductCard from "./ProductCard";
 import SimpleDropdown from "../../UI/SimpleDropdown";
 import LoadingOverlay from "../../UI/LoadingOverlay";
+import ProductCardSlideshow from "./ProductCardSlideshow";
 
 const ResultsBox = ({
   fetchedProducts,
@@ -16,7 +17,7 @@ const ResultsBox = ({
 }) => {
   const showProducts = fetchedProducts.map((product) => {
     return (
-      <ProductCard
+      <ProductCardSlideshow
         key={`product-${product._id}`}
         product={product}
         picturesLoading={picturesLoading}

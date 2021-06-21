@@ -59,7 +59,6 @@ const MainNav = () => {
 
   const handleLogo = () => {
     history.push("/");
-    history.go(0);
   };
 
   useEffect(() => {

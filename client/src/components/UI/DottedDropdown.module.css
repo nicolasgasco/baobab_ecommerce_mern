@@ -1,0 +1,8 @@
+.active-item::after {
+  content: " ✓";
+  font-size: 120%;
+}
+
+.active-item {
+  background-color: #a7f3d0;
+}

@@ -32,6 +32,7 @@ const defaultResultsState = {
   resultsPerPage: 6,
   fetchedProducts: [],
   showAuth: false,
+  departmentFilter: { name: "all" },
 };
 
 const resultsReducer = (state, action) => {
@@ -56,6 +57,8 @@ const resultsReducer = (state, action) => {
       return { ...state, fetchedProducts: action.val };
     case "SHOW_AUTH":
       return { ...state, showAuth: !state };
+    case "DEPARTMENT_FILTER":
+      return { ...state, departmentFilter: action.val };
     default:
       return defaultResultsState;
   }
@@ -124,7 +127,11 @@ const MainContent = () => {
 
       fetchProducts(
         {
-          url: `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}`,
+          url: `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}${
+            resultsState.departmentFilter.name !== "all"
+              ? `&department=${resultsState.departmentFilter._id}`
+              : null
+          }`,
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -142,6 +149,7 @@ const MainContent = () => {
       resultsState.resultsPerPage,
       history,
       fetchProducts,
+      resultsState.departmentFilter,
     ]
   );
 
@@ -168,6 +176,12 @@ const MainContent = () => {
     },
     [resultsState.activePage]
   );
+
+  const handleDepartmentFilter = useCallback((value) => {
+    if (value.name) {
+      dispatchResults({ type: "DEPARTMENT_FILTER", val: value });
+    }
+  }, []);
 
   useEffect(() => {
     if (resultsState.searchKeywords !== "") {
@@ -256,6 +270,8 @@ const MainContent = () => {
   return (
     <>
       <StoreSearchbar
+        handleDepartmentFilter={handleDepartmentFilter}
+        departmentFilter={resultsState.departmentFilter}
         onGetSearchbarInput={getSearchbarInput}
         handleActivePage={handleActivePage}
         activePage={resultsState.activePage}
