@@ -25,6 +25,7 @@ const CartTable = () => {
   const removeItem = (id) => {
     setIsLoading(true);
     removeItemFromCart(id);
+    console.log(cartItems);
     // Otherwise not working for last item
     if (cartItems.length === 1) setCartItems([]);
   };

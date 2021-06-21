@@ -139,6 +139,7 @@ const CartProvider = (props) => {
           }),
         });
         const data = await fetchResponse.json();
+        console.log(data);
         if (data.deletedCount === 1) {
           console.log("item deleted");
           // Deleted

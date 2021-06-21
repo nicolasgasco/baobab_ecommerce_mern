@@ -130,7 +130,7 @@ const MainContent = () => {
           url: `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}${
             resultsState.departmentFilter.name !== "all"
               ? `&department=${resultsState.departmentFilter._id}`
-              : null
+              : ""
           }`,
           method: "POST",
           headers: {

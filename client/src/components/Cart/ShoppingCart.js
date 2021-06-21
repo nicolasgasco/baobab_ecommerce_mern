@@ -111,12 +111,12 @@ const ShoppingCart = () => {
                   </div>
                   <div>
                     <Link
-                      to={"/checkout"}
+                      to={userData.address ? "/checkout" : "/cart"}
                       className={`${
                         userData.address
-                          ? "bg-green-600 hover:bg-green-700"
-                          : "bg-gray-400"
-                      }           flex justify-center w-10/12 mx-auto px-10 py-3 mt-6 font-medium text-white uppercase bg-green-600 rounded-md shadow item-center hover:bg-green-700 focus:shadow-outline focus:outline-none`}
+                          ? "bg-green-600  hover:bg-green-700"
+                          : "bg-gray-400 cursor-default"
+                      } flex justify-center w-10/12 mx-auto px-10 py-3 mt-6 font-medium text-white uppercasrounded-md shadow item-center  focus:shadow-outline focus:outline-none`}
                     >
                       <svg
                         aria-hidden="true"
