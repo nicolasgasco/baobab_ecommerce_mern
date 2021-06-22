@@ -200,15 +200,34 @@ const addStarRating = async (req, res) => {
   if (!productToUpdate) {
     res.status(404).send({ error: "Product not found" });
   }
-  const newRating = Math.round((productToUpdate.starRating + starRating) / 2);
+  let newRating;
+  let newRatingHistory;
+  if (productToUpdate.ratingInfo.ratingHistory) {
+    newRatingHistory = [
+      ...productToUpdate.ratingInfo.ratingHistory,
+      starRating,
+    ];
+
+    const sumOfHistory = newRatingHistory.reduce((newValue, currentValue) => {
+      return (newValue += currentValue);
+    }, 0);
+    newRating = Math.round(sumOfHistory / newRatingHistory.length);
+  } else {
+    newRatingHistory = [starRating];
+  }
+
   const updatedProduct = await Product.updateOne(
     { productId },
-    { starRating: newRating }
+    {
+      $set: {
+        ratingInfo: { starRating: newRating, ratingHistory: newRatingHistory },
+      },
+    }
   );
   if (!updatedProduct.nModified) {
-    res.status(400).send({ error: "Product wasn't updated" });
+    return res.status(400).send({ error: "Product wasn't updated" });
   }
-  res.send({ nModified: 1, result: updatedProduct });
+  return res.send({ nModified: 1, result: updatedProduct });
 };
 
 exports.getAllProducts = getAllProducts;
