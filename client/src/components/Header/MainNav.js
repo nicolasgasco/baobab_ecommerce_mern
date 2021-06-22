@@ -17,22 +17,46 @@ import CartContext from "../../store/cart-context";
 import jwt_decode from "jwt-decode";
 
 const MainNav = () => {
+  // This came with the component
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
+
   const history = useHistory();
 
-  // User related
-  const { logoutUser, handleOpenLogin, isLogged, token } =
-    useContext(AuthContext);
+  // User related states
+  const { logoutUser, handleOpenLogin } = useContext(AuthContext);
+  // Used for greeting user on main nav
   const [userGreeting, setUserGreeting] = useState("");
   const navigation = [userGreeting];
+  // Profile menu items
   const profile = ["Your profile", "Your orders", "Change password", "Sign in"];
+  // User for user data in mobile view
+  const [userDataFromToken, setUserDataFromToken] = useState({});
+
+  // Fetching user data from token
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setUserDataFromToken(jwt_decode(localStorage.getItem("token")));
+    }
+  }, []);
+
+  // Setting user greeting
+  useEffect(() => {
+    if (userDataFromToken.name) {
+      setUserGreeting(`Hi, ${capitalizeWord(userDataFromToken.name)}!`);
+    } else {
+      setUserGreeting("Hi, stranger!");
+    }
+  }, [userDataFromToken]);
 
   // Cart related
   const { items } = useContext(CartContext);
-  // I'm not using this any more
-  // const cart = ["See cart"];
   const [itemsNum, setItemsNum] = useState(items ? items.length : 0);
+  // Bouncing animation for when adding new items
   const [bounceAnimation, setBounceAnimation] = useState("");
 
+  // Setting the bounce animation and taking it away after half a second
   useEffect(() => {
     setItemsNum(items ? items.length : 0);
     setBounceAnimation("animate-bounce");
@@ -41,42 +65,26 @@ const MainNav = () => {
     }, 500);
   }, [items]);
 
-  // This came with the component
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
-
   const handleSignin = () => {
-    if (!localStorage.getItem("token")) {
-      history.push("/signin");
-      handleOpenLogin();
-    } else {
-      logoutUser();
-      history.go(0);
-      setUserGreeting("");
-    }
+    history.push("/signin");
+    handleOpenLogin();
   };
 
+  const handleLogout = () => {
+    logoutUser();
+    history.go(0);
+    setUserGreeting("");
+  };
+
+  // When clicking on nav main log
   const handleLogo = () => {
     history.push("/");
   };
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      setUserGreeting(
-        `Hi, ${
-          jwt_decode(localStorage.getItem("token"))
-            .name.charAt(0)
-            .toUpperCase() +
-          jwt_decode(localStorage.getItem("token")).name.substring(1)
-        }!`
-      );
-    } else {
-      setUserGreeting("");
-    }
-  }, [isLogged, userGreeting, token]);
+  // Utility function for when showing name
+  const capitalizeWord = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 
-  // Second element is for signing in
+  // All menu items for desktop view
   const showProfileItems = profile.map((item, index) => {
     // Sign in
     if (item === "Sign in") {
@@ -85,7 +93,9 @@ const MainNav = () => {
           {({ active }) => (
             <Link
               id={`profile-item-${index + 1}`}
-              onClick={handleSignin}
+              onClick={
+                localStorage.getItem("token") ? handleLogout : handleSignin
+              }
               className={classNames(
                 active ? "bg-gray-100" : "",
                 `block px-4 py-2 text-sm text-gray-700 cursor-pointer ${
@@ -161,28 +171,73 @@ const MainNav = () => {
     return null;
   });
 
-  // Showing counter only if there are items in cart
-  let showItemCounterMobile;
-  if (itemsNum > 0) {
-    showItemCounterMobile = (
-      <div
-        className={`relative mt-8 -ml-2 -mr-2 px-2 ${bounceAnimation} bg-yellow-500 rounded-full text-sm text-white font-bold`}
-      >
-        {itemsNum}
-      </div>
-    );
-  }
-
-  let showItemCounterDesktop;
-  if (itemsNum > 0) {
-    showItemCounterDesktop = (
-      <div
-        className={`absolute top-0 right-0 mt-7 -mr-3 px-2 ${bounceAnimation} bg-yellow-500 rounded-full text-sm text-white font-bold`}
-      >
-        {itemsNum}
-      </div>
-    );
-  }
+  // All menu items for mobile view
+  const showProfileItemsMobile = profile.map((item, index) => {
+    // Sign in
+    if (item === "Sign in") {
+      return (
+        <Disclosure.Button
+          key={`profile-item-${index + 1}`}
+          id={`profile-item-${index + 1}`}
+          className={classNames(
+            `w-full text-left hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700 cursor-pointer bg-yellow-200 rounded-md`
+          )}
+        >
+          <Link
+            to={localStorage.getItem("token") ? "/" : "/signin"}
+            onClick={
+              localStorage.getItem("token") ? handleLogout : handleSignin
+            }
+          >
+            {localStorage.getItem("token") ? "Log out" : item}
+          </Link>
+        </Disclosure.Button>
+      );
+      // Your profile
+    } else if (item === "Your profile") {
+      return (
+        localStorage.getItem("token") && (
+          <Disclosure.Button
+            id={`profile-item-${index + 1}`}
+            className={classNames(
+              "hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+            )}
+          >
+            <Link to="/profile">{item}</Link>
+          </Disclosure.Button>
+        )
+      );
+    } else if (item === "Change password") {
+      return (
+        localStorage.getItem("token") && (
+          <Disclosure.Button
+            id={`profile-item-${index + 1}`}
+            className={classNames(
+              "hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+            )}
+          >
+            <Link to="/password">{item}</Link>
+          </Disclosure.Button>
+        )
+      );
+    } else if (item === "Your orders") {
+      return (
+        localStorage.getItem("token") && (
+          <Disclosure.Button
+            to="/orders"
+            id={`profile-item-${index + 1}`}
+            className={classNames(
+              "hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+            )}
+          >
+            <Link to="/orders">{item}</Link>
+          </Disclosure.Button>
+        )
+      );
+    }
+    // This is to silence warning
+    return null;
+  });
 
   // This is not used at the moment
 
@@ -259,7 +314,11 @@ const MainNav = () => {
                               className="h-6 w-6"
                               aria-hidden="true"
                             />
-                            {showItemCounterDesktop}
+                            <div
+                              className={`absolute top-0 right-0 mt-7 -mr-3 px-2 ${bounceAnimation} bg-yellow-500 rounded-full text-sm text-white font-bold`}
+                            >
+                              {itemsNum > 0 && itemsNum}
+                            </div>
                           </Menu.Button>
                         </div>
                         {/* <Transition
@@ -337,17 +396,19 @@ const MainNav = () => {
             </div>
           </header>
 
+          {/* Mobile version */}
           <Disclosure.Panel className="md:hidden bg-white mb-5">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {/* Navigation only has one element at the moment */}
               {navigation.map((item, itemIdx) =>
                 itemIdx === 0 ? (
                   <Fragment key={item}>
-                    {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                    <div className="bg-green-900 text-white block px-3 py-2 rounded-md text-base font-medium">
+                    <div className="bg-green-800 text-white block px-3 py-2 rounded-md text-base font-medium">
                       {item}
                     </div>
                   </Fragment>
                 ) : (
+                  // This is not used at the moment
                   <p
                     key={item}
                     className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
@@ -359,33 +420,45 @@ const MainNav = () => {
             </div>
             <div className="pt-4 pb-3 border-t border-gray-700">
               <div className="flex items-center px-5">
-                <div className="flex-shrink-0 bg-gray-600 p-1 rounded-full text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                  <UserIcon className="h-6 w-6" aria-hidden="true" />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium leading-none text-gray-800">
-                    Tom Cook
-                  </div>
-                  <div className="text-sm font-medium leading-none text-gray-400">
-                    tom@example.com
-                  </div>
-                </div>
-                <Link className="ml-auto bg-gray-600 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                {userDataFromToken.name && (
+                  <>
+                    <div className="flex-shrink-0 bg-gray-600 p-1 rounded-full text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                      <UserIcon className="h-6 w-6" aria-hidden="true" />
+                    </div>
+                    {/* Box with name and e-mail */}
+                    <div className="ml-3">
+                      <div className="text-base font-medium leading-none text-gray-800">
+                        {`${capitalizeWord(
+                          userDataFromToken.name
+                        )} ${capitalizeWord(userDataFromToken.surname)}`}
+                      </div>
+                      <div className="text-sm font-medium leading-none text-gray-400">
+                        {userDataFromToken && userDataFromToken.email}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <Disclosure.Button className="ml-auto bg-gray-600 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                   <span className="sr-only">View shopping cart</span>
-                  <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-                </Link>
-                {showItemCounterMobile}
+                  <ShoppingCartIcon
+                    onClick={() => {
+                      if (items.length > 0) {
+                        history.push("/cart");
+                      }
+                    }}
+                    className="h-6 w-6"
+                    aria-hidden="true"
+                  />
+                </Disclosure.Button>
+                <div
+                  className={`relative mt-8 -ml-2 -mr-2 px-2 ${bounceAnimation} bg-yellow-500 rounded-full text-sm text-white font-bold`}
+                >
+                  {itemsNum > 0 && itemsNum}
+                </div>
               </div>
-              <div className="mt-3 px-2 space-y-1">
-                {profile.map((item) => (
-                  <Link
-                    key={item}
-                    href="#"
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
-                  >
-                    {item}
-                  </Link>
-                ))}
+              <div className="mt-3 px-2 space-y-1" show={open}>
+                {showProfileItemsMobile}
               </div>
             </div>
           </Disclosure.Panel>
