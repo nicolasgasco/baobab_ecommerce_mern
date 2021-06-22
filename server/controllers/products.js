@@ -119,14 +119,17 @@ const postProductsByKeywords = async (req, res) => {
     })
       .sort(sortBy)
       .skip((pageNumber - 1) * pageSize)
-      .limit(+pageSize);
+      .limit(+pageSize)
+      .populate("department");
   } else {
     products = await Product.find({
       completeNameDesc: keywordsRegex,
     })
+
       .sort(sortBy)
       .skip((pageNumber - 1) * pageSize)
-      .limit(+pageSize);
+      .limit(+pageSize)
+      .populate("department");
   }
 
   res.status(200).send({
