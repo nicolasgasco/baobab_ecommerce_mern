@@ -6,6 +6,7 @@ const productsController = require("../controllers/products");
 // Middleware
 const joiValidationProducts = require("../middleware/joiValidationProducts");
 const validateUuid = require("../middleware/validateUuid");
+const validateObjectId = require("../middleware/validateObjectId");
 const createCompleteName = require("../middleware/createCompleteName");
 const createKeywords = require("../middleware/createKeywords");
 const validateStarRating = require("../middleware/validateStarRating");
@@ -42,7 +43,7 @@ router.delete("/:id", validateUuid, productsController.deleteProductWithId);
 
 router.post(
   "/rating/:id",
-  [validateUuid, validateStarRating],
+  [validateObjectId, validateStarRating],
   productsController.addStarRating
 );
 

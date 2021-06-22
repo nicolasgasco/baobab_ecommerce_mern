@@ -196,7 +196,7 @@ const addStarRating = async (req, res) => {
   const productId = req.params.id;
   const starRating = req.body.rating;
 
-  const productToUpdate = await Product.findOne({ productId });
+  const productToUpdate = await Product.findOne({ _id: productId });
   if (!productToUpdate) {
     res.status(404).send({ error: "Product not found" });
   }
@@ -217,7 +217,7 @@ const addStarRating = async (req, res) => {
   }
 
   const updatedProduct = await Product.updateOne(
-    { productId },
+    { _id: productId },
     {
       $set: {
         ratingInfo: { starRating: newRating, ratingHistory: newRatingHistory },
