@@ -73,7 +73,7 @@ const CartTable = () => {
             />
           </div>
         </td>
-        <td className="pr-4 whitespace-no-wrap">
+        <td className="pr-4 whitespace-no-wrap  hidden md:table-cell">
           <div className="text-center">
             <span className="text-xs lg:text-base font-medium">{`${
               item.pricingInfo.price
@@ -105,7 +105,7 @@ const CartTable = () => {
               <th className="w-1/12  text-center text-gray-600 dark:text-gray-400 font-bold pr-6 text-sm tracking-normal leading-4">
                 Quantity
               </th>
-              <th className="w-1/12  text-center text-gray-600 dark:text-gray-400 font-bold pr-6 text-sm tracking-normal leading-4">
+              <th className="w-1/12   hidden md:table-cell text-center text-gray-600 dark:text-gray-400 font-bold pr-6 text-sm tracking-normal leading-4">
                 Unit
               </th>
               <th className="w-2/12  text-center text-gray-600 dark:text-gray-400 font-bold pr-8 text-sm tracking-normal leading-4">

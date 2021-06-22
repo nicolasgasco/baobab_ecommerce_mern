@@ -10,7 +10,7 @@ const DottedDropdown = ({
 
   useEffect(() => {
     handleDepartmentFilter({ name: "all" });
-  }, []);
+  }, [handleDepartmentFilter]);
 
   const capitalizeWord = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -75,7 +75,7 @@ const DottedDropdown = ({
                 <li
                   key={`all`}
                   onClick={() => handleMenuItem({ name: "all" })}
-                  className={`cursor-pointer text-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 text-sm leading-3 tracking-normal py-3 font-bold hover:bg-gray-100 px-3  ${
+                  className={`cursor-pointer rounded text-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 text-sm leading-3 tracking-normal py-3 font-bold hover:bg-gray-100 px-3  ${
                     departmentFilter.name === "all" && classes["active-item"]
                   }`}
                 >

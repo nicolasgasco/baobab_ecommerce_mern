@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { StarIcon } from "@heroicons/react/outline";
-import RatingSystem from "./RatingSystem";
+import RatingSystem from "../UI/RatingSystem";
 
 // Custom hook for querying APIK
 import useHttp from "../../hooks/use-http";
@@ -11,8 +11,8 @@ const OrderOverview = ({ items, classes }) => {
   const [currentItem, setCurrentItem] = useState("");
   const [ratingValue, setRatingValue] = useState(0);
   const [showSuccessRating, setShowSuccessRating] = useState([]);
-  const [showErrorRating, setShowErrorRating] = useState([]);
-  const [alreadyRatedProducts, setAlreadyRatedProducts] = useState([]);
+  const [setShowErrorRating] = useState([]);
+  const [setAlreadyRatedProducts] = useState([]);
 
   const { sendRequest: updateRating } = useHttp();
 

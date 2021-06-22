@@ -14,7 +14,7 @@ import LoadingOverlay from "../../UI/LoadingOverlay";
 
 import CartContext from "../../../store/cart-context";
 import useHttp from "../../../hooks/use-http";
-import RatingSystem from "../../Cart/RatingSystem";
+import RatingSystem from "../../UI/RatingSystem";
 
 const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   const { addItemToCart } = useContext(CartContext);
@@ -28,7 +28,18 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   }, [product.ratingInfo.starRating]);
 
   // Custom hook per HTTP requests
-  const { isLoading, setIsLoading } = useHttp();
+  const { isLoading, setIsLoading, sendRequest: fetchDepartments } = useHttp();
+  const [departmentName, setDepartmentName] = useState("");
+
+  useEffect(() => {
+    const handleFetchedDepartments = (res) => {
+      setDepartmentName(res.result.name);
+    };
+    fetchDepartments(
+      { url: `api/departments/${product.department}` },
+      handleFetchedDepartments
+    );
+  }, [fetchDepartments, product.department]);
 
   const handleAddToCart = (id) => {
     console.log(id);
@@ -56,7 +67,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
             <img
               src={picture.url}
               alt={picture.alt}
-              className="h-52 object-contain object-center z-0"
+              className="h-52 w-full object-cover object-center z-0"
             />
           </Slide>
         );
@@ -138,7 +149,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
           <div className="border-t p-6 bg-green-200 dark:bg-gray-800 rounded-b-3xl">
             <div className="flex items-baseline">
               <span className="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
-                {product.department.name}
+                {departmentName}
               </span>
             </div>
             <h3 className="mt-2 text-xl font-semibold leading-tight mb-2">
