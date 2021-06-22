@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import MainNav from "./components/Header/MainNav";
 import HeaderBanner from "./components/Header/HeaderBanner";
@@ -9,12 +9,12 @@ import MainContent from "./components/MainContent/MainContent";
 // Stripe related
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-// This key is public, no need to hid it
+import LoadingOverlay from "./components/UI/LoadingOverlay";
+// This key is public, no need to hide it
 const promise = loadStripe(
   "pk_test_51J3L3sID7BWQ1tRhAZSV4MKb1ZUS23HKoXXF3R1zdKj2kbjh03UQqvfFgSVDWakLvATspzNOBELpa7k41w6OYa2C00PDmPXqgR"
 );
-
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Elements stripe={promise}>
@@ -30,7 +30,7 @@ function App() {
               <MainContent />
             </div>
           </Route>
-          
+
           <Route exact path="/search">
             <div className="min-h-screen">
               <MainContent />
@@ -84,6 +84,6 @@ function App() {
       </Elements>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

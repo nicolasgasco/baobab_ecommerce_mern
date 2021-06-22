@@ -1,25 +1,33 @@
-import { useEffect, useReducer, useCallback, useContext } from "react";
+import React, {
+  useEffect,
+  useReducer,
+  useCallback,
+  useContext,
+  Suspense,
+} from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
 // Components
-import ResultsBox from "./Results/ResultsBox";
 import StoreSearchbar from "./StoreSearchbar";
 import HeroMain from "./HeroMain";
-import ProductsSectionCard from "./ProductsSection/ProductsSectionCard";
-import ProfilePage from "../Profile/ProfilePage";
-import PasswordChange from "../Profile/PasswordChange";
-import ShoppingCart from "../Cart/ShoppingCart";
-import CheckoutForm from "../Cart/CheckoutForm";
 import BoxWrapper from "../UI/BoxWrapper";
-import OrderSent from "../Cart/OrderSent";
-import AuthContent from "./Auth/AuthContent";
-import Orders from "../Cart/Orders";
+import ProductsSectionCard from "./ProductsSection/ProductsSectionCard";
+import LoadingOverlay from "../UI/LoadingOverlay";
 
 // Auth context for authentication
 import AuthContext from "../../store/auth-context";
 
 // Custom hook for querying APIK
 import useHttp from "../../hooks/use-http";
+
+const ProfilePage = React.lazy(() => import("../Profile/ProfilePage"));
+const PasswordChange = React.lazy(() => import("../Profile/PasswordChange"));
+const ShoppingCart = React.lazy(() => import("../Cart/ShoppingCart"));
+const CheckoutForm = React.lazy(() => import("../Cart/CheckoutForm"));
+const OrderSent = React.lazy(() => import("../Cart/OrderSent"));
+const AuthContent = React.lazy(() => import("./Auth/AuthContent"));
+const Orders = React.lazy(() => import("../Cart/Orders"));
+const ResultsBox = React.lazy(() => import("./Results/ResultsBox"));
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -292,7 +300,11 @@ const MainContent = () => {
         activePage={resultsState.activePage}
       />
       {resultsContent.map((component) => {
-        return <BoxWrapper>{component}</BoxWrapper>;
+        return (
+          <Suspense fallback={<LoadingOverlay />}>
+            <BoxWrapper>{component}</BoxWrapper>
+          </Suspense>
+        );
       })}
     </>
   );
