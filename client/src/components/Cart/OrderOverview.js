@@ -11,8 +11,8 @@ const OrderOverview = ({ items, classes }) => {
   const [currentItem, setCurrentItem] = useState("");
   const [ratingValue, setRatingValue] = useState(0);
   const [showSuccessRating, setShowSuccessRating] = useState([]);
-  const [setShowErrorRating] = useState([]);
-  const [setAlreadyRatedProducts] = useState([]);
+  const [, setShowErrorRating] = useState([]);
+  const [, setAlreadyRatedProducts] = useState([]);
 
   const { sendRequest: updateRating } = useHttp();
 
