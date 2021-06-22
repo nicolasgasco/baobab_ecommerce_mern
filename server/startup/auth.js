@@ -6,7 +6,10 @@ const joiValidationUsers = require("../middleware/joiValidationUsers");
 const jwt = require("jsonwebtoken");
 const { encryptPassword } = require("../middleware/encryptPassword");
 
+// Need to store session in DB if you want to have more than 1
 const session = require("express-session");
+const MongoDbStore = require("connect-mongo");
+
 const initializePassport = require("./passport-config");
 
 // We'll need it later to generate token
@@ -51,6 +54,9 @@ const passportLogic = (app) => {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
+      store: MongoDbStore.create({
+        mongoUrl: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@sandbox.1ybr6.mongodb.net/bootcamp_final_project?retryWrites=true&w=majority`,
+      }),
     })
   );
 
