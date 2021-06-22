@@ -70,7 +70,8 @@ const OrderOverview = ({ items, classes }) => {
             <span className="sr-only">Rate product</span>
             <StarIcon
               onClick={() => handleRateButton(item._id)}
-              className="h-6 cursor-pointer"
+              fill={`${showRatingSystem ? "#FDE68A" : "#FFFF"}`}
+              className={`h-6 cursor-pointer`}
             />
           </td>
         </tr>
@@ -86,7 +87,6 @@ const OrderOverview = ({ items, classes }) => {
                   "Your rating was saved."
                 ) : (
                   <>
-                    {" "}
                     <RatingSystem getRatingValue={getRatingValue} />
                     <button
                       onClick={handleSubmitRating}
