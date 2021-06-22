@@ -121,6 +121,12 @@ const productSchema = new mongoose.Schema(
     },
     quantity: {
       type: Number,
+      min: [1, "Min rating is 1"],
+      max: [5, "Current max rating is 5"],
+      set: (value) => Math.round(value),
+    },
+    starRating: {
+      type: Number,
       min: [1, "You cannot have negative quantity"],
       max: [9, "Current max quantity is 9"],
       set: (value) => Math.round(value),

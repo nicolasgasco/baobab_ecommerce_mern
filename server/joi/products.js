@@ -40,6 +40,7 @@ const productSchemaJoi = Joi.object({
   creationDate: Joi.date().iso().default("now"),
   modificationDate: Joi.date().iso().less("now"),
   stock: Joi.number().min(0).max(9999),
+  starRating: Joi.number().integer().min(1).max(5).valid(1, 2, 3, 4, 5),
   seller: Joi.string().min(2).max(30).trim(),
   department: Joi.objectId().required(),
   pricingInfo: {
