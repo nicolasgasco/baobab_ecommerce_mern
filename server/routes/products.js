@@ -8,6 +8,7 @@ const joiValidationProducts = require("../middleware/joiValidationProducts");
 const validateUuid = require("../middleware/validateUuid");
 const createCompleteName = require("../middleware/createCompleteName");
 const createKeywords = require("../middleware/createKeywords");
+const validateStarRating = require("../middleware/validateStarRating");
 
 // GET all products
 router.get("/", productsController.getAllProducts);
@@ -38,5 +39,11 @@ router.put(
 
 // DELETE a specific order (with ID)
 router.delete("/:id", validateUuid, productsController.deleteProductWithId);
+
+router.post(
+  "/rating/:id",
+  [validateUuid, validateStarRating],
+  productsController.addStarRating
+);
 
 module.exports = router;

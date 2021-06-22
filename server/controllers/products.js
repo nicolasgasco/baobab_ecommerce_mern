@@ -192,9 +192,29 @@ const deleteProductWithId = async (req, res) => {
   res.send({ deletedCount: 1, result: result });
 };
 
+const addStarRating = async (req, res) => {
+  const productId = req.params.id;
+  const starRating = req.body.rating;
+
+  const productToUpdate = await Product.findOne({ productId });
+  if (!productToUpdate) {
+    res.status(404).send({ error: "Product not found" });
+  }
+  const newRating = Math.round((productToUpdate.starRating + starRating) / 2);
+  const updatedProduct = await Product.updateOne(
+    { productId },
+    { starRating: newRating }
+  );
+  if (!updatedProduct.nModified) {
+    res.status(400).send({ error: "Product wasn't updated" });
+  }
+  res.send({ nModified: 1, result: updatedProduct });
+};
+
 exports.getAllProducts = getAllProducts;
 exports.postProductsByKeywords = postProductsByKeywords;
 exports.getProductById = getProductById;
 exports.postNewProduct = postNewProduct;
 exports.putProductWithId = putProductWithId;
 exports.deleteProductWithId = deleteProductWithId;
+exports.addStarRating = addStarRating;
