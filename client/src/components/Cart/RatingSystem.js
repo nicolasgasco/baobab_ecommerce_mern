@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const RatingSystem = ({ classes, getRatingValue }) => {
+const RatingSystem = ({ classes, getRatingValue}) => {
   const [starRating, setStarRating] = useState(0);
   const [hoverStarRating, setHoverStarRating] = useState(0);
 

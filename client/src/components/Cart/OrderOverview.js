@@ -3,30 +3,62 @@ import React, { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/outline";
 import RatingSystem from "./RatingSystem";
 
+// Custom hook for querying APIK
+import useHttp from "../../hooks/use-http";
+
 const OrderOverview = ({ items, classes }) => {
   const [showRatingSystem, setShowRatingSystem] = useState(false);
   const [currentItem, setCurrentItem] = useState("");
   const [ratingValue, setRatingValue] = useState(0);
   const [showSuccessRating, setShowSuccessRating] = useState(false);
 
+  const { sendRequest: updateRating } = useHttp();
+
   useEffect(() => {
     setRatingValue(0);
   }, []);
 
   const handleRateButton = (id) => {
-    setRatingValue(0);
-    setShowRatingSystem((prevState) => {
-      return !prevState;
-    });
+    console.log("id is ", id, " currentItem is ", currentItem);
+    if (currentItem === id || currentItem === "") {
+      setShowRatingSystem((prevState) => {
+        setShowSuccessRating(false);
+        if (prevState) setCurrentItem("");
+        return !prevState;
+      });
+    }
     setCurrentItem(id);
+    setRatingValue(0);
   };
 
   const getRatingValue = (value) => {
     console.log(value, "value is");
     setRatingValue(value);
   };
-  const handleSubmitRating = () => {
-    console.log(ratingValue);
+
+  const handleModifiedRating = (res) => {
+    console.log(res);
+  };
+
+  const handleSubmitRating = (id) => {
+    console.log(id)
+    console.log(ratingValue, "value");
+    if (ratingValue) {
+      updateRating(
+        {
+          url: `api/products/rating/${id}`,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            rating: ratingValue,
+          },
+        },
+        handleModifiedRating
+      );
+      setShowSuccessRating(true);
+    }
   };
 
   const showCartItems = items.map((item, index) => {
@@ -70,7 +102,11 @@ const OrderOverview = ({ items, classes }) => {
             <span className="sr-only">Rate product</span>
             <StarIcon
               onClick={() => handleRateButton(item._id)}
-              fill={`${showRatingSystem ? "#FDE68A" : "#FFFF"}`}
+              fill={`${
+                showRatingSystem && currentItem === item._id
+                  ? "#FDE68A"
+                  : "#FFFF"
+              }`}
               className={`h-6 cursor-pointer`}
             />
           </td>
@@ -84,12 +120,12 @@ const OrderOverview = ({ items, classes }) => {
             >
               <div className="flex justify-center">
                 {showSuccessRating ? (
-                  "Your rating was saved."
+                  <p className="font-bold">Your rating was saved!</p>
                 ) : (
                   <>
                     <RatingSystem getRatingValue={getRatingValue} />
                     <button
-                      onClick={handleSubmitRating}
+                      onClick={() => handleSubmitRating(item.productId)}
                       type="button"
                       className="inline-flex justify-center py-2 px-4 my-2  ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
                     >
