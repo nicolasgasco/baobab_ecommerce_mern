@@ -10,7 +10,9 @@ const OrderOverview = ({ items, classes }) => {
   const [showRatingSystem, setShowRatingSystem] = useState(false);
   const [currentItem, setCurrentItem] = useState("");
   const [ratingValue, setRatingValue] = useState(0);
-  const [showSuccessRating, setShowSuccessRating] = useState(false);
+  const [showSuccessRating, setShowSuccessRating] = useState([]);
+  const [showErrorRating, setShowErrorRating] = useState([]);
+  const [alreadyRatedProducts, setAlreadyRatedProducts] = useState([]);
 
   const { sendRequest: updateRating } = useHttp();
 
@@ -18,15 +20,23 @@ const OrderOverview = ({ items, classes }) => {
     setRatingValue(0);
   }, []);
 
-  const handleRateButton = (id) => {
-    console.log("id is ", id, " currentItem is ", currentItem);
+  // When pressing star icon to show rating system
+  const handleStarButton = (id) => {
     if (currentItem === id || currentItem === "") {
       setShowRatingSystem((prevState) => {
-        setShowSuccessRating(false);
-        if (prevState) setCurrentItem("");
+        if (prevState) {
+          setCurrentItem("");
+        }
+
         return !prevState;
       });
     }
+    // Remove from error list
+    setShowErrorRating((prevState) => {
+      return [...prevState].filter((el) => {
+        return el !== id;
+      });
+    });
     setCurrentItem(id);
     setRatingValue(0);
   };
@@ -36,12 +46,23 @@ const OrderOverview = ({ items, classes }) => {
     setRatingValue(value);
   };
 
-  const handleModifiedRating = (res) => {
-    console.log(res);
-  };
-
   const handleSubmitRating = (id) => {
-    console.log(id)
+    const handleModifiedRating = (res) => {
+      setShowSuccessRating((prevState) => {
+        return [...prevState, id];
+      });
+      setAlreadyRatedProducts((prevState) => {
+        return [...prevState, id];
+      });
+    };
+
+    const handleErrorRating = () => {
+      console.log("ERROR!!!");
+      setShowErrorRating((prevState) => {
+        return [...prevState, id];
+      });
+    };
+
     console.log(ratingValue, "value");
     if (ratingValue) {
       updateRating(
@@ -55,16 +76,41 @@ const OrderOverview = ({ items, classes }) => {
             rating: ratingValue,
           },
         },
-        handleModifiedRating
+        handleModifiedRating,
+        handleErrorRating
       );
-      setShowSuccessRating(true);
+    }
+  };
+
+  const showRatingContent = (id) => {
+    console.log("IDIDDD", showSuccessRating.indexOf(id));
+    if (showSuccessRating.indexOf(id) !== -1) {
+      return <p className="font-bold">Your rating was saved!</p>;
+    } else if (showSuccessRating.indexOf(id) !== -1) {
+      return <p className="font-bold">An error ocurred!</p>;
+    } else {
+      return (
+        <>
+          <RatingSystem getRatingValue={getRatingValue} />
+          <button
+            onClick={() => handleSubmitRating(id)}
+            type="button"
+            className="inline-flex justify-center py-2 px-4 my-2  ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+          >
+            Rate
+          </button>
+        </>
+      );
     }
   };
 
   const showCartItems = items.map((item, index) => {
     return (
       <>
-        <tr className={`h-24 border-gray-300 dark:border-gray-200 border-b `}>
+        <tr
+          className={`h-24 border-gray-300 dark:border-gray-200 border-b `}
+          key={`item-${item._id}`}
+        >
           {/* Image */}
           <td className="hidden md:table-cell text-sm whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">
             <img
@@ -101,7 +147,7 @@ const OrderOverview = ({ items, classes }) => {
           <td className="text-center text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">
             <span className="sr-only">Rate product</span>
             <StarIcon
-              onClick={() => handleRateButton(item._id)}
+              onClick={() => handleStarButton(item._id)}
               fill={`${
                 showRatingSystem && currentItem === item._id
                   ? "#FDE68A"
@@ -113,26 +159,16 @@ const OrderOverview = ({ items, classes }) => {
         </tr>
 
         {showRatingSystem && currentItem === item._id && (
-          <tr className={`h-16 border-gray-300 dark:border-gray-200 border-b `}>
+          <tr
+            className={`h-16 border-gray-300 dark:border-gray-200 border-b `}
+            key={`rating-${item._id}`}
+          >
             <td
               colSpan={6}
               className="text-sm whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4"
             >
               <div className="flex justify-center">
-                {showSuccessRating ? (
-                  <p className="font-bold">Your rating was saved!</p>
-                ) : (
-                  <>
-                    <RatingSystem getRatingValue={getRatingValue} />
-                    <button
-                      onClick={() => handleSubmitRating(item.productId)}
-                      type="button"
-                      className="inline-flex justify-center py-2 px-4 my-2  ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                    >
-                      Rate
-                    </button>
-                  </>
-                )}
+                {showRatingContent(item._id)}
               </div>
             </td>
           </tr>
