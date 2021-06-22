@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 
-const RatingSystem = ({ classes, getRatingValue}) => {
+const RatingSystem = ({
+  classes,
+  getRatingValue,
+  notInteractive,
+  ratingValue,
+}) => {
   const [starRating, setStarRating] = useState(0);
   const [hoverStarRating, setHoverStarRating] = useState(0);
 
@@ -17,10 +22,15 @@ const RatingSystem = ({ classes, getRatingValue}) => {
   };
 
   const determineFillColor = (value) => {
-    if (hoverStarRating) {
-      return hoverStarRating >= value ? "#FCD34D" : "#9CA3AF";
+    // Not interactive version
+    if (notInteractive) {
+      return ratingValue >= value ? "#F59E0B" : "#9CA3AF";
     } else {
-      return starRating >= value ? "#F59E0B" : "#9CA3AF";
+      if (hoverStarRating) {
+        return hoverStarRating >= value ? "#FCD34D" : "#9CA3AF";
+      } else {
+        return starRating >= value ? "#F59E0B" : "#9CA3AF";
+      }
     }
   };
 
@@ -32,15 +42,17 @@ const RatingSystem = ({ classes, getRatingValue}) => {
   const showStars = [1, 2, 3, 4, 5].map((number) => {
     return (
       <div
-        className="pr-4 lg:pr-2"
-        onMouseEnter={() => handleMouseEnter(number)}
-        onMouseLeave={handleMouseLeave}
-        onClick={() => handleOnClick(number)}
+        className={notInteractive ? "pr-1" : "pr-4 lg:pr-2"}
+        onMouseEnter={
+          notInteractive ? undefined : () => handleMouseEnter(number)
+        }
+        onMouseLeave={notInteractive ? undefined : handleMouseLeave}
+        onClick={notInteractive ? undefined : () => handleOnClick(number)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width={18}
-          height={17}
+          width={notInteractive ? 13 : 18}
+          height={notInteractive ? 12 : 17}
           viewBox="0 0 14 13"
           fill="none"
         >
