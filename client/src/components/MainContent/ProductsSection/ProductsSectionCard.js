@@ -30,10 +30,9 @@ const ProductsSectionCard = () => {
         product && (
           <ProductCardSlideshow
             short={true}
-            classes={
-              "mx-auto max-w-md w-full md:w-1/2 xl:w-1/3 py-4 lg:py-0  px-2 flex flex-col justify-center"
-            }
             product={product}
+            // Showing only 2 elements if three don't fit
+            classes={index === 2 ? `hidden xl:flex` : ""}
           />
         )
       );
@@ -46,10 +45,8 @@ const ProductsSectionCard = () => {
       <h2 className="-mt-4 mb-8 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl text-center">
         Our latest arrivals
       </h2>
-      <div className="flex items-center">
-        <div className="w-full">
-          <div className="flex flex-col md:flex-row">{showCards}</div>
-        </div>
+      <div className="outline-black w-full flex flex-wrap justify-center">
+        {showCards}
       </div>
     </div>
   );

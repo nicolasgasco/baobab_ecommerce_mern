@@ -89,12 +89,9 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
       )}
       <div
         key={`product-${product._id}`}
-        className={`${
-          classes ? classes : "pb-10 md:px-4 sm:w-1/2 xl:w-1/3 max-w-sm px-2"
-        }
-        `}
+        className={`pb-10 md:px-4 md:w-1/2 xl:w-1/3 max-w-sm px-2 ${classes}`}
       >
-        <div className="shadow-lg rounded-3xl z-0">
+        <div className="shadow-lg rounded-3xl z-0 ">
           <div
             className="flex items-center rounded-t-3xl justify-between bg-white px-2
            py-4"
@@ -133,7 +130,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                   </svg>
                 </div>
               </ButtonBack>
-              <Slider className="w-52 h-52 shadow-md rounded-lg flex justify-center align-center">
+              <Slider className="shadow-md rounded-lg flex justify-center align-center">
                 {showPictures}
               </Slider>
               <ButtonNext
