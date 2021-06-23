@@ -45,14 +45,15 @@ require("./startup/auth")(app);
 // app.use(express.static(path.join(__dirname, "./build/")));
 
 // Redirect all requests to index.html
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "/build/index.html"), function (err) {
-    if (err) {
-      res.status(500).send(err);
-    }
-  });
-});
+// app.get("/*", function (req, res) {
+//   res.sendFile(path.join(__dirname, "/build/index.html"), function (err) {
+//     if (err) {
+//       res.status(500).send(err);
+//     }
+//   });
+// });
 
+// console.log(path.join(__dirname, "/build/index.html"));
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () =>
