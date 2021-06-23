@@ -8,12 +8,12 @@ function classNames(...classes) {
 const SectionedDropdown = ({ handleSortingFilter }) => {
   const [dropdownItems, setDropdownItems] = useState([
     [
-      { title: "Price ascending", value: "princingInfo.price" },
-      { title: "Price descending", value: "-princingInfo.price" },
+      { title: "Price ascending", value: "pricingInfo.price" },
+      { title: "Price descending", value: "-pricingInfo.price" },
     ],
     [
-      { title: "Newest first", value: "creationDate" },
-      { title: "Oldest first", value: "-creationDate" },
+      { title: "Newest first", value: "-creationDate" },
+      { title: "Oldest first", value: "creationDate" },
     ],
   ]);
   const [currentItem, setCurrentItem] = useState("");

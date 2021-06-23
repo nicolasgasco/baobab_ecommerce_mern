@@ -138,8 +138,15 @@ const MainContent = () => {
       };
 
       console.log(
-        "fetching ",
-        `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}`
+        `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}${
+          resultsState.departmentFilter.name !== "all"
+            ? `&department=${resultsState.departmentFilter._id || ""}`
+            : ""
+        }${
+          resultsState.sortingFilter
+            ? `&sortBy=${resultsState.sortingFilter}`
+            : ""
+        }`
       );
       fetchProducts(
         {
@@ -205,7 +212,6 @@ const MainContent = () => {
   }, []);
 
   const handleSortingFilter = useCallback((value) => {
-    console.log("VALUEEE", value);
     dispatchResults({ type: "SORTING_FILTER", val: value });
     dispatchResults({ type: "SEARCH_KEYWORDS", val: "" });
   }, []);
