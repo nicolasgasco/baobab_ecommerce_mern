@@ -10,7 +10,7 @@ const ordersRouter = require("../routes/orders");
 
 module.exports = function (app) {
   app.use(express.json());
-  // app.use(express.static(path.join(__dirname, "build")));
+  app.use(express.static(path.join(__dirname, "../build")));
 
   // Used to redirect to react page when a route other than index is refreshed by user
   app.use("/api/departments", departmentsRouter);
