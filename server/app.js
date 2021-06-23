@@ -10,9 +10,6 @@ require("express-async-errors");
 // Calling variuos app.use in separate file
 const app = express();
 
-// At the end, otherwise calling a route redirects you to home
-app.use("/", indexRouter);
-
 // Includes dotenv and Morgan
 require("./startup/config")(app);
 // Include connection to database
@@ -27,6 +24,9 @@ require("./startup/logging")();
 require("./startup/routes")(app);
 // Complete passport auth logic
 require("./startup/auth")(app);
+
+// At the end, otherwise calling a route redirects you to home
+app.use("/", indexRouter);
 
 // Add here "page not found logic"
 // app.use((req, res, next) => {

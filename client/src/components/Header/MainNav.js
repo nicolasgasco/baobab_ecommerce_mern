@@ -198,6 +198,7 @@ const MainNav = () => {
       return (
         localStorage.getItem("token") && (
           <Disclosure.Button
+            key={`profile-item-${index + 1}`}
             id={`profile-item-${index + 1}`}
             className={classNames(
               "hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700 cursor-pointer"
@@ -211,6 +212,7 @@ const MainNav = () => {
       return (
         localStorage.getItem("token") && (
           <Disclosure.Button
+            key={`profile-item-${index + 1}`}
             id={`profile-item-${index + 1}`}
             className={classNames(
               "hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700 cursor-pointer"
@@ -225,6 +227,7 @@ const MainNav = () => {
         localStorage.getItem("token") && (
           <Disclosure.Button
             to="/orders"
+            key={`profile-item-${index + 1}`}
             id={`profile-item-${index + 1}`}
             className={classNames(
               "hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700 cursor-pointer"

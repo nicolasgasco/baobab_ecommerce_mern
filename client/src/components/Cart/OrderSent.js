@@ -63,7 +63,7 @@ const OrderSent = () => {
           <div className="mt-6">
             <h3 className="font-bold text-2xl">{"Order overview:"}</h3>
             <OrderOverview items={order.items} />
-            <h4>
+            <h4 className="mt-8">
               <span className="font-bold">Estimated arrival date: </span>
               {`${formatDate(new Date())} - ${formatDate(new Date())}.`}
             </h4>

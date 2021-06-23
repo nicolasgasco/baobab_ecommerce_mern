@@ -23,7 +23,7 @@ const BannerContent = () => {
                   <a
                     href="https://github.com/nicolasgasco"
                     target="blank"
-                    classList="cursor-pointer underline"
+                    className="cursor-pointer underline"
                   >
                     here
                   </a>
@@ -34,7 +34,7 @@ const BannerContent = () => {
                   <a
                     href="https://github.com/nicolasgasco"
                     target="blank"
-                    classList="cursor-pointer underline"
+                    className="cursor-pointer underline"
                   >
                     here
                   </a>

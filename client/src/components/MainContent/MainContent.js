@@ -310,13 +310,13 @@ const MainContent = () => {
         handleActivePage={handleActivePage}
         activePage={resultsState.activePage}
       />
-      {resultsContent.map((component) => {
-        return (
-          <Suspense fallback={<LoadingOverlay />}>
-            <BoxWrapper>{component}</BoxWrapper>
-          </Suspense>
-        );
-      })}
+      <Suspense fallback={<LoadingOverlay />}>
+        {resultsContent.map((component, index) => {
+          return (
+            <BoxWrapper key={`component-${index}`}>{component}</BoxWrapper>
+          );
+        })}
+      </Suspense>
     </>
   );
 };

@@ -42,6 +42,7 @@ const RatingSystem = ({
   const showStars = [1, 2, 3, 4, 5].map((number) => {
     return (
       <div
+        key={`element-${number}`}
         className={notInteractive ? "pr-1" : "pr-4 lg:pr-2"}
         onMouseEnter={
           notInteractive ? undefined : () => handleMouseEnter(number)

@@ -42,7 +42,7 @@ const ShoppingCart = () => {
     setUserAddress(userData.address);
     showShippingInfo = (
       <div>
-        <p classList="font-bold">{`${userData.name} ${userData.surname}`}</p>
+        <p className="font-bold">{`${userData.name} ${userData.surname}`}</p>
         <div>
           <p>{userData.address.street}</p>
           <p>{`${userData.address.zip}, ${userData.address.province}, ${userData.address.city}`}</p>

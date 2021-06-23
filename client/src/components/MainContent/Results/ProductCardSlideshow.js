@@ -40,7 +40,6 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   };
 
   const handleOpenPicture = (imgData) => {
-
     setOverlayData({ src: imgData.src, alt: imgData.alt });
     setOverlayOpen(true);
     console.log(overlayOpen, "overlayOpne");
@@ -63,7 +62,11 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
         );
       } else {
         return (
-          <Slide className="flex items-center justify-center" index={index + 1}>
+          <Slide
+            key={index + 1}
+            className="flex items-center justify-center"
+            index={index + 1}
+          >
             <img
               onClick={(e) => handleOpenPicture(e.target)}
               src={picture.url}

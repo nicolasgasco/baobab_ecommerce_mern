@@ -5,8 +5,9 @@
 @layer utilities {
   body {
     margin: 0;
-    background-color: green;
-    background-image: url("./img/OC23T40_nlohlv_1_cokto0.jpg");
+    background-image: url("https://res.cloudinary.com/ngasco/image/upload/v1623879021/bonsai_background/OC23T40_nlohlv_1_cokto0.jpg");
+    background-color: #f2f2f2;
+    background-repeat: repeat;
     background-size: 40%;
   }
 
@@ -17,6 +18,7 @@
   .footer-background {
     background-image: url("https://res.cloudinary.com/ngasco/image/upload/v1624051564/bonsai_background/y2020-11-30-66_generated_funlah.jpg");
     background-repeat: repeat;
+    background-color: #41e0a0;
     background-size: 40%;
   }
 

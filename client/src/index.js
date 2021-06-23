@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 // Tailwind-generated css
-import "./assets/main.css";
+import "./styles/output.css";
 
 import App from "./App";
 

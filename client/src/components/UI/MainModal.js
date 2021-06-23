@@ -32,7 +32,6 @@ const ModalContent = () => {
 
   const handleModalClose = () => {
     toggleModal();
-    console.log(location.pathname);
     // This is necessary to not redirect when changing profile data
     if (localStorage.getItem("token") && location.pathname !== "/profile") {
       history.push("/");

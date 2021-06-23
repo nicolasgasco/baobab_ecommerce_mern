@@ -21,7 +21,7 @@ const SectionedDropdown = ({ handleSortingFilter }) => {
   const showItems = dropdownItems.map(([item1, item2]) => {
     return (
       <div className="py-1">
-        <Menu.Item>
+        <Menu.Item key={item1.value}>
           {({ active }) => (
             <button
               onClick={function () {
@@ -38,7 +38,7 @@ const SectionedDropdown = ({ handleSortingFilter }) => {
             </button>
           )}
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key={item1.value}>
           {({ active }) => (
             <button
               onClick={function () {
