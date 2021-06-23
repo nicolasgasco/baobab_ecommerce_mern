@@ -284,9 +284,11 @@ const MainNav = () => {
                       navigation.map((item, itemIdx) =>
                         itemIdx === 0 ? (
                           <Fragment key={item}>
-                            <p className="bg-green-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-default">
-                              {item}
-                            </p>
+                            {userGreeting && (
+                              <p className="bg-green-900 text-white px-3 py-2 rounded-md text-sm font-medium cursor-default">
+                                {item}
+                              </p>
+                            )}
                           </Fragment>
                         ) : (
                           <p
