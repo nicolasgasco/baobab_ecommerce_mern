@@ -35,11 +35,14 @@ const CartTable = () => {
 
   const showCartItems = cartItems.map((item) => {
     return (
-      <tr className="h-24 border-gray-300 dark:border-gray-200 border-b">
-        <td className="hidden md:table-cell text-sm whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">
+      <tr
+        className="h-24 border-gray-300 dark:border-gray-200 border-b"
+        key={`row-${item._id}`}
+      >
+        <td className="hidden py-4 md:table-cell text-sm whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">
           <img
             src={item.pictures[0].url}
-            className="w-16 h-16 mx-auto object-contain rounded-sm ring-2 ring-green-500"
+            className="w-full mx-auto object-contain rounded-sm ring-2 ring-green-500"
             alt={item.pictures[0].alt}
           />
         </td>
