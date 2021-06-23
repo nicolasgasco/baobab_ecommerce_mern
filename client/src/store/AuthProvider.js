@@ -155,7 +155,9 @@ const AuthProvider = (props) => {
         // Empty local cart
         deleteCartLocal();
         history.push("/");
-        history.go(0);
+        setTimeout(() => {
+          window.location.reload();
+        }, 300);
       })
       .catch((error) => {
         console.log("An error ocurred: " + error.message);
