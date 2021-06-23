@@ -219,7 +219,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                 {` ${product.ecoInfo.productionCountryCode}`}
               </span>
             </div>
-            <div className="mt-4 bg-green-100 p-2 rounded-md">
+            <div className="mt-4 p-2 rounded-md">
               <span className="text-teal-600 text-md font-semibold uppercase">
                 Social:
               </span>
@@ -227,7 +227,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                 {` ${product.ecoInfo.socialMission}`}
               </span>
             </div>
-            <div className="mt-4 bg-green-100 p-2 rounded-md">
+            <div className="mt-4 p-2 rounded-md">
               <span className="text-teal-600 text-md font-semibold uppercase">
                 Environment:
               </span>
