@@ -14,10 +14,8 @@ const StoreSearchbar = ({
 
   const [menuItems, setMenuItems] = useState([]);
 
-  const [activeMenuItem, setActiveMenuItem] = useState({});
-
   // Custom hook per HTTP requests
-  const { isLoading, setIsLoading, sendRequest: fetchDepartments } = useHttp();
+  const { sendRequest: fetchDepartments } = useHttp();
 
   // Fetch departments when rendering product card
   useEffect(() => {
