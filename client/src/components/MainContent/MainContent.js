@@ -13,6 +13,7 @@ import HeroMain from "./HeroMain";
 import BoxWrapper from "../UI/BoxWrapper";
 import ProductsSectionCard from "./ProductsSection/ProductsSectionCard";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import ResultsBox from "./Results/ResultsBox";
 
 // Auth context for authentication
 import AuthContext from "../../store/auth-context";
@@ -27,7 +28,7 @@ const CheckoutForm = React.lazy(() => import("../Cart/CheckoutForm"));
 const OrderSent = React.lazy(() => import("../Cart/OrderSent"));
 const AuthContent = React.lazy(() => import("./Auth/AuthContent"));
 const Orders = React.lazy(() => import("../Cart/Orders"));
-const ResultsBox = React.lazy(() => import("./Results/ResultsBox"));
+// const ResultsBox = React.lazy(() => import("./Results/ResultsBox"));
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -136,6 +137,10 @@ const MainContent = () => {
         dispatchResults({ type: "CONTENT_LOADING", val: false });
       };
 
+      console.log(
+        "fetching ",
+        `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}`
+      );
       fetchProducts(
         {
           url: `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}${
@@ -171,7 +176,7 @@ const MainContent = () => {
 
   const handleActivePage = useCallback(
     (data) => {
-      dispatchResults({ type: "ACTIVE_PAGE", val: data });
+      dispatchResults({ type: "ACTIVE_PAGE", val: +data });
     },
     [dispatchResults]
   );

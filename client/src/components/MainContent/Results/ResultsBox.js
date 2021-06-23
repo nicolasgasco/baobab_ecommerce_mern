@@ -27,7 +27,6 @@ const ResultsBox = ({
   });
 
   const resultsPerPageDropdown = ["3", "6", "24", "60"];
-
   return (
     <>
       {isEmpty ? (

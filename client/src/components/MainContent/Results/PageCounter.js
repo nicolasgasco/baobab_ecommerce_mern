@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const PageCounter = ({ paginationData, className, handlePageChange }) => {
+  console.log("page counter", paginationData);
   const [paginationButtons, setPaginationButtons] = useState([]);
 
   useEffect(() => {

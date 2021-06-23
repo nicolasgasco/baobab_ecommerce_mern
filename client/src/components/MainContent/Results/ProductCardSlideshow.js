@@ -66,7 +66,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
       <div
         key={`product-${product._id}`}
         className={`${
-          classes ? classes : "pb-10 md:px-4 sm:w-1/3 xl:w-1/3 max-w-sm px-2"
+          classes ? classes : "pb-10 md:px-4 sm:w-1/2 xl:w-1/3 max-w-sm px-2"
         }
         `}
       >
@@ -165,7 +165,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                     (product.pricingInfo.price -
                       Math.floor(product.pricingInfo.price)) *
                     100
-                  ).toFixed(0)}
+                  ).toFixed(0).toString().padStart(2, '0')}
                 </span>
               }
               <p className="inline text-2xl"> €</p>

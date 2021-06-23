@@ -89,12 +89,12 @@ const postProductsByKeywords = async (req, res) => {
   // Populating department name from another table, with name and without id
   let totalProducts;
   if (department) {
-    const totalProducts = await Product.find({
+    totalProducts = await Product.find({
       completeNameDesc: keywordsRegex,
       department: new ObjectID(department),
     }).countDocuments();
   } else {
-    const totalProducts = await Product.find({
+    totalProducts = await Product.find({
       completeNameDesc: keywordsRegex,
     }).countDocuments();
   }

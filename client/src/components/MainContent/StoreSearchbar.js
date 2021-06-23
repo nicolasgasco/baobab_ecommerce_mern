@@ -8,6 +8,7 @@ const StoreSearchbar = ({
   handleActivePage,
   handleDepartmentFilter,
   departmentFilter,
+  activePage,
 }) => {
   const searchbarInputRef = useRef();
 
@@ -31,11 +32,13 @@ const StoreSearchbar = ({
     event.preventDefault();
     const currentSearchbarInput = searchbarInputRef.current.value.trim();
 
-    // if (currentSearchbarInput) {
     onGetSearchbarInput(currentSearchbarInput);
     handleActivePage(1);
-    // }
   };
+
+  useEffect(() => {
+    onGetSearchbarInput(searchbarInputRef.current.value.trim());
+  }, [activePage, onGetSearchbarInput]);
 
   return (
     <form
