@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProductCard from "../Results/ProductCard";
+import ProductCardSlideshow from "../Results/ProductCardSlideshow";
 
 import useHttp from "../../../hooks/use-http";
 
@@ -28,7 +28,7 @@ const ProductsSectionCard = () => {
     if (index < 3) {
       return (
         product && (
-          <ProductCard
+          <ProductCardSlideshow
             short={true}
             classes={
               "mx-auto max-w-md w-full md:w-1/2 xl:w-1/3 py-4 lg:py-0  px-2 flex flex-col justify-center"

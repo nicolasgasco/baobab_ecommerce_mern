@@ -107,7 +107,11 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
               infinite={true}
               className="flex items-center justify-between w-full"
             >
-              <ButtonBack className="focus:outline-none cursor-pointer">
+              <ButtonBack
+                className={`${
+                  product.pictures.length <= 1 && "invisible"
+                } focus:outline-none cursor-pointer`}
+              >
                 <div
                   className="bg-yellow-200 w-5 h-5 mr-2 rounded-full flex items-center cursor-pointer justify-center"
                   id="prev2"
@@ -132,7 +136,11 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
               <Slider className="w-52 h-52 shadow-md rounded-lg flex justify-center align-center">
                 {showPictures}
               </Slider>
-              <ButtonNext className="focus:outline-none cursor-pointer">
+              <ButtonNext
+                className={`${
+                  product.pictures.length <= 1 && "invisible"
+                } focus:outline-none cursor-pointer`}
+              >
                 <div
                   className="bg-yellow-200 w-5 h-5 ml-2 rounded-full flex items-center cursor-pointer justify-center"
                   id="next2"

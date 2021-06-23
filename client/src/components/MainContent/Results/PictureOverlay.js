@@ -9,7 +9,7 @@ const OverlayContent = ({ src, alt, handleClosePicture }) => {
         onClick={handleClosePicture}
       ></div>
       <div role="alert" className="mx-auto  flex justify-center">
-        <div className="z-40 fixed py-10 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400 w-10/12 md:w-7/12">
+        <div className="z-40 fixed py-10 px-1 sm:px-5 md:px-10 bg-white shadow-md rounded border border-gray-400 w-11/12 md:w-6/12 2xl:w-5/12">
           {/* X symbol */}
           <div className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out">
             <svg
