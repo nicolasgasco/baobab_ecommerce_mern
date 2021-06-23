@@ -20,7 +20,7 @@ const SectionedDropdown = ({ handleSortingFilter }) => {
 
   const showItems = dropdownItems.map(([item1, item2]) => {
     return (
-      <div className="py-1">
+      <div className="py-1" key={`div-${item1.value}-${item2.value}`}>
         <Menu.Item key={item1.value}>
           {({ active }) => (
             <button
