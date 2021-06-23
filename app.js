@@ -26,7 +26,7 @@ require("./startup/routes")(app);
 require("./startup/auth")(app);
 
 // At the end, otherwise calling a route redirects you to home
-// app.use("/", indexRouter);
+app.use("/", indexRouter);
 
 // Add here "page not found logic"
 // app.use((req, res, next) => {
