@@ -1,17 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import OrderOverview from "./OrderOverview";
 
 import useHttp from "../../hooks/use-http";
 import jwt_decode from "jwt-decode";
 
-import CartContext from "../../store/cart-context";
-
 const Orders = () => {
   const [orders, setOrders] = useState([]);
 
   const { sendRequest: fetchOrders } = useHttp();
-
-  const { userAddress } = useContext(CartContext);
 
   useEffect(() => {
     const userToken = jwt_decode(localStorage.getItem("token"));
