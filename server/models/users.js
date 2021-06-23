@@ -124,7 +124,7 @@ const userSchema = new mongoose.Schema(
         type: String,
         trim: true,
         match: [/^[0-9]*$/, "Zip code is not valid"],
-        length: [5, "Zip code must 5 digits long"],
+        minLength: [5, "Zip code must 5 digits long"],
         maxLength: [5, "Zip code must 5 digits long"],
       },
       street: {

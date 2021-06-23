@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const ordersController = require("../controllers/payments");
+const ordersController = require("../controllers/orders");
 const validateObjectId = require("../middleware/validateObjectId");
 
 // POST a new payment
