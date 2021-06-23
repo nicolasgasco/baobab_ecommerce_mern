@@ -8,7 +8,6 @@ const useHttp = () => {
     async (requestConfig, applyData, handleError) => {
       setIsLoading(true);
       setError(null);
-      console.log("started http");
 
       try {
         const response = await fetch(requestConfig.url, {

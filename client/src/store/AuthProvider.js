@@ -21,7 +21,6 @@ const AuthProvider = (props) => {
 
   const loginUser = (userData) => {
     console.log(userData);
-    console.log("login");
     fetch("/api/login", {
       method: "POST",
       headers: {
@@ -54,7 +53,6 @@ const AuthProvider = (props) => {
       })
       .then((res) => {
         if (!res.success) throw new Error(res.msg);
-        console.log("success");
         fetchCartFromDB();
         handleModalText(`Welcome, ${userName}!`);
       })
@@ -74,7 +72,6 @@ const AuthProvider = (props) => {
   const checkPassword = (userData, token) => {
     return new Promise((resolve, reject) => {
       console.log(userData);
-      console.log("login");
       fetch("/api/login", {
         method: "POST",
         headers: {
@@ -87,18 +84,15 @@ const AuthProvider = (props) => {
         })
         .then((res) => {
           if (!res.success) throw new Error(res.msg);
-          console.log("success");
           resolve("Right password");
         })
         .catch((error) => {
-          console.log("fail");
           reject(Error("Wrong password"));
         });
     });
   };
 
   const signupUser = (userData) => {
-    console.log("signin");
     fetch("/api/signin", {
       method: "POST",
       headers: {
@@ -144,7 +138,6 @@ const AuthProvider = (props) => {
   };
 
   const logoutUser = () => {
-    console.log("logout");
     fetch("/api/logout", {
       method: "DELETE",
     })
@@ -159,7 +152,6 @@ const AuthProvider = (props) => {
       })
       .then((res) => {
         if (res.error) throw new Error(res.error);
-        console.log("Logout successful");
         localStorage.removeItem("token");
         userName = "";
         // Empty local cart
@@ -173,7 +165,6 @@ const AuthProvider = (props) => {
   };
 
   const checkLogin = useCallback(() => {
-    console.log("check");
     fetch("/api/check")
       .then((res) => {
         // This is the token

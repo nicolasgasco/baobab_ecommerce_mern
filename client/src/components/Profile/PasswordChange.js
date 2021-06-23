@@ -47,7 +47,6 @@ const PasswordChange = () => {
     if (localStorage.getItem("token")) {
       setIsLoading(true);
       try {
-        console.log("check");
         const result = await checkPassword({
           email,
           password: currentPassword,
@@ -90,7 +89,6 @@ const PasswordChange = () => {
               })
           );
         }
-        console.log("Patching passowrd");
         if (result.updatedCount === 1) {
           setIsLoading(false);
           handleModalText("Password changed!");

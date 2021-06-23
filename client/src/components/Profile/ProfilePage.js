@@ -41,7 +41,6 @@ const ProfilePage = () => {
   // User data from LocalStorage
   const [userData, setUserData] = useState(async () => {
     setIsLoading(true);
-    console.log("fetched user data");
     try {
       const { _id: id } = jwt_decode(localStorage.getItem("token"));
       // Get user and see if there's already an address
@@ -184,7 +183,6 @@ const ProfilePage = () => {
 
     setErrorMessages([]);
     setIsLoading(true);
-    console.log("putting");
     fetch(`/api/users/${userData._id}`, {
       method: "PUT",
       headers: {
@@ -199,7 +197,6 @@ const ProfilePage = () => {
         //     console.log(header[1]);
         //   }
         // }
-        console.log("json");
         return res.json();
       })
       .then(async (res) => {

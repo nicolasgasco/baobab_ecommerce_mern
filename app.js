@@ -33,6 +33,15 @@ require("./startup/auth")(app);
 //   res.status(404);
 // });
 
+// Apparently I need this to make the deployment work
+app.use(function (req, res, next) {
+  res.setHeader(
+    "content-security-policy-report-only",
+    "default-src 'self'; script-src 'unsafe-inline' 'self' 'report-sample'; style-src 'self' 'report-sample'; base-uri 'none'; object-src 'none'; connect-src 'self'; font-src 'self'; frame-src 'self'; img-src 'self'; manifest-src 'self'; media-src 'self'; worker-src 'none'; report-uri https://5e52f4c893efcda6a7d40460.endpoint.csper.io"
+  );
+  next();
+});
+
 app.use(express.static(path.join(__dirname, "./build/static")));
 
 // Redirect all requests to index.html

@@ -26,12 +26,10 @@ const ProductCard = ({ product, picturesLoading, classes, short }) => {
   }, [fetchDepartments]);
 
   const handleAddToCart = (id) => {
-    console.log("loading");
     setIsLoading(true);
     addItemToCart(id);
     setPingAnimation("animate-ping");
     setIsLoading(false);
-    console.log("finished");
     setPingAnimation("");
   };
 
