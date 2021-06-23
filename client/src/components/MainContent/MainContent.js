@@ -135,17 +135,6 @@ const MainContent = () => {
         dispatchResults({ type: "CONTENT_LOADING", val: false });
       };
 
-      console.log(
-        `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}${
-          resultsState.departmentFilter.name !== "all"
-            ? `&department=${resultsState.departmentFilter._id || ""}`
-            : ""
-        }${
-          resultsState.sortingFilter
-            ? `&sortBy=${resultsState.sortingFilter}`
-            : ""
-        }`
-      );
       fetchProducts(
         {
           url: `api/products/search/?pageNum=${resultsState.activePage.toString()}&pageSize=${resultsState.resultsPerPage.toString()}${
@@ -250,7 +239,6 @@ const MainContent = () => {
   // Squared brackets because I'm using map later
   const location = useLocation();
   let resultsContent;
-  console.log(location.pathname, "pathname");
 
   switch (location.pathname) {
     case "/":

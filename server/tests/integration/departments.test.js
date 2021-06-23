@@ -70,7 +70,6 @@ describe("/api/departments", () => {
       });
       department.save();
 
-      console.log(department._id);
       const res = await request(server).get(
         `/api/departments/${department._id}`
       );

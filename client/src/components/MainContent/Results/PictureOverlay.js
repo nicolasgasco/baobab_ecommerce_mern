@@ -43,7 +43,6 @@ const OverlayContent = ({ src, alt, handleClosePicture }) => {
 };
 
 const PictureOverlay = (props) => {
-  console.log(props);
   return (
     <>
       {ReactDOM.createPortal(

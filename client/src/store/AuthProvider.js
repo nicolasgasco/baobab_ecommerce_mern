@@ -20,7 +20,6 @@ const AuthProvider = (props) => {
   const history = useHistory();
 
   const loginUser = (userData) => {
-    console.log(userData);
     fetch("/api/login", {
       method: "POST",
       headers: {
@@ -71,7 +70,6 @@ const AuthProvider = (props) => {
 
   const checkPassword = (userData, token) => {
     return new Promise((resolve, reject) => {
-      console.log(userData);
       fetch("/api/login", {
         method: "POST",
         headers: {
@@ -181,7 +179,6 @@ const AuthProvider = (props) => {
           localStorage.removeItem("token");
           setToken("");
         }
-        console.log(res);
       })
       .catch((error) => {
         console.log("An error ocurred: " + error.message);

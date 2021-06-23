@@ -22,10 +22,6 @@ const SignupForm = () => {
     event.preventDefault();
 
     if (passwordInput.current.value !== repeatPasswordInput.current.value) {
-      console.log(
-        passwordInput.current.value,
-        repeatPasswordInput.current.value
-      );
       handleModalText("The two passwords don't match!");
       return;
     }

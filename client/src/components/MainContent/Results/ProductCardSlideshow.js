@@ -42,7 +42,6 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   const handleOpenPicture = (imgData) => {
     setOverlayData({ src: imgData.src, alt: imgData.alt });
     setOverlayOpen(true);
-    console.log(overlayOpen, "overlayOpne");
   };
 
   const handleClosePicture = () => {

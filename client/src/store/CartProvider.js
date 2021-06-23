@@ -96,7 +96,6 @@ const CartProvider = (props) => {
   }, [items]);
 
   const updateItemQuantity = (id, quantity) => {
-    console.log(id, quantity, "ciao");
     setItems((prevState) => {
       const newProducts = [...prevState];
       const updatedItemIndex = newProducts.findIndex((item) => {
@@ -131,7 +130,6 @@ const CartProvider = (props) => {
           }),
         });
         const data = await fetchResponse.json();
-        console.log(data);
         if (data.deletedCount === 1) {
           // Deleted
           setItems((prevState) => {

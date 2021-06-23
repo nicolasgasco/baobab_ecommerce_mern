@@ -16,7 +16,6 @@ const Orders = () => {
   useEffect(() => {
     const userToken = jwt_decode(localStorage.getItem("token"));
     const handleFetchedOrders = (result) => {
-      console.log(result);
       if (!result.ordersFound) {
         throw new Error("No results found");
       }
@@ -49,7 +48,6 @@ const Orders = () => {
   };
 
   const showOrders = orders.map((order) => {
-    console.log(order.userAddress);
     return (
       <div key={order.orderId}>
         <h3 className="font-bold text-xl mt-6">

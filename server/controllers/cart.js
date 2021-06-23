@@ -64,7 +64,6 @@ const addCartItem = async (req, res) => {
         // Doesn't work with three equal signs
         return item._id == cartItem._id;
       });
-      console.log(itemAlreadyFound);
       if (itemAlreadyFound.length === 0) {
         const update = await Cart.updateOne(
           { _id: cartCollection[0]._id },
@@ -101,7 +100,6 @@ const deleteCartItem = async (req, res) => {
       { _id: cartCollection[0]._id },
       { $pull: { cartItems: { _id: cartItemId } } }
     );
-    console.log(cartItemId);
     if (update.nModified === 1) {
       res.send({ deletedCount: 1 });
     } else {
@@ -117,7 +115,6 @@ const deleteWholeCart = async (req, res) => {
 
   try {
     const result = await Cart.findOneAndDelete({ userId });
-    console.log(result);
     if (result._id) {
       res.send({ deletedCount: 1, result: result });
     } else {

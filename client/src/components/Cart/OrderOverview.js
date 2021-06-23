@@ -42,7 +42,6 @@ const OrderOverview = ({ items, classes }) => {
   };
 
   const getRatingValue = (value) => {
-    console.log(value, "value is");
     setRatingValue(value);
   };
 
@@ -62,7 +61,6 @@ const OrderOverview = ({ items, classes }) => {
       });
     };
 
-    console.log(ratingValue, "value");
     if (ratingValue) {
       updateRating(
         {

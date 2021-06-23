@@ -266,7 +266,6 @@ describe("/api/users", () => {
           .put(`/api/users/12345`)
           .send(validUserCopy);
 
-        console.log(res.body);
         expect(res.status).toBe(400);
         expect(res.body.error).toMatch(/Invalid/i);
       });
@@ -292,8 +291,6 @@ describe("/api/users", () => {
         const res = await request(server)
           .put(`/api/users/`)
           .send(validUserCopy);
-        
-        console.log(res);
 
         expect(res.status).toBe(400);
         expect(res.body.error).toMatch(/missing/);

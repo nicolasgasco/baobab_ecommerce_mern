@@ -67,7 +67,6 @@ const ProfilePage = () => {
       const res = await fetch(`/api/users/${id}`);
       const user = await res.json();
       if (user.resultsFound && user.result.address) {
-        console.log(user.result.address);
         setUserAddress(user.result.address);
         setIsLoading(false);
       } else {
