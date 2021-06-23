@@ -58,10 +58,6 @@ typings/
 
 # dotenv environment variables file
 .env
-client\build
-client/build
-server\build
-server/build
 
 # next.js build output
 .next
