@@ -5,22 +5,29 @@ import useHttp from "../../../hooks/use-http";
 
 const ProductsSectionCard = () => {
   const [products, setProducts] = useState(["", "", ""]);
+  const [picturesLoading, setPicturesLoading] = useState(false);
 
   const { sendRequest: fetchLatestProducts } = useHttp();
 
   useEffect(() => {
+    const handleError = (err) => {
+      setPicturesLoading(false);
+    };
     // Fetching latest three results
     const handleFetchedProducts = (result) => {
       if (result.resultsFound !== 3) {
         throw new Error("Found less than three results");
       }
       setProducts(result.results);
+      setPicturesLoading(false);
     };
+    setPicturesLoading(true);
     fetchLatestProducts(
       {
         url: "/api/products/?pageSize=3&pageNum=1&sortBy=creationDate&order=-1",
       },
-      handleFetchedProducts
+      handleFetchedProducts,
+      handleError
     );
   }, [fetchLatestProducts]);
 
@@ -29,7 +36,8 @@ const ProductsSectionCard = () => {
       return (
         product && (
           <ProductCardSlideshow
-            key={`product-${index+1}`}
+            picturesLoading={picturesLoading}
+            key={`product-${index + 1}`}
             product={product}
             // Showing only 2 elements if three don't fit
             classes={index === 2 ? `hidden xl:flex` : ""}
