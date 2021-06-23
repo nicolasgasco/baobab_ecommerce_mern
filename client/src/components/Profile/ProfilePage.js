@@ -138,18 +138,12 @@ const ProfilePage = () => {
   // Error messages shown in a box below form
   const [errorMessages, setErrorMessages] = useState([]);
 
-  // Utility function to capitalize certain words
-  // const capitalizeWord = (word) => {
-  //   if (word) {
-  //     return word.charAt(0).toUpperCase() + word.slice(1);
-  //   }
-  // };
-
   const handleEditButton = () => {
     setIsEditing(true);
   };
 
   const handleCancelButton = () => {
+    setErrorMessages([])
     setIsEditing(false);
     setLegacyData();
   };
