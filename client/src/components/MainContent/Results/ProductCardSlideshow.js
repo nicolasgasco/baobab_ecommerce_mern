@@ -11,6 +11,7 @@ import { ShoppingCartIcon } from "@heroicons/react/outline";
 
 import Spinner from "../../../assets/img/Spinner-5.gif";
 import LoadingOverlay from "../../UI/LoadingOverlay";
+import PictureOverlay from "./PictureOverlay";
 
 import CartContext from "../../../store/cart-context";
 import useHttp from "../../../hooks/use-http";
@@ -19,6 +20,8 @@ import RatingSystem from "../../UI/RatingSystem";
 const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   const { addItemToCart } = useContext(CartContext);
   const [starRating, setStarRating] = useState(0);
+  const [overlayData, setOverlayData] = useState({});
+  const [overlayOpen, setOverlayOpen] = useState(false);
 
   // Get product rating
   useEffect(() => {
@@ -36,6 +39,19 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
     setIsLoading(false);
   };
 
+  const handleOpenPicture = (imgData) => {
+    console.log("event");
+
+    setOverlayData({ src: imgData.src, alt: imgData.alt });
+    setOverlayOpen(true);
+    console.log(overlayOpen, "overlayOpne");
+  };
+
+  const handleClosePicture = () => {
+    console.log("close");
+    setOverlayOpen(false);
+  };
+
   let showPictures;
   if (product) {
     showPictures = product.pictures.map((picture, index) => {
@@ -51,6 +67,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
         return (
           <Slide className="flex items-center justify-center" index={index + 1}>
             <img
+              onClick={(e) => handleOpenPicture(e.target)}
               src={picture.url}
               alt={picture.alt}
               className="mx-auto h-52 w-52 object-cover object-center z-0"
@@ -63,6 +80,13 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   return (
     <>
       {isLoading && <LoadingOverlay />}
+      {overlayOpen && (
+        <PictureOverlay
+          src={overlayData.src}
+          alt={overlayData.alt}
+          handleClosePicture={handleClosePicture}
+        />
+      )}
       <div
         key={`product-${product._id}`}
         className={`${
@@ -165,7 +189,10 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                     (product.pricingInfo.price -
                       Math.floor(product.pricingInfo.price)) *
                     100
-                  ).toFixed(0).toString().padStart(2, '0')}
+                  )
+                    .toFixed(0)
+                    .toString()
+                    .padStart(2, "0")}
                 </span>
               }
               <p className="inline text-2xl"> €</p>

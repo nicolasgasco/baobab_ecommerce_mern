@@ -1,10 +1,11 @@
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import ModalContext from "../../store/modal-context";
 import { useHistory, useLocation } from "react-router-dom";
 
-const MainModal = () => {
+const ModalContent = () => {
   const { isOpen, modalText, modalBody, toggleModal } =
     useContext(ModalContext);
 
@@ -130,6 +131,17 @@ const MainModal = () => {
         </div>
       </Dialog>
     </Transition.Root>
+  );
+};
+
+const MainModal = () => {
+  return (
+    <>
+      {ReactDOM.createPortal(
+        <ModalContent />,
+        document.getElementById("overlay-root")
+      )}
+    </>
   );
 };
 
