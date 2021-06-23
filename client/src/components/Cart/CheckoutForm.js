@@ -88,7 +88,6 @@ export default function CheckoutForm() {
       setError(`Payment failed ${payload.error.message}`);
       setProcessing(false);
     } else {
-      console.log("payment processed");
       const userId = jwt_decode(localStorage.getItem("token"))._id;
       saveOrder(userId, items, userAddress);
       setError(null);

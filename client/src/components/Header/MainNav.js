@@ -39,7 +39,7 @@ const MainNav = () => {
     if (localStorage.getItem("token")) {
       setUserDataFromToken(jwt_decode(localStorage.getItem("token")));
     }
-  }, []);
+  }, [handleOpenLogin, logoutUser]);
 
   // Setting user greeting
   useEffect(() => {

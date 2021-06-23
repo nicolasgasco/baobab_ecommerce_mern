@@ -40,7 +40,6 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   };
 
   const handleOpenPicture = (imgData) => {
-    console.log("event");
 
     setOverlayData({ src: imgData.src, alt: imgData.alt });
     setOverlayOpen(true);
@@ -48,7 +47,6 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   };
 
   const handleClosePicture = () => {
-    console.log("close");
     setOverlayOpen(false);
   };
 
@@ -85,15 +83,16 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
           src={overlayData.src}
           alt={overlayData.alt}
           handleClosePicture={handleClosePicture}
+          showPictures={showPictures}
         />
       )}
       <div
         key={`product-${product._id}`}
-        className={`pb-10 md:px-4 md:w-1/2 xl:w-1/3 max-w-sm px-2 ${classes}`}
+        className={`pb-10 md:px-4 w-full md:w-1/2 xl:w-1/3 max-w-sm px-2 h-full ${classes}`}
       >
         <div className="shadow-lg rounded-3xl z-0 ">
           <div
-            className="flex items-center rounded-t-3xl justify-between bg-white px-2
+            className="rounded-t-3xl bg-white px-2
            py-4"
           >
             <CarouselProvider
@@ -130,7 +129,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                   </svg>
                 </div>
               </ButtonBack>
-              <Slider className="shadow-md rounded-lg flex justify-center align-center">
+              <Slider className="shadow-md h-52 w-52 rounded-lg">
                 {showPictures}
               </Slider>
               <ButtonNext
@@ -162,14 +161,16 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
             </CarouselProvider>
           </div>
           <div className="border-t p-6 bg-green-200 dark:bg-gray-800 rounded-b-3xl">
-            <div className="flex items-baseline">
+            <div className="">
               <span className="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
                 {product.department.name}
               </span>
             </div>
-            <h3 className="mt-2 text-xl font-semibold leading-tight mb-2">
-              {`${product.completeName.brand} ${product.completeName.productName}, ${product.completeName.shortDesc}, ${product.completeName.productDesc1}, ${product.completeName.productDesc2}, ${product.completeName.productDesc3}, ${product.completeName.color}`}
-            </h3>
+            <div className="">
+              <h3 className="mt-2 text-xl font-semibold leading-tight mb-2">
+                {`${product.completeName.brand} ${product.completeName.productName}, ${product.completeName.shortDesc}, ${product.completeName.productDesc1}, ${product.completeName.productDesc2}, ${product.completeName.productDesc3}, ${product.completeName.color}`}
+              </h3>
+            </div>
             <div className="flex items-center pt-3">
               <RatingSystem
                 notInteractive={true}
@@ -216,7 +217,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                 {` ${product.ecoInfo.productionCountryCode}`}
               </span>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 bg-green-100 p-2 rounded-md">
               <span className="text-teal-600 text-md font-semibold uppercase">
                 Social:
               </span>
@@ -224,7 +225,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                 {` ${product.ecoInfo.socialMission}`}
               </span>
             </div>
-            <div className="mt-1">
+            <div className="mt-4 bg-green-100 p-2 rounded-md">
               <span className="text-teal-600 text-md font-semibold uppercase">
                 Environment:
               </span>

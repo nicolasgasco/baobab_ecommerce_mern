@@ -12,16 +12,13 @@ const CartProvider = (props) => {
 
   const fetchCartFromDB = async () => {
     // Fetching from DB if user is logged
-    console.log("fetchin items");
     if (localStorage.getItem("token")) {
       const userId = jwt_decode(localStorage.getItem("token"))._id;
       const fetchResponse = await fetch(`/api/cart/${userId}`);
       const allCartItems = await fetchResponse.json();
       if (allCartItems.results) {
-        console.log("items fetched");
         setItems(allCartItems.results);
       } else {
-        console.log("items empty");
         setItems([]);
       }
       // Fetching from localStorage if user not logged
@@ -37,14 +34,11 @@ const CartProvider = (props) => {
   }, []);
 
   const addItemToCart = async (item) => {
-    console.log("Adding item to cart");
     // Adding quantity propierty to item
     item.quantity = 1;
     // If user is logged
     if (localStorage.getItem("token")) {
       try {
-        console.log("posting cart");
-        console.log("merda", item);
         const fetchResponse = await fetch("/api/cart/", {
           method: "POST",
           headers: {
@@ -56,7 +50,6 @@ const CartProvider = (props) => {
           }),
         });
         const data = await fetchResponse.json();
-        console.log("data", data);
         if (data.insertedCount === 1) {
           // Good
         } else {
@@ -127,7 +120,6 @@ const CartProvider = (props) => {
     if (localStorage.getItem("token")) {
       try {
         const userId = jwt_decode(localStorage.getItem("token"))._id;
-        console.log("deleting cart");
         const fetchResponse = await fetch("/api/cart/", {
           method: "DELETE",
           headers: {
@@ -141,7 +133,6 @@ const CartProvider = (props) => {
         const data = await fetchResponse.json();
         console.log(data);
         if (data.deletedCount === 1) {
-          console.log("item deleted");
           // Deleted
           setItems((prevState) => {
             if (prevState.length === 1) {
@@ -179,7 +170,6 @@ const CartProvider = (props) => {
   };
 
   const deleteCartLocal = () => {
-    console.log("Delete all");
     setItems([]);
   };
 
@@ -195,14 +185,12 @@ const CartProvider = (props) => {
       const order = await fetchResponse.json();
       deleteUserCart(id);
       setLastOrder(order.result);
-      console.log("Order saved");
     } catch (err) {
       console.log(err.message);
     }
   };
 
   const deleteUserCart = async (id) => {
-    console.log("Deleting user cart");
     try {
       const fetchResponse = await fetch(`/api/cart/whole/${id}`, {
         method: "DELETE",
@@ -212,7 +200,6 @@ const CartProvider = (props) => {
       });
       const deletedCart = await fetchResponse.json();
       if (deletedCart.deletedCount) {
-        console.log("Cart deleted");
         deleteCartLocal();
       } else {
         throw new Error("It wasn't possible to delete the cart");
