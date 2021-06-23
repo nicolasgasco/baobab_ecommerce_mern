@@ -58,6 +58,8 @@ typings/
 
 # dotenv environment variables file
 .env
+client\.dotenv
+client/.dotenv
 
 # next.js build output
 .next
@@ -124,4 +126,5 @@ main.css
 # Hidden files
 .*
 .gitignore
+client/.dotenv
 client/.dotenv
