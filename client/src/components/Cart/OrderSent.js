@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import OrderOverview from "./OrderOverview";
 
 import CartContext from "../../store/cart-context";
@@ -16,9 +16,7 @@ const OrderSent = () => {
     if (lastOrder && Object.keys(lastOrder).length > 0) {
       setOrder(lastOrder);
     } else {
-      console.log("ciao");
       const handleFetchedOrder = (result) => {
-        console.log(result);
         setOrder(result.result);
       };
       const userToken = jwt_decode(localStorage.getItem("token"));
