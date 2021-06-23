@@ -28,26 +28,12 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
   }, [product.ratingInfo.starRating]);
 
   // Custom hook per HTTP requests
-  const { isLoading, setIsLoading, sendRequest: fetchDepartments } = useHttp();
-  const [departmentName, setDepartmentName] = useState("");
-
-  useEffect(() => {
-    const handleFetchedDepartments = (res) => {
-      setDepartmentName(res.result.name);
-    };
-    fetchDepartments(
-      { url: `api/departments/${product.department}` },
-      handleFetchedDepartments
-    );
-  }, [fetchDepartments, product.department]);
+  const { isLoading, setIsLoading } = useHttp();
 
   const handleAddToCart = (id) => {
-    console.log(id);
-    console.log("loading");
     setIsLoading(true);
     addItemToCart(id);
     setIsLoading(false);
-    console.log("finished");
   };
 
   let showPictures;
@@ -67,7 +53,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
             <img
               src={picture.url}
               alt={picture.alt}
-              className="h-52 w-full object-cover object-center z-0"
+              className="mx-auto h-52 w-52 object-cover object-center z-0"
             />
           </Slide>
         );
@@ -80,7 +66,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
       <div
         key={`product-${product._id}`}
         className={`${
-          classes ? classes : "pb-10 md:px-4 sm:w-1/2 xl:w-1/3 px-2"
+          classes ? classes : "pb-10 md:px-4 sm:w-1/3 xl:w-1/3 max-w-sm px-2"
         }
         `}
       >
@@ -119,7 +105,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
                   </svg>
                 </div>
               </ButtonBack>
-              <Slider className="w-50 h-52 shadow-md rounded-lg flex justify-center align-center">
+              <Slider className="w-52 h-52 shadow-md rounded-lg flex justify-center align-center">
                 {showPictures}
               </Slider>
               <ButtonNext className="focus:outline-none cursor-pointer">
@@ -149,7 +135,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
           <div className="border-t p-6 bg-green-200 dark:bg-gray-800 rounded-b-3xl">
             <div className="flex items-baseline">
               <span className="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
-                {departmentName}
+                {product.department.name}
               </span>
             </div>
             <h3 className="mt-2 text-xl font-semibold leading-tight mb-2">
