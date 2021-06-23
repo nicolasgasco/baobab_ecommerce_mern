@@ -89,7 +89,7 @@ export default function CheckoutForm() {
       setProcessing(false);
     } else {
       const userId = jwt_decode(localStorage.getItem("token"))._id;
-      saveOrder(userId, items, userAddress);
+      saveOrder(userId, items);
       setError(null);
       setProcessing(false);
       setSucceeded(true);
