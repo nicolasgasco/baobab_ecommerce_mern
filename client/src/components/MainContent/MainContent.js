@@ -91,7 +91,7 @@ const MainContent = () => {
 
   // Fetching the products by keywords
   const getSearchbarInput = useCallback(
-    (input) => {
+    (input = null) => {
       // Redirect to search to render searchbox
       history.push("/search");
       // dispatchResults({ type: "SHOW_RESULTS", val: true });
@@ -101,8 +101,6 @@ const MainContent = () => {
       // THis is necessary, otherwise some products just stay stuck there
       dispatchResults({ type: "FETCHED_PRODUCTS", val: [] });
       dispatchResults({ type: "SEARCH_KEYWORDS", val: input });
-
-      console.log("Fetching products...");
 
       // Function with logic for when products are fetched
       const handleFetchedProducts = (res) => {
@@ -229,7 +227,6 @@ const MainContent = () => {
 
   // Redirecting if there are no results on load (e.g. when manually realoding)
   useEffect(() => {
-    console.log("No products fetched");
     if (resultsState.fetchedProducts.length === 0) {
       history.push("/");
     }
@@ -253,7 +250,12 @@ const MainContent = () => {
   // Squared brackets because I'm using map later
   const location = useLocation();
   let resultsContent;
+  console.log(location.pathname, "pathname");
+
   switch (location.pathname) {
+    case "/":
+      resultsContent = [<HeroMain />, <ProductsSectionCard />];
+      break;
     case "/search":
       resultsContent = [
         <ResultsBox
@@ -294,10 +296,8 @@ const MainContent = () => {
       redirectIfNotLoggedIn();
       resultsContent = [<Orders />];
       break;
-    case "/":
-      resultsContent = [<HeroMain />, <ProductsSectionCard />];
-      break;
     default:
+      resultsContent = [<HeroMain />, <ProductsSectionCard />];
       break;
   }
 

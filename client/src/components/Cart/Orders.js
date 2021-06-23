@@ -15,7 +15,6 @@ const Orders = () => {
 
   useEffect(() => {
     const userToken = jwt_decode(localStorage.getItem("token"));
-    console.log("fetching orders");
     const handleFetchedOrders = (result) => {
       console.log(result);
       if (!result.ordersFound) {

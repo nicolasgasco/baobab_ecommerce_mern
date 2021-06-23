@@ -57,7 +57,6 @@ const OrderOverview = ({ items, classes }) => {
     };
 
     const handleErrorRating = () => {
-      console.log("ERROR!!!");
       setShowErrorRating((prevState) => {
         return [...prevState, id];
       });
@@ -83,7 +82,6 @@ const OrderOverview = ({ items, classes }) => {
   };
 
   const showRatingContent = (id) => {
-    console.log("IDIDDD", showSuccessRating.indexOf(id));
     if (showSuccessRating.indexOf(id) !== -1) {
       return <p className="font-bold">Your rating was saved!</p>;
     } else if (showSuccessRating.indexOf(id) !== -1) {

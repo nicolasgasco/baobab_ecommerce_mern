@@ -38,7 +38,8 @@ const StoreSearchbar = ({
 
   useEffect(() => {
     onGetSearchbarInput(searchbarInputRef.current.value.trim());
-  }, [activePage, onGetSearchbarInput]);
+    // this works better without function as argument
+  }, [activePage]);
 
   return (
     <form

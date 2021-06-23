@@ -36,6 +36,7 @@ const App = () => {
               <MainContent />
             </div>
           </Route>
+
           <Route exact path="/signin">
             <div className="min-h-screen">
               <MainContent />
@@ -75,7 +76,7 @@ const App = () => {
             </div>
           </Route>
 
-          <Route path="*">
+          <Route path="/*">
             <Redirect to="/" />
           </Route>
         </Switch>
