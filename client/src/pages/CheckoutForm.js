@@ -6,10 +6,10 @@ import jwt_decode from "jwt-decode";
 import styles from "./CheckoutForm.module.css";
 import { CreditCardIcon } from "@heroicons/react/outline";
 
-import CartContext from "../../store/cart-context";
+import CartContext from "../store/cart-context";
 import { useHistory } from "react-router";
 
-import useHttp from "../../hooks/use-http";
+import useHttp from "../hooks/use-http";
 
 export default function CheckoutForm() {
   const { items, saveOrder, userAddress } = useContext(CartContext);

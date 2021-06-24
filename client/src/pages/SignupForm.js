@@ -1,9 +1,9 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { useRef, useContext } from "react";
-import BaobabLogo from "../../../assets/img/baobab.svg";
+import BaobabLogo from "../assets/img/baobab.svg";
 
-import AuthContext from "../../../store/auth-context";
-import ModalContext from "../../../store/modal-context";
+import AuthContext from "../store/auth-context";
+import ModalContext from "../store/modal-context";
 
 const SignupForm = () => {
   const nameInput = useRef();

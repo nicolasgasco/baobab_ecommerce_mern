@@ -1,13 +1,13 @@
 import { useState, useContext } from "react";
 import { useHistory } from "react-router";
-import AuthContext from "../../store/auth-context";
-import ModalContext from "../../store/modal-context";
+import AuthContext from "../store/auth-context";
+import ModalContext from "../store/modal-context";
 
-import LoadingOverlay from "../UI/LoadingOverlay";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 import jwt_decode from "jwt-decode";
 
-import useHttp from "../../hooks/use-http";
+import useHttp from "../hooks/use-http";
 
 const PasswordChange = () => {
   const { checkPassword } = useContext(AuthContext);

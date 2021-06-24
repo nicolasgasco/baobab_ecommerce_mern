@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
-import ModalContext from "../../store/modal-context";
+import ModalContext from "../store/modal-context";
 
-import LoadingOverlay from "../UI/LoadingOverlay";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
-import useInput from "../../hooks/use-input";
+import useInput from "../hooks/use-input";
 
 const ProfilePage = () => {
   // For authentication
@@ -193,7 +193,6 @@ const ProfilePage = () => {
         return res.json();
       })
       .then(async (res) => {
-        console.log(res);
         if (res.error) throw new Error(res.error);
 
         // Reset error messages

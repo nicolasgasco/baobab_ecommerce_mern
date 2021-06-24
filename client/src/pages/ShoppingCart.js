@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 
-import CartContext from "../../store/cart-context";
-import NothingFound from "../../components/MainContent/Results/NothingFound";
+import CartContext from "../store/cart-context";
+import NothingFound from "../components/MainContent/Results/NothingFound";
 
 import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
-import CartTable from "./CartTable";
-import useHttp from "../../hooks/use-http";
+import CartTable from "../components/Cart/CartTable";
+import useHttp from "../hooks/use-http";
 
 const ShoppingCart = () => {
   const { items, totalPrice, setUserAddress } = useContext(CartContext);

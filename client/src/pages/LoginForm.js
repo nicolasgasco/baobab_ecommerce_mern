@@ -1,9 +1,9 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import React, { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
-import BaobabLogo from "../../../assets/img/baobab.svg";
+import BaobabLogo from "../assets/img/baobab.svg";
 
-import AuthContext from "../../../store/auth-context";
+import AuthContext from "../store/auth-context";
 
 const Loginform = () => {
   const emailInput = useRef();

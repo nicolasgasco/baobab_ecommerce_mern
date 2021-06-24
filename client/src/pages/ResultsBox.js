@@ -1,10 +1,10 @@
 import React from "react";
-import NothingFound from "./NothingFound";
-import PageCounter from "./PageCounter";
-import SimpleDropdown from "../../UI/SimpleDropdown";
-import LoadingOverlay from "../../UI/LoadingOverlay";
-import ProductCardSlideshow from "./ProductCardSlideshow";
-import SectionedDropdown from "../../UI/SectionedDropdown";
+import NothingFound from "../components/MainContent/Results/NothingFound";
+import PageCounter from "../components/MainContent/Results/PageCounter";
+import SimpleDropdown from "../components/UI/SimpleDropdown";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ProductCardSlideshow from "../components/MainContent/Results/ProductCardSlideshow";
+import SectionedDropdown from "../components/UI/SectionedDropdown";
 
 const ResultsBox = ({
   fetchedProducts,

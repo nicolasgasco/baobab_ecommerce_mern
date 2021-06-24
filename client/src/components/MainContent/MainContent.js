@@ -9,11 +9,11 @@ import { useHistory, useLocation } from "react-router-dom";
 
 // Components
 import StoreSearchbar from "./StoreSearchbar";
-import HeroMain from "./HeroMain";
+import HeroMain from "./LandingPage/HeroMain";
 import BoxWrapper from "../UI/BoxWrapper";
-import ProductsSectionCard from "./ProductsSection/ProductsSectionCard";
+import ProductsSectionCard from "./LandingPage/ProductsSectionCard";
 import LoadingOverlay from "../UI/LoadingOverlay";
-import ResultsBox from "./Results/ResultsBox";
+import ResultsBox from "../../pages/ResultsBox";
 
 // Auth context for authentication
 import AuthContext from "../../store/auth-context";
@@ -21,14 +21,14 @@ import AuthContext from "../../store/auth-context";
 // Custom hook for querying APIK
 import useHttp from "../../hooks/use-http";
 
-const ProfilePage = React.lazy(() => import("../Profile/ProfilePage"));
-const PasswordChange = React.lazy(() => import("../Profile/PasswordChange"));
-const ShoppingCart = React.lazy(() => import("../Cart/ShoppingCart"));
-const CheckoutForm = React.lazy(() => import("../Cart/CheckoutForm"));
+const ProfilePage = React.lazy(() => import("../../pages/ProfilePage"));
+const PasswordChange = React.lazy(() => import("../../pages/PasswordChange"));
+const ShoppingCart = React.lazy(() => import("../../pages/ShoppingCart"));
+const CheckoutForm = React.lazy(() => import("../../pages/CheckoutForm"));
 const OrderSent = React.lazy(() => import("../Cart/OrderSent"));
 const Orders = React.lazy(() => import("../Cart/Orders"));
-const SignupForm = React.lazy(() => import("./Auth/SignupForm"));
-const Loginform = React.lazy(() => import("./Auth/LoginForm"));
+const SignupForm = React.lazy(() => import("../../pages/SignupForm"));
+const Loginform = React.lazy(() => import("../../pages/LoginForm"));
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -47,8 +47,6 @@ const defaultResultsState = {
 
 const resultsReducer = (state, action) => {
   switch (action.type) {
-    // case "SHOW_RESULTS":
-    //   return { ...state, showResultsBox: action.val };
     case "CONTENT_LOADING":
       return { ...state, contentLoading: action.val };
     case "PICTURES_LOADING":
