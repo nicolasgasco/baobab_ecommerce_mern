@@ -10,6 +10,7 @@ import useHttp from "../../hooks/use-http";
 
 const ShoppingCart = () => {
   const { items, totalPrice, setUserAddress } = useContext(CartContext);
+  console.log(items);
 
   const [userData, setUserData] = useState({});
 
@@ -71,7 +72,7 @@ const ShoppingCart = () => {
   } else {
     showShippingInfo = (
       <div>
-        <p>Create an account to complete your order.</p>
+        <p>Create an account or log in to complete your order.</p>
         <Link
           to="/signin"
           className="flex justify-center w-10/12 mx-auto px-10 py-3 mt-6 font-medium text-white uppercase bg-green-600 rounded-md shadow item-center hover:bg-green-700 focus:shadow-outline focus:outline-none"
@@ -85,6 +86,9 @@ const ShoppingCart = () => {
   return (
     <>
       <div className="lg:px-6 mx-0 md:mx-6">
+        <h2 className="mb-8 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Your shopping cart
+        </h2>
         {items.length === 0 && <NothingFound />}
         {items.length !== 0 && (
           <>

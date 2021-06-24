@@ -105,7 +105,7 @@ export default function CheckoutForm() {
         </div>
       </div>
       <div className="mb-10">
-        <h2 className="text-center font-bold text-xl uppercase">
+        <h2 className="mt-2 mb-4 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl text-center">
           Secure payment info
         </h2>
       </div>
