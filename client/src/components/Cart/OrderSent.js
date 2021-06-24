@@ -13,19 +13,21 @@ const OrderSent = () => {
   const { sendRequest: fetchLastOrder } = useHttp();
 
   const [order, setOrder] = useState(() => {
-    if (lastOrder && Object.keys(lastOrder).length > 0) {
-      setOrder(lastOrder);
-    } else {
-      const handleFetchedOrder = (result) => {
-        setOrder(result.result);
-      };
-      const userToken = jwt_decode(localStorage.getItem("token"));
+    // I don't remember why I put this part, but it was breaking my code
+    // if (lastOrder && Object.keys(lastOrder).length > 0) {
+    //   return lastOrder;
+    // } else {
+    const handleFetchedOrder = (result) => {
+      console.log(result, "result");
+      setOrder(result.result);
+    };
+    const userToken = jwt_decode(localStorage.getItem("token"));
 
-      fetchLastOrder(
-        { url: `api/order/latest/${userToken._id}` },
-        handleFetchedOrder
-      );
-    }
+    fetchLastOrder(
+      { url: `api/order/latest/${userToken._id}` },
+      handleFetchedOrder
+    );
+    // }
   });
 
   const formatDate = (dateObj) => {
@@ -44,7 +46,9 @@ const OrderSent = () => {
       ) : (
         <div className={"p-6"}>
           <div className="text-xl">
-            <h2 className="text-2xl font-bold mb-4">{`Your order (${order.orderId}) was received!`}</h2>
+            <h2 className="mb-4 -mt-4 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+              {`Your order (${order.orderId}) was received!`}
+            </h2>
             <p className="mb-2 ">
               You will receive confirmation via e-mail. You should receive your
               order betweeen 2-5 working days depending on your location.

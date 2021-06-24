@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import OrderOverview from "./OrderOverview";
+import NothingFound from "../MainContent/Results/NothingFound";
 
 import useHttp from "../../hooks/use-http";
 import jwt_decode from "jwt-decode";
@@ -72,10 +73,10 @@ const Orders = () => {
 
   return (
     <>
-      <h2 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+      <h2 className="-mt-4 mb-8 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
         Your orders
       </h2>
-      <div>{showOrders}</div>
+      <div>{orders.length > 0 ? showOrders : <NothingFound />}</div>
     </>
   );
 };
