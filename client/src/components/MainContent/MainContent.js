@@ -26,9 +26,9 @@ const PasswordChange = React.lazy(() => import("../Profile/PasswordChange"));
 const ShoppingCart = React.lazy(() => import("../Cart/ShoppingCart"));
 const CheckoutForm = React.lazy(() => import("../Cart/CheckoutForm"));
 const OrderSent = React.lazy(() => import("../Cart/OrderSent"));
-const AuthContent = React.lazy(() => import("./Auth/AuthContent"));
 const Orders = React.lazy(() => import("../Cart/Orders"));
-// const ResultsBox = React.lazy(() => import("./Results/ResultsBox"));
+const SignupForm = React.lazy(() => import("./Auth/SignupForm"));
+const Loginform = React.lazy(() => import("./Auth/LoginForm"));
 
 const defaultResultsState = {
   showResultsBox: false,
@@ -199,7 +199,6 @@ const MainContent = () => {
   }, []);
 
   const handleSortingFilter = useCallback((value) => {
-    console.log(value, "value");
     dispatchResults({ type: "SORTING_FILTER", val: value });
   }, []);
 
@@ -260,7 +259,10 @@ const MainContent = () => {
       ];
       break;
     case "/signin":
-      resultsContent = [<AuthContent />];
+      resultsContent = [<Loginform />];
+      break;
+    case "/signup":
+      resultsContent = [<SignupForm />];
       break;
     case "/profile":
       redirectIfNotLoggedIn();

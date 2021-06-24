@@ -9,8 +9,6 @@ const AuthContext = React.createContext({
   loginUser: (userData) => {},
   logoutUser: () => {},
   signupUser: (userData) => {},
-  handleOpenLogin: () => {},
-  handleOpenSignup: () => {},
   checkLogin: () => {},
   checkPassword: (userData) => {},
 });

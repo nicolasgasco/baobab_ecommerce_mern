@@ -1,5 +1,6 @@
 import { LockClosedIcon } from "@heroicons/react/solid";
 import React, { useContext, useRef } from "react";
+import { Link } from "react-router-dom";
 import BaobabLogo from "../../../assets/img/baobab.svg";
 
 import AuthContext from "../../../store/auth-context";
@@ -8,7 +9,7 @@ const Loginform = () => {
   const emailInput = useRef();
   const passwordInput = useRef();
 
-  const { loginUser, handleOpenSignup } = useContext(AuthContext);
+  const { loginUser } = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,12 +33,12 @@ const Loginform = () => {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or{" "}
-            <button
-              onClick={handleOpenSignup}
+            <Link
+              to="/signup"
               className="font-medium text-green-600 hover:text-green-500 cursor-pointer"
             >
               sign up for a free account!
-            </button>
+            </Link>
           </p>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6 w-full">

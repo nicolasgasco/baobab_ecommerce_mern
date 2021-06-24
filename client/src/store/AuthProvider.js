@@ -183,15 +183,6 @@ const AuthProvider = (props) => {
       });
   }, []);
 
-  const handleOpenLogin = () => {
-    setOpenLogin(true);
-    setOpenSignup(false);
-  };
-  const handleOpenSignup = () => {
-    setOpenLogin(false);
-    setOpenSignup(true);
-  };
-
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     setIsLogged(!!localStorage.getItem("token"));
@@ -206,8 +197,6 @@ const AuthProvider = (props) => {
     loginUser,
     signupUser,
     logoutUser,
-    handleOpenLogin,
-    handleOpenSignup,
     checkLogin,
     checkPassword,
   };

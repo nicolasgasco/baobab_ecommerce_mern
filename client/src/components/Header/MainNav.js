@@ -25,7 +25,7 @@ const MainNav = () => {
   const history = useHistory();
 
   // User related states
-  const { logoutUser, handleOpenLogin } = useContext(AuthContext);
+  const { logoutUser } = useContext(AuthContext);
   // Used for greeting user on main nav
   const [userGreeting, setUserGreeting] = useState("");
   const navigation = [userGreeting];
@@ -39,7 +39,7 @@ const MainNav = () => {
     if (localStorage.getItem("token")) {
       setUserDataFromToken(jwt_decode(localStorage.getItem("token")));
     }
-  }, [handleOpenLogin, logoutUser]);
+  }, [logoutUser]);
 
   // Setting user greeting
   useEffect(() => {
@@ -67,7 +67,6 @@ const MainNav = () => {
 
   const handleSignin = () => {
     history.push("/signin");
-    handleOpenLogin();
   };
 
   const handleLogout = () => {

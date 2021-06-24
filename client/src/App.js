@@ -42,6 +42,11 @@ const App = () => {
               <MainContent />
             </div>
           </Route>
+          <Route exact path="/signup">
+            <div className="min-h-screen">
+              <MainContent />
+            </div>
+          </Route>
           <Route exact path="/profile">
             <div className="min-h-screen">
               <MainContent />
