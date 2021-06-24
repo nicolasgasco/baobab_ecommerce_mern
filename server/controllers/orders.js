@@ -1,6 +1,7 @@
 const { id } = require("../joi/password");
 const productSchemaJoi = require("../joi/products");
 const { Order } = require("../models/orders");
+const { nanoid } = require("nanoid");
 
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 
@@ -18,6 +19,7 @@ const makePayment = async (req, res) => {
     amount: calculateOrderAmount(items),
     currency: "eur",
   });
+
   res.send({
     clientSecret: paymentIntent.client_secret,
   });
@@ -47,11 +49,19 @@ const saveOrder = async (req, res) => {
 
   if (foundError) return;
 
+  const orderToSave = {
+    userId,
+    items,
+    userAddress,
+    orderId: nanoid(),
+  };
+
   try {
-    const newOrder = new Order({ userId, items, userAddress });
+    const newOrder = new Order(orderToSave);
     const result = await newOrder.save();
     res.send({ orderAdded: 1, result });
   } catch (err) {
+    console.log(err);
     res.status(400).send({ error: err.message });
   }
 };
@@ -69,6 +79,7 @@ const getNewestorder = async (req, res) => {
       throw new Error("No order found");
     }
   } catch (err) {
+    console.log(err.message);
     res.status(400).send({ error: err.mesasge });
   }
 };
