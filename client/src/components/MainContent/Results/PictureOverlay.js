@@ -34,7 +34,7 @@ const OverlayContent = ({ src, alt, handleClosePicture }) => {
           <img
             src={src}
             alt={alt}
-            className="mx-auto h-full shadow-md rounded-lg max-h-screen"
+            className="mx-auto shadow-md rounded-lg max-h-screen"
           />
         </div>
       </div>
