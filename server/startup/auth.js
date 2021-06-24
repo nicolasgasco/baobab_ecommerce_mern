@@ -78,25 +78,26 @@ const passportLogic = (app) => {
     // Encrypt password now and not before (middleware), otherwise it cannot be validated
     req.body.password = encryptPassword(req.body.password);
 
-    // Creating new mongoose user with body
-    const user = new User(req.body);
-
-    // Second round of validation with Mongoose
     try {
+      // Creating new mongoose user with body
+      const user = new User(req.body);
+
+      // Second round of validation with Mongoose
       await user.validate();
+
+      console.log("Mongoose validation successful");
+
+      // Saving in DB and sending result
+      const result = await user.save();
+      // User will be authorized automatically
+      const token = user.generateAuthToken();
+      res
+        .header("x-auth-token", token)
+        .send({ insertedCount: 1, result: result });
     } catch (error) {
       console.log(error.message);
       res.status(400).send({ error: `${error.name}: ${error.message}` });
     }
-    console.log("Mongoose validation successful");
-
-    // Saving in DB and sending result
-    const result = await user.save();
-    // User will be authorized automatically
-    const token = user.generateAuthToken();
-    res
-      .header("x-auth-token", token)
-      .send({ insertedCount: 1, result: result });
   });
 
   app.get("/api/check", (req, res) => {
