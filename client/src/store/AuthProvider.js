@@ -112,7 +112,7 @@ const AuthProvider = (props) => {
         loginUser({ email: userData.email, password: userData.password });
       })
       .catch((error) => {
-        console.log(error.message);
+        console.log(error.message, "PORCOOO");
         if (error.message.includes("Joi")) {
           handleModalText(
             "Something went wrong",
@@ -121,11 +121,10 @@ const AuthProvider = (props) => {
         } else if (error.message.includes("not unique")) {
           handleModalText(
             "Something went wrong",
-            `${error.message
-              .split("email:")[1]
-              .replaceAll(",", ".\n")
-              .split(".\n")}`
+            error.message.split("email:")[1].replaceAll(",", ".\n").split(".\n")
           );
+        } else if (error.message.includes("duplicate")) {
+          handleModalText("Something went wrong", `User already exists!`);
         }
 
         console.log("An error ocurred: " + error.message);
