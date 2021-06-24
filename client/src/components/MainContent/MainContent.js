@@ -198,10 +198,17 @@ const MainContent = () => {
     }
   }, []);
 
-  const handleSortingFilter = useCallback((value) => {
-    dispatchResults({ type: "SORTING_FILTER", val: value });
-    dispatchResults({ type: "SEARCH_KEYWORDS", val: "" });
-  }, []);
+  const handleSortingFilter = useCallback(
+    (value) => {
+      console.log(value, "value");
+      dispatchResults({ type: "SORTING_FILTER", val: value });
+      // dispatchResults({ type: "SEARCH_KEYWORDS", val: "" });
+      if (value) {
+        getSearchbarInput(resultsState.searchKeywords);
+      }
+    },
+    [getSearchbarInput, resultsState.searchKeywords]
+  );
 
   useEffect(() => {
     if (resultsState.searchKeywords !== "") {
@@ -293,6 +300,7 @@ const MainContent = () => {
     <>
       <StoreSearchbar
         handleDepartmentFilter={handleDepartmentFilter}
+        handleSortingFilter={handleSortingFilter}
         departmentFilter={resultsState.departmentFilter}
         onGetSearchbarInput={getSearchbarInput}
         handleActivePage={handleActivePage}
