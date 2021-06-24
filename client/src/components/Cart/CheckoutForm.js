@@ -98,9 +98,9 @@ export default function CheckoutForm() {
   };
 
   return (
-    <div className="w-full mx-auto" style={{ maxWidth: "600px" }}>
+    <div className="mt-10 md:mt-0 w-full mx-auto" style={{ maxWidth: "600px" }}>
       <div className="w-full pt-1 pb-5">
-        <div className="bg-yellow-500 text-white overflow-hidden rounded-full w-20 h-20 -mt-16 mx-auto shadow-lg flex justify-center items-center">
+        <div className="bg-yellow-500 text-white overflow-hidden rounded-full w-20 h-20 -mt-20 md:-mt-16 mx-auto shadow-lg flex justify-center items-center">
           <CreditCardIcon className="w-2/3" />
         </div>
       </div>
