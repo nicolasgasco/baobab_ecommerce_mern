@@ -198,26 +198,20 @@ const MainContent = () => {
     }
   }, []);
 
-  const handleSortingFilter = useCallback(
-    (value) => {
-      console.log(value, "value");
-      dispatchResults({ type: "SORTING_FILTER", val: value });
-      // dispatchResults({ type: "SEARCH_KEYWORDS", val: "" });
-      if (value) {
-        getSearchbarInput(resultsState.searchKeywords);
-      }
-    },
-    [getSearchbarInput, resultsState.searchKeywords]
-  );
+  const handleSortingFilter = useCallback((value) => {
+    console.log(value, "value");
+    dispatchResults({ type: "SORTING_FILTER", val: value });
+  }, []);
 
   useEffect(() => {
-    if (resultsState.searchKeywords !== "") {
-      getSearchbarInput(resultsState.searchKeywords);
-    }
+    // if (resultsState.searchKeywords !== "") {
+    getSearchbarInput(resultsState.searchKeywords);
+    // }
   }, [
     resultsState.resultsPerPage,
     resultsState.searchKeywords,
     resultsState.activePage,
+    resultsState.sortingFilter,
     getSearchbarInput,
   ]);
 
