@@ -128,3 +128,4 @@ client/.dotenv
 client/.dotenv
 client/build/favicon.ico
 server/build/favicon.ico
+client/src/styles/output.css
