@@ -11,7 +11,6 @@ const orderSchema = new mongoose.Schema(
       unique: true,
       index: true,
       type: String,
-      default: nanoid(),
     },
     userId: {
       // Otherwise it triggers duplicate key error
