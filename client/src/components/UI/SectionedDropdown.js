@@ -18,10 +18,10 @@ const SectionedDropdown = ({ handleSortingFilter }) => {
   ]);
   const [currentItem, setCurrentItem] = useState("");
 
-  const showItems = dropdownItems.map(([item1, item2]) => {
+  const showItems = dropdownItems.map(([item1, item2], index) => {
     return (
-      <div className="py-1" key={`div-${item1.value}-${item2.value}`}>
-        <Menu.Item key={item1.value}>
+      <div className="py-1" key={`div-${index + 1}`}>
+        <Menu.Item key={`div-${index + 1}-a`}>
           {({ active }) => (
             <button
               onClick={function () {
@@ -38,7 +38,7 @@ const SectionedDropdown = ({ handleSortingFilter }) => {
             </button>
           )}
         </Menu.Item>
-        <Menu.Item key={item1.value}>
+        <Menu.Item key={`div-${index + 1}-b`}>
           {({ active }) => (
             <button
               onClick={function () {
@@ -65,7 +65,7 @@ const SectionedDropdown = ({ handleSortingFilter }) => {
         <>
           <div>
             <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-green-500">
-              {currentItem || "Sort by"}
+              {"Sort by"}
               <ChevronDownIcon
                 className="-mr-1 ml-2 h-5 w-5"
                 aria-hidden="true"
