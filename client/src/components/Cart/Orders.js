@@ -4,8 +4,10 @@ import NothingFound from "../MainContent/Results/NothingFound";
 
 import useHttp from "../../hooks/use-http";
 import jwt_decode from "jwt-decode";
+import LoadingOverlay from "../UI/LoadingOverlay";
 
 const Orders = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [orders, setOrders] = useState([]);
 
   const { sendRequest: fetchOrders } = useHttp();
@@ -13,8 +15,10 @@ const Orders = () => {
   useEffect(() => {
     const userToken = jwt_decode(localStorage.getItem("token"));
     const handleFetchedOrders = (result) => {
+      setIsLoading(false);
       if (!result.ordersFound) {
-        throw new Error("No results found");
+        setOrders([]);
+        return;
       }
       setOrders(result.result);
     };
@@ -73,6 +77,7 @@ const Orders = () => {
 
   return (
     <>
+      {isLoading && <LoadingOverlay />}
       <h2 className="-mt-4 mb-8 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
         Your orders
       </h2>
