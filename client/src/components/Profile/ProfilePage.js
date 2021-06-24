@@ -143,7 +143,7 @@ const ProfilePage = () => {
   };
 
   const handleCancelButton = () => {
-    setErrorMessages([])
+    setErrorMessages([]);
     setIsEditing(false);
     setLegacyData();
   };
