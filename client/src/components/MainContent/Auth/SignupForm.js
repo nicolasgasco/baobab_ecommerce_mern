@@ -36,10 +36,6 @@ const SignupForm = () => {
     await signupUser(userData);
   };
 
-  // useEffect(() => {
-  //   setLogged(isLogged);
-  // }, [isLogged]);
-
   return (
     <div className="flex items-center justify-center">
       <div className="max-w-md w-full space-y-8">

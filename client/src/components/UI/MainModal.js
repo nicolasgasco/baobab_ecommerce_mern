@@ -96,10 +96,11 @@ const ModalContent = () => {
                     {modalBody && (
                       <ul className="mt-2">
                         {body.map((message) => {
+                          console.log("Message: ", message);
                           return (
                             <li className="ml-5 text-left list-disc text-sm text-gray-500">
                               {/* This is to make the message more beautiful */}
-                              {message.replaceAll(".", ",")}
+                              <p>{message.replaceAll(".", ",")}</p>
                             </li>
                           );
                         })}

@@ -116,10 +116,7 @@ const AuthProvider = (props) => {
         if (error.message.includes("Joi")) {
           handleModalText(
             "Something went wrong",
-            `${error.message
-              .split("(Joi):")[1]
-              .replaceAll(",", ".\n")
-              .split(".\n")}`
+            error.message.split("(Joi):")[1].replaceAll(",", ".\n").split(".\n")
           );
         } else if (error.message.includes("not unique")) {
           handleModalText(
