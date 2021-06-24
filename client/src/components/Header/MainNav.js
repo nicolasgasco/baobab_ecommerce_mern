@@ -275,7 +275,7 @@ const MainNav = () => {
                     onClick={handleLogo}
                     className="h-12 w-12 cursor-pointer"
                     src={BaobabLogo}
-                    alt="Workflow"
+                    alt="BaobabLogo"
                   />
                 </div>
                 <div className="hidden md:block">
