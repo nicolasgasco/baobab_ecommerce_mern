@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom";
+import classes from "./PictureOverlay.module.scss";
 
 const OverlayContent = ({ src, alt, handleClosePicture }) => {
   return (
@@ -8,8 +9,10 @@ const OverlayContent = ({ src, alt, handleClosePicture }) => {
         id="modal"
         onClick={handleClosePicture}
       ></div>
-      <div role="alert" className="mx-auto  flex justify-center">
-        <div className="z-40 absolute py-10 px-1 sm:px-5 md:px-10 bg-white shadow-md rounded border border-gray-400 w-11/12  lg:w-6/12 xl:w-5/12 2xl:w-4/12">
+      <div role="alert" className="mx-auto">
+        <div
+          className={`${classes["centered-div"]} container z-40 absolute py-10 px-1 sm:px-5 md:px-10 bg-white shadow-md rounded border border-gray-400  w-11/12 md:w-8/12 lg:w-6/12 xl:w-5/12 2xl:w-4/12`}
+        >
           {/* X symbol */}
           <div className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out">
             <svg
@@ -34,7 +37,7 @@ const OverlayContent = ({ src, alt, handleClosePicture }) => {
           <img
             src={src}
             alt={alt}
-            className="mx-auto shadow-md rounded-lg max-h-screen"
+            className="mx-auto shadow-md rounded-lg"
           />
         </div>
       </div>
