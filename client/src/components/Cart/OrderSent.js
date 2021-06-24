@@ -18,7 +18,6 @@ const OrderSent = () => {
     //   return lastOrder;
     // } else {
     const handleFetchedOrder = (result) => {
-      console.log(result, "result");
       setOrder(result.result);
     };
     const userToken = jwt_decode(localStorage.getItem("token"));

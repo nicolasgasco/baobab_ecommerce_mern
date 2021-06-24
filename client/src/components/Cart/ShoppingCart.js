@@ -10,7 +10,6 @@ import useHttp from "../../hooks/use-http";
 
 const ShoppingCart = () => {
   const { items, totalPrice, setUserAddress } = useContext(CartContext);
-  console.log(items);
 
   const [userData, setUserData] = useState({});
 
