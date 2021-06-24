@@ -5,8 +5,6 @@ const PageCounter = ({ paginationData, className, handlePageChange }) => {
 
   useEffect(() => {
     setPaginationButtons([]);
-    console.log(paginationData.totalPages);
-    console.log(paginationData.pageNumber);
     let start;
     let end;
 
