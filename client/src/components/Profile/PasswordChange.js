@@ -89,7 +89,9 @@ const PasswordChange = () => {
               })
           );
         }
+
         if (result.updatedCount === 1) {
+          history.push("/");
           setIsLoading(false);
           handleModalText("Password changed!");
         }
@@ -198,14 +200,14 @@ const PasswordChange = () => {
               {/* Error messages */}
               {errorMessages.length > 0 && (
                 <div
-                  class="mx-5 bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
+                  class="mx-5 mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
                   role="alert"
                 >
                   <h4 className="font-bold text-xl">Error</h4>
                   <ul className="ml-5 list-disc">{showErrorMessages}</ul>
                 </div>
               )}
-              <div className="px-4 text-right sm:px-6">
+              <div className="px-4 my-2  text-right sm:px-6">
                 <button
                   type="button"
                   className="inline-flex justify-center py-2 px-4 ml-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
