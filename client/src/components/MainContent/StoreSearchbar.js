@@ -7,6 +7,7 @@ const StoreSearchbar = ({
   onGetSearchbarInput,
   handleActivePage,
   handleDepartmentFilter,
+  handleSortingFilter,
   departmentFilter,
   activePage,
 }) => {
@@ -29,6 +30,7 @@ const StoreSearchbar = ({
   const handleSubmitSearchbar = (event) => {
     event.preventDefault();
     const currentSearchbarInput = searchbarInputRef.current.value.trim();
+    handleSortingFilter("");
 
     onGetSearchbarInput(currentSearchbarInput);
     handleActivePage(1);
