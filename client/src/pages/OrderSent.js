@@ -1,15 +1,15 @@
 import { useContext, useState } from "react";
-import OrderOverview from "./OrderOverview";
+import OrderOverview from "../components/Cart/OrderOverview";
 
-import CartContext from "../../store/cart-context";
-import LoadingOverlay from "../UI/LoadingOverlay";
+import CartContext from "../store/cart-context";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 import jwt_decode from "jwt-decode";
 
-import useHttp from "../../hooks/use-http";
+import useHttp from "../hooks/use-http";
 
 const OrderSent = () => {
-  const { lastOrder } = useContext(CartContext);
+  // const { lastOrder } = useContext(CartContext);
   const { sendRequest: fetchLastOrder } = useHttp();
 
   const [order, setOrder] = useState(() => {

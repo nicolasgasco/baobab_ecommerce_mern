@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import OrderOverview from "./OrderOverview";
-import NothingFound from "../MainContent/Results/NothingFound";
+import OrderOverview from "../components/Cart/OrderOverview";
+import NothingFound from "../components/MainContent/Results/NothingFound";
 
-import useHttp from "../../hooks/use-http";
+import useHttp from "../hooks/use-http";
 import jwt_decode from "jwt-decode";
-import LoadingOverlay from "../UI/LoadingOverlay";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 const Orders = () => {
   const [isLoading, setIsLoading] = useState(true);

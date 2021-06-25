@@ -25,8 +25,8 @@ const ProfilePage = React.lazy(() => import("../../pages/ProfilePage"));
 const PasswordChange = React.lazy(() => import("../../pages/PasswordChange"));
 const ShoppingCart = React.lazy(() => import("../../pages/ShoppingCart"));
 const CheckoutForm = React.lazy(() => import("../../pages/CheckoutForm"));
-const OrderSent = React.lazy(() => import("../Cart/OrderSent"));
-const Orders = React.lazy(() => import("../Cart/Orders"));
+const OrderSent = React.lazy(() => import("../../pages/OrderSent"));
+const Orders = React.lazy(() => import("../../pages/Orders"));
 const SignupForm = React.lazy(() => import("../../pages/SignupForm"));
 const Loginform = React.lazy(() => import("../../pages/LoginForm"));
 
