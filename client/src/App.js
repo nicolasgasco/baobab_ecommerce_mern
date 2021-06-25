@@ -19,11 +19,9 @@ const App = () => {
     <BrowserRouter>
       <Elements stripe={promise}>
         <HeaderBanner />
-
         <MainModal />
-        {/* <VideoBackground /> */}
-
         <MainNav />
+
         <Switch>
           <Route exact path="/">
             <div className="min-h-screen">
@@ -81,7 +79,7 @@ const App = () => {
             </div>
           </Route>
 
-          <Route path="/*">
+          <Route path="*">
             <Redirect to="/" />
           </Route>
         </Switch>
