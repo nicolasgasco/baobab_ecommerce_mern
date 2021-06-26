@@ -37,7 +37,7 @@ const defaultResultsState = {
   isEmpty: false,
   activePage: 1,
   paginationData: {},
-  searchKeywords: "",
+  searchKeywords: null,
   resultsPerPage: 6,
   fetchedProducts: [],
   showAuth: false,
@@ -91,7 +91,7 @@ const MainContent = () => {
   const getSearchbarInput = useCallback(
     (input = null) => {
       // Redirect to search to render searchbox
-      history.push("/search");
+      if (resultsState.searchKeywords) history.push("/search");
       // dispatchResults({ type: "SHOW_RESULTS", val: true });
       dispatchResults({ type: "CONTENT_LOADING", val: true });
       dispatchResults({ type: "PICTURES_LOADING", val: true });
