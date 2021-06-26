@@ -26,12 +26,30 @@ require("./startup/routes")(app);
 require("./startup/auth")(app);
 
 // At the end, otherwise calling a route redirects you to home
-app.use("/", indexRouter);
+// app.use("/", indexRouter);
+
+// Serve static assets if in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+
+  app.get("/*", function (req, res) {
+    res.sendFile(
+      path.resolve(__dirname, "build", "index.html"),
+      function (err) {
+        if (err) {
+          console.log(`Error during deplyment: ${err}`);
+          res.status(500).send(err);
+        }
+      }
+    );
+  });
+}
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () =>
   console.log(`Listening on port ${port}...`)
 );
+console.log(`We are currently in ${process.env.NODE_ENV}...`);
 
 exports.app = app;
 exports.server = server;
