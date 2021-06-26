@@ -37,7 +37,7 @@ const defaultResultsState = {
   isEmpty: false,
   activePage: 1,
   paginationData: {},
-  searchKeywords: null,
+  searchKeywords: "",
   resultsPerPage: 6,
   fetchedProducts: [],
   showAuth: false,
@@ -91,7 +91,7 @@ const MainContent = () => {
   const getSearchbarInput = useCallback(
     (input = null) => {
       // Redirect to search to render searchbox
-      if (resultsState.searchKeywords) history.push("/search");
+      history.push("/search");
       // dispatchResults({ type: "SHOW_RESULTS", val: true });
       dispatchResults({ type: "CONTENT_LOADING", val: true });
       dispatchResults({ type: "PICTURES_LOADING", val: true });
@@ -201,9 +201,9 @@ const MainContent = () => {
   }, []);
 
   useEffect(() => {
-    // if (resultsState.searchKeywords !== "") {
-    getSearchbarInput(resultsState.searchKeywords);
-    // }
+    if (resultsState.searchKeywords !== "") {
+      getSearchbarInput(resultsState.searchKeywords);
+    }
   }, [
     resultsState.resultsPerPage,
     resultsState.searchKeywords,
