@@ -22,10 +22,20 @@
     background-size: 40%;
   }
 
-  /* Need for product card */
+  /* Needed for product card */
   .wrapper {
     display: grid;
     height: 100vh;
     place-items: center;
+  }
+
+  @media only screen and (max-width: 768px) {
+    body {
+      background-size: 70%;
+    }
+
+    .footer-background {
+      background-size: 70%;
+    }
   }
 }
