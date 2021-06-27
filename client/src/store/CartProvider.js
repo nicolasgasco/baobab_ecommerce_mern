@@ -1,12 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CartContext from "./cart-context";
+import ModalContext from "./modal-context";
 
 import jwt_decode from "jwt-decode";
 
 const CartProvider = (props) => {
+  // For showing error message when adding same article twice
+  const { handleModalText } = useContext(ModalContext);
+
   const [totalPrice, setTotalPrice] = useState(0);
   // It starts empty and then fetched
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState((prevState) => {
+    return JSON.parse(localStorage.getItem("cart"));
+  });
   const [lastOrder, setLastOrder] = useState({});
   const [userAddress, setUserAddress] = useState({});
 
@@ -65,20 +71,26 @@ const CartProvider = (props) => {
       }
       // If user not logged
     } else {
+      console.log("No user");
       if (localStorage.getItem("cart")) {
         const allLocalItems = JSON.parse(localStorage.getItem("cart"));
         if (
-          allLocalItems.filter((object) => object._id == item._id).length === 0
+          allLocalItems.filter((object) => object._id === item._id).length === 0
         ) {
+          // New item added to cart
           allLocalItems.push(item);
+          setItems((prevState) => {
+            setItems([...prevState, item]);
+          });
+        } else {
+          handleModalText("Item already added to the cart!");
         }
         localStorage.setItem("cart", JSON.stringify(allLocalItems));
       } else {
+        // New cart with only one item
         localStorage.setItem("cart", JSON.stringify([item]));
+        setItems([item]);
       }
-      setItems((prevState) => {
-        setItems([...prevState, item]);
-      });
     }
   };
 
