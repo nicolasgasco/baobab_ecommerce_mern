@@ -66,7 +66,8 @@ const MainNav = () => {
   }, [items]);
 
   const handleSignin = () => {
-    history.push("/signin");
+    // This is redundant right now
+    // history.push("/signin");
   };
 
   const handleLogout = () => {
@@ -92,6 +93,8 @@ const MainNav = () => {
           {({ active }) => (
             <Link
               id={`profile-item-${index + 1}`}
+              className="w-full block px-4 py-2"
+              to={localStorage.getItem("token") ? "/" : "/signin"}
               onClick={
                 localStorage.getItem("token") ? handleLogout : handleSignin
               }
@@ -179,10 +182,12 @@ const MainNav = () => {
           key={`profile-item-${index + 1}`}
           id={`profile-item-${index + 1}`}
           className={classNames(
-            `w-full text-left hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700 cursor-pointer bg-yellow-200 rounded-md`
+            `w-full text-left hover:bg-gray-100 block text-sm text-gray-700 cursor-pointer bg-yellow-200 rounded-md`
           )}
         >
           <Link
+            id={`profile-item-${index + 1}`}
+            className="w-full block px-4 py-2"
             to={localStorage.getItem("token") ? "/" : "/signin"}
             onClick={
               localStorage.getItem("token") ? handleLogout : handleSignin
