@@ -19,7 +19,7 @@ E-commerce of eco-friendly products. Browse, buy, pay, and rate the available pr
 
 ## Todo
 - Improving styles and responsiveness
-- Add more testing for backend
+- Add more testing with Jest
 - Add more filtering options
 
 ## Live app hosted on Heroku
