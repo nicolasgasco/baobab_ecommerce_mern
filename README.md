@@ -1,5 +1,5 @@
 # Baobab - Conscious e-commerce
-E-commerce of eco-friendly products. Browse, buy, pay, and rate the available products.
+E-commerce of eco-friendly products. Browse, buy, pay, and rate the available products. The final project of the Fullstack Web Development bootcamp I attended.
 
 ## Stack
 - Front end: React, Stripe API
