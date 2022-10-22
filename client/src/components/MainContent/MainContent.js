@@ -201,9 +201,7 @@ const MainContent = () => {
   }, []);
 
   useEffect(() => {
-    if (resultsState.searchKeywords !== "") {
-      getSearchbarInput(resultsState.searchKeywords);
-    }
+    getSearchbarInput(resultsState.searchKeywords);
   }, [
     resultsState.resultsPerPage,
     resultsState.searchKeywords,
