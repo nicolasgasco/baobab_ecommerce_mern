@@ -1,5 +1,5 @@
 # Baobab - Conscious e-commerce
-E-commerce of eco-friendly products. Browse, buy, pay, and rate the available products. The final project of the Fullstack Web Development bootcamp I attended.
+Final project of Web Development bootcamp. E-commerce with eco-friendly products. Browse, buy, pay, and rate the available products.
 
 ![Screenshot of Baobab](https://res.cloudinary.com/ngasco/image/upload/v1641754569/baobab_preview_xaratt.png "Screenshot of Baobab")
 
