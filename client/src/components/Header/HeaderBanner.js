@@ -30,15 +30,17 @@ const BannerContent = () => {
                   {" for my Github!"}
                 </span>
                 <span className="hidden md:inline">
-                  {"Click "}
+                  {
+                    "Create an account, add items to the cart, and simulate a payment with "
+                  }
                   <a
-                    href="https://github.com/nicolasgasco"
+                    href="https://stripe.com/docs/testing"
                     target="blank"
                     className="cursor-pointer underline"
                   >
-                    here
+                    Stripe mock cards
                   </a>
-                  {" to see my Github!"}
+                  {"!"}
                 </span>
               </p>
             </div>
