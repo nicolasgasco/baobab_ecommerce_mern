@@ -58,6 +58,7 @@ const AuthProvider = (props) => {
       .catch((error) => {
         localStorage.removeItem("token");
         console.log("An error ocurred: " + error.message);
+        console.log(error);
         if (error.message.includes("token <")) {
           handleModalText(`Something went wrong!`);
         } else {
