@@ -54,6 +54,7 @@ const ProductCardSlideshow = ({ product, picturesLoading, classes }) => {
       if (picturesLoading) {
         return (
           <img
+            key={index + 1}
             src={Spinner}
             alt="Loading animation"
             className="w-1/3 mx-auto p-5 object-cover object-center rounded-lg z-0"
