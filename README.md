@@ -6,7 +6,7 @@ _Except for some minor maintainance to migrate from hosting on Heroku to Render,
 ![Screenshot of Baobab](https://res.cloudinary.com/ngasco/image/upload/v1641754569/baobab_preview_xaratt.png "Screenshot of Baobab")
 
 ## Live app hosted on Render
-Open [Baobab](https://baobab-mern-front.onrender.com/search)
+Open [Baobab on Render](https://baobab-mern-front.onrender.com/)
 
 ## Stack
 - Front end: React, Stripe API
