@@ -25,7 +25,7 @@ const SectionedDropdown = ({ handleSortingFilter }) => {
           {({ active }) => (
             <button
               onClick={function () {
-                handleSortingFilter(this.value);
+                handleSortingFilter(item1.value);
                 setCurrentItem(item1.title);
               }}
               value={item1.value}
@@ -42,7 +42,7 @@ const SectionedDropdown = ({ handleSortingFilter }) => {
           {({ active }) => (
             <button
               onClick={function () {
-                handleSortingFilter(this.value);
+                handleSortingFilter(item2.value);
                 setCurrentItem(item2.title);
               }}
               value={item2.value}
