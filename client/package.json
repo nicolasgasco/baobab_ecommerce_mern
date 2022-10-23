@@ -60,5 +60,5 @@
     "postcss-cli": "^8.3.1",
     "tailwindcss": "^2.1.4"
   },
-  "proxy": "localhost:443"
+  "proxy": "http://localhost:443"
 }
