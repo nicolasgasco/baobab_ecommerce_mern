@@ -66,8 +66,8 @@ const passportLogic = (app) => {
   app.post(
     "/api/login",
     passport.authenticate("local", {
-      successRedirect: "/success",
-      failureRedirect: "/fail",
+      successRedirect: "/api/success",
+      failureRedirect: "/api/fail",
     })
   );
 
@@ -121,7 +121,7 @@ const passportLogic = (app) => {
     });
   });
 
-  app.get("/success", (req, res) => {
+  app.get("/api/success", (req, res) => {
     const token = user.generateAuthToken();
     res.status(200).header("x-auth-token", token).send({
       success: true,
@@ -130,7 +130,7 @@ const passportLogic = (app) => {
     });
   });
 
-  app.get("/fail", (req, res) => {
+  app.get("/api/fail", (req, res) => {
     res.status(400).send({
       success: false,
       msg: "Wrong user or password",
