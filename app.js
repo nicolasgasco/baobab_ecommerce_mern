@@ -25,19 +25,12 @@ require("./startup/auth")(app);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client", "build")));
+  //*Set static folder up in production
+  app.use(express.static("client/build"));
 
-  app.get("/*", function (req, res) {
-    res.sendFile(
-      path.join(__dirname, "client", "build", "index.html"),
-      function (err) {
-        if (err) {
-          console.log(`Error during deployment: ${err}`);
-          res.status(500).send(err);
-        }
-      }
-    );
-  });
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+  );
 }
 
 const port = process.env.PORT || 8000;
