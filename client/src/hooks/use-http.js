@@ -9,8 +9,12 @@ const useHttp = () => {
       setIsLoading(true);
       setError(null);
 
+      const requestUrl = process.env.API_URL
+        ? process.env.API_URL + requestConfig.url
+        : requestConfig.url;
+
       try {
-        const response = await fetch(requestConfig.url, {
+        const response = await fetch(requestUrl, {
           method: requestConfig.method ? requestConfig.method : "GET",
           headers: requestConfig.headers ? requestConfig.headers : {},
           body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
