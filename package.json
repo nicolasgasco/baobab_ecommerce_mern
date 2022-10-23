@@ -4,8 +4,13 @@
   "main": "app.js",
   "private": true,
   "scripts": {
-    "start": "node ./app.js",
-    "test": "set $NODE_ENV=test && set $PORT=3001 && jest --watchAll --verbose --detectOpenHandles"
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "test": "set $NODE_ENV=test && set $PORT=3001 && jest --watchAll --verbose --detectOpenHandles",
+    "client": "npm start --prefix client",
+    "clientinstall": "npm install --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "render-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build -- prefix client"
   },
   "engines": {
     "node": "14.17.0"
@@ -13,6 +18,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
+    "concurrently": "^7.5.0",
     "connect-mongo": "^4.4.1",
     "express": "~4.16.1",
     "express-async-errors": "^3.1.1",

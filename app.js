@@ -1,5 +1,3 @@
-const indexRouter = require("./routes/index");
-
 const express = require("express");
 
 const path = require("path");
@@ -25,19 +23,16 @@ require("./startup/routes")(app);
 // Complete passport auth logic
 require("./startup/auth")(app);
 
-// At the end, otherwise calling a route redirects you to home
-// app.use("/", indexRouter);
-
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("build"));
+  app.use(express.static(path.join(__dirname, "client", "build")));
 
   app.get("/*", function (req, res) {
     res.sendFile(
-      path.resolve(__dirname, "build", "index.html"),
+      path.join(__dirname, "client", "build", "index.html"),
       function (err) {
         if (err) {
-          console.log(`Error during deplyment: ${err}`);
+          console.log(`Error during deployment: ${err}`);
           res.status(500).send(err);
         }
       }
@@ -45,7 +40,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 const server = app.listen(port, () =>
   console.log(`Listening on port ${port}...`)
 );
