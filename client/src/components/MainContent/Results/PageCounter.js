@@ -5,29 +5,16 @@ const PageCounter = ({ paginationData, className, handlePageChange }) => {
 
   useEffect(() => {
     setPaginationButtons([]);
-    let start;
-    let end;
 
-    // Middle normal case
-    if (
-      paginationData.pageNumber > 3 &&
-      paginationData.pageNumber < paginationData.totalPages - 1
-    ) {
-      start = paginationData.pageNumber - 3;
-      end = paginationData.pageNumber + 2;
-    } else if (paginationData.pageNumber <= 3) {
-      start = 0;
-      end = 5;
-    } else {
-      start = paginationData.totalPages - 5;
-      end = paginationData.totalPages;
-    }
+    // Happy path, not enough products for more complex logic
+    let start = 0;
+    let end = paginationData.totalPages;
 
     for (let i = start; i < end; i++) {
       setPaginationButtons((prevState) => {
         return [
           ...prevState,
-          <li>
+          <li key={i + 1}>
             <button
               onClick={handlePageChange}
               key={`button-${i + 1}`}
