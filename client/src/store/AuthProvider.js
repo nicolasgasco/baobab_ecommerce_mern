@@ -58,8 +58,7 @@ const AuthProvider = (props) => {
       .catch((error) => {
         localStorage.removeItem("token");
         console.log("An error ocurred: " + error.message);
-        console.log(error);
-        if (error.message.includes("token <")) {
+        if (error.message.includes("token '<'")) {
           handleModalText(`Something went wrong!`);
         } else {
           handleModalText(`${error.message}!`);
@@ -113,7 +112,6 @@ const AuthProvider = (props) => {
         loginUser({ email: userData.email, password: userData.password });
       })
       .catch((error) => {
-        console.log(error.message, "PORCOOO");
         if (error.message.includes("Joi")) {
           handleModalText(
             "Something went wrong",
