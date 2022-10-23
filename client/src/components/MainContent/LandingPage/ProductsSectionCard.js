@@ -6,30 +6,38 @@ import useHttp from "../../../hooks/use-http";
 const ProductsSectionCard = () => {
   const [products, setProducts] = useState(["", "", ""]);
   const [picturesLoading, setPicturesLoading] = useState(false);
+  const [didMount, setDidMount] = useState(false);
 
   const { sendRequest: fetchLatestProducts } = useHttp();
 
   useEffect(() => {
-    const handleError = (err) => {
-      setPicturesLoading(false);
-    };
-    // Fetching latest three results
-    const handleFetchedProducts = (result) => {
-      if (result.resultsFound !== 3) {
-        throw new Error("Found less than three results");
-      }
-      setProducts(result.results);
-      setPicturesLoading(false);
-    };
-    setPicturesLoading(true);
-    fetchLatestProducts(
-      {
-        url: "/api/products/?pageSize=3&pageNum=1&sortBy=creationDate&order=-1",
-      },
-      handleFetchedProducts,
-      handleError
-    );
-  }, [fetchLatestProducts]);
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  useEffect(() => {
+    if (didMount) {
+      const handleError = (err) => {
+        setPicturesLoading(false);
+      };
+      // Fetching latest three results
+      const handleFetchedProducts = (result) => {
+        if (result.resultsFound !== 3) {
+          throw new Error("Found less than three results");
+        }
+        setProducts(result.results);
+        setPicturesLoading(false);
+      };
+      setPicturesLoading(true);
+      fetchLatestProducts(
+        {
+          url: "/api/products/?pageSize=3&pageNum=1&sortBy=creationDate&order=-1",
+        },
+        handleFetchedProducts,
+        handleError
+      );
+    }
+  }, [didMount]);
 
   const showCards = products.map((product, index) => {
     if (index < 3) {
