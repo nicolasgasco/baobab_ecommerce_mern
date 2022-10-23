@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import jwt_decode from "jwt-decode";
 import ModalContext from "../store/modal-context";
+import countries from "../assets/countries_list.js";
 
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 
@@ -22,21 +23,7 @@ const ProfilePage = () => {
   }, [history]);
 
   // Fetching countries for dropdown
-  const [countryNames, setCountryNames] = useState(["Loading..."]);
-
-  useEffect(() => {
-    fetch("https://restcountries.eu/rest/v2/all")
-      .then((res) => res.json())
-      .then((res) => {
-        const countryList = res.map((country) => {
-          return [country.name, country.alpha3Code];
-        });
-        setCountryNames(countryList);
-      })
-      .catch((error) => {
-        console.log("En error ocurred: " + error);
-      });
-  }, []);
+  const [countryNames, setCountryNames] = useState(countries);
 
   // User data from LocalStorage
   const [userData, setUserData] = useState(async () => {
@@ -224,24 +211,16 @@ const ProfilePage = () => {
     setErrorMessages([]);
   }, []);
 
-  // Selecting either the current country from DB or Spain
   const showCountries = countryNames.map((country) => {
-    if (
-      (userAddress.countryCode && country[1] === userAddress.countryCode) ||
-      (!userAddress.countryCode && country[0] === "Spain")
-    ) {
-      return (
-        <option selected id={country[1]} value={country[1]}>
-          {country[0]}
-        </option>
-      );
-    } else {
-      return (
-        <option id={country[1]} value={country[1]}>
-          {country[0]}
-        </option>
-      );
-    }
+    return (
+      <option
+        key={country.alpha3Code}
+        id={country.alpha3Code}
+        value={country.alpha3Code}
+      >
+        {country.name}
+      </option>
+    );
   });
 
   return (
@@ -321,15 +300,13 @@ const ProfilePage = () => {
                   autoComplete="sex"
                   required
                   placeholder="Gender"
-                  value={userData.gender}
+                  value={userData.gender || "f"}
                   disabled={!isEditing}
                   className={`${
                     !isEditing && "bg-gray-100"
                   } mt-1 block w-full py-2 px-3 border placeholder-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
                 >
-                  <option selected value="f">
-                    Female
-                  </option>
+                  <option value="f">Female</option>
                   <option value="m">Male</option>
                   <option value="o">Other</option>
                 </select>
@@ -348,6 +325,7 @@ const ProfilePage = () => {
                   autoComplete="country"
                   required
                   disabled={!isEditing}
+                  value={userData.address?.country || "ESP"}
                   className={`${
                     !isEditing && "bg-gray-100"
                   } mt-1 block w-full py-2 px-3 border  placeholder-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
