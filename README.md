@@ -1,6 +1,8 @@
 # Baobab - Conscious e-commerce
 Final project of Web Development bootcamp. E-commerce with eco-friendly products. Browse, buy, pay, and rate the available products.
 
+_Except for some minor maintainance to migrate from hosting on Heroku to Render, this project hasn't been touched since July 2021 and is thus a representation of my skills at that point in time_
+
 ![Screenshot of Baobab](https://res.cloudinary.com/ngasco/image/upload/v1641754569/baobab_preview_xaratt.png "Screenshot of Baobab")
 
 ## Stack
